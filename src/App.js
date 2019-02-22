@@ -13,6 +13,7 @@ class App extends Component {
     }
 
     render() {
+        let {selectedTab} = this.state;
         return (
             <div style={{
                 position: 'fixed',
@@ -28,79 +29,37 @@ class App extends Component {
                     <TabBar.Item
                         title="首页"
                         key="home"
-                        icon={<div style={{
-                            width: '22px',
-                            height: '22px',
-                            background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat'
-                        }}
-                        />
-                        }
-                        selectedIcon={<div style={{
-                            width: '22px',
-                            height: '22px',
-                            background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat'
-                        }}
-                        />
-                        }
-                        selected={this.state.selectedTab === 'home'}
+                        icon={<HomeUnselectedIcon/>}
+                        selectedIcon={<HomeSelectedIcon/>}
+                        selected={selectedTab === 'home'}
                         onPress={() => {
                             this.setState({
                                 selectedTab: 'home',
                             })
                         }}
-                        data-seed="logId"
                     >
                         <Home/>
                     </TabBar.Item>
                     <TabBar.Item
-                        icon={
-                            <div style={{
-                                width: '22px',
-                                height: '22px',
-                                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat'
-                            }}
-                            />
-                        }
-                        selectedIcon={
-                            <div style={{
-                                width: '22px',
-                                height: '22px',
-                                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat'
-                            }}
-                            />
-                        }
+                        icon={<CartUnselectedIcon/>}
+                        selectedIcon={<CartSelectedIcon/>}
                         title="购物车"
                         key="cart"
-                        selected={this.state.selectedTab === 'cart'}
+                        selected={selectedTab === 'cart'}
                         onPress={() => {
                             this.setState({
                                 selectedTab: 'cart',
                             })
                         }}
-                        data-seed="logId1"
                     >
                         <Cart/>
                     </TabBar.Item>
                     <TabBar.Item
-                        icon={
-                            <div style={{
-                                width: '22px',
-                                height: '22px',
-                                background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat'
-                            }}
-                            />
-                        }
-                        selectedIcon={
-                            <div style={{
-                                width: '22px',
-                                height: '22px',
-                                background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat'
-                            }}
-                            />
-                        }
+                        icon={<MyUnselectedIcon/>}
+                        selectedIcon={<MySelectedIcon/>}
                         title="我的"
                         key="my"
-                        selected={this.state.selectedTab === 'my'}
+                        selected={selectedTab === 'my'}
                         onPress={() => {
                             this.setState({
                                 selectedTab: 'my',
@@ -116,3 +75,51 @@ class App extends Component {
 }
 
 export default App
+
+const HomeUnselectedIcon = () => (
+    <div style={{
+        width: '22px',
+        height: '22px',
+        background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat'
+    }}/>
+)
+
+const HomeSelectedIcon = () => (
+    <div style={{
+        width: '22px',
+        height: '22px',
+        background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat'
+    }}/>
+)
+
+const CartUnselectedIcon = () => (
+    <div style={{
+        width: '22px',
+        height: '22px',
+        background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat'
+    }}/>
+)
+
+const CartSelectedIcon = () => (
+    <div style={{
+        width: '22px',
+        height: '22px',
+        background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat'
+    }}/>
+)
+
+const MyUnselectedIcon = () => (
+    <div style={{
+        width: '22px',
+        height: '22px',
+        background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat'
+    }}/>
+)
+
+const MySelectedIcon = () => (
+    <div style={{
+        width: '22px',
+        height: '22px',
+        background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat'
+    }}/>
+)
