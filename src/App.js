@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Icon} from 'antd'
 import {TabBar} from 'antd-mobile'
 import Home from './pages/home'
 import Cart from './pages/cart'
@@ -41,9 +42,9 @@ class App extends Component {
                         <Home/>
                     </TabBar.Item>
                     <TabBar.Item
-                        icon={<CartUnselectedIcon/>}
-                        selectedIcon={<CartSelectedIcon/>}
-                        title="购物车"
+                        icon={<Icon type="shopping" style={{fontSize:22}}/>}
+                        selectedIcon={<Icon type="shopping" theme="twoTone" style={{fontSize:22}}/>}
+                        title="购物袋"
                         key="cart"
                         selected={selectedTab === 'cart'}
                         onPress={() => {
