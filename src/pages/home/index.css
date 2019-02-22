@@ -1,0 +1,24 @@
+.guess-wrap {
+    background-color: white;
+    min-height: 100px;
+}
+
+.guess-title {
+    display: block;
+    color: #397f44;
+    font-size: 16px;
+    margin: 0 auto;
+    padding: 20px 0;
+    width: 120px;
+    text-align: center;
+}
+
+.guess-item {
+
+}
+
+.guess-item-img {
+    background-size: cover;
+    width: 150px;
+    height: 160px;
+}
