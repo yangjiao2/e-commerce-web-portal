@@ -1,0 +1,43 @@
+.footer{
+    position: fixed;
+    bottom: 50px;
+    width: 100%;
+}
+
+.jiesuan {
+    height: 50px;
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    background-color: #fff;
+}
+
+.jiesuan-checkbox_label {
+    color: #323233;
+    margin-left: 10px;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.jiesuan-total {
+    flex: 1;
+    font-weight: 500;
+    text-align: right;
+    color: #323233;
+    padding-right: 12px;
+}
+
+.jiesuan-total_price {
+    color: #f44;
+    font-size: 18px;
+}
+
+.jiesuan-button {
+    width: 110px;
+    height: 100%;
+    color: #fff;
+    background-color: #f44;
+    border: 1px solid #f44;
+    font-size: 16px;
+    text-align: center;
+}
