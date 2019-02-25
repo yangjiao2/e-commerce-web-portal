@@ -113,9 +113,6 @@ class Like extends Component {
 
     render() {
         let {data} = this.props
-        if (data % 2 !== 0) {
-            data.splice(0, 1)
-        }
         return (
             <div className='guess-wrapper'>
                 <div className='guess-title'>- 猜你喜欢 -</div>

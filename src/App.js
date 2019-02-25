@@ -13,6 +13,12 @@ class App extends Component {
         }
     }
 
+    changeTabBar = (tab) => {
+        this.setState({
+            selectedTab: tab
+        })
+    }
+
     render() {
         let {selectedTab} = this.state;
         return (
@@ -34,26 +40,22 @@ class App extends Component {
                         selectedIcon={<HomeSelectedIcon/>}
                         selected={selectedTab === 'home'}
                         onPress={() => {
-                            this.setState({
-                                selectedTab: 'home',
-                            })
+                            this.changeTabBar('home')
                         }}
                     >
-                        <Home/>
+                        <Home changeTabBar={this.changeTabBar}/>
                     </TabBar.Item>
                     <TabBar.Item
-                        icon={<Icon type="shopping" style={{fontSize:22}}/>}
-                        selectedIcon={<Icon type="shopping" theme="twoTone" style={{fontSize:22}}/>}
+                        icon={<CartUnselectedIcon/>}
+                        selectedIcon={<CartSelectedIcon/>}
                         title="购物袋"
                         key="cart"
                         selected={selectedTab === 'cart'}
                         onPress={() => {
-                            this.setState({
-                                selectedTab: 'cart',
-                            })
+                            this.changeTabBar('cart')
                         }}
                     >
-                        <Cart/>
+                        <Cart changeTabBar={this.changeTabBar}/>
                     </TabBar.Item>
                     <TabBar.Item
                         icon={<MyUnselectedIcon/>}
@@ -62,12 +64,10 @@ class App extends Component {
                         key="my"
                         selected={selectedTab === 'my'}
                         onPress={() => {
-                            this.setState({
-                                selectedTab: 'my',
-                            })
+                            this.changeTabBar('my')
                         }}
                     >
-                        <My/>
+                        <My changeTabBar={this.changeTabBar}/>
                     </TabBar.Item>
                 </TabBar>
             </div>
@@ -94,19 +94,11 @@ const HomeSelectedIcon = () => (
 )
 
 const CartUnselectedIcon = () => (
-    <div style={{
-        width: '22px',
-        height: '22px',
-        background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat'
-    }}/>
+    <Icon type="shopping" style={{fontSize:22}}/>
 )
 
 const CartSelectedIcon = () => (
-    <div style={{
-        width: '22px',
-        height: '22px',
-        background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat'
-    }}/>
+    <Icon type="shopping" theme="twoTone" style={{fontSize:22}}/>
 )
 
 const MyUnselectedIcon = () => (
