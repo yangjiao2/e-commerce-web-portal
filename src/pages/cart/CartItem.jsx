@@ -26,7 +26,7 @@ export class CartItem extends Component {
     }
 
     //获取输入框的值
-    getInputText=(e,i)=>{
+    getInputValue=(e,i)=>{
         this.setState({
             arr:this.state.arr.map((ele,index)=>{
                 if(index===i){
@@ -86,8 +86,8 @@ export class CartItem extends Component {
         },1)
     };
 
-    // 实现全选与反选的操作
-    checkAllorNotAll=(e,i)=>{
+    // 改变选择
+    changeCheckedStatus=(e,i)=>{
         this.setState({
             arr:this.state.arr.map((ele,index)=>{
                 if(index===i){
@@ -96,11 +96,10 @@ export class CartItem extends Component {
                 return ele
             })
         });
-
         this.sumPrice();
     };
 
-    //全选全不选,判断全选状态
+    //全选或全不选,判断全选状态
     checkedAll=(e)=>{
         // console.log('CheckedAll e',e);
         if(e.target.checked===true){
@@ -161,7 +160,7 @@ export class CartItem extends Component {
                                             <Checkbox
                                                 style={{marginLeft:15}}
                                                 checked={ele.checked}
-                                                onChange={(e)=>{this.checkAllorNotAll(e,index)}}
+                                                onChange={(e)=>{this.changeCheckedStatus(e,index)}}
                                             />
                                         </div>
                                         <div className="cart-list-image">
@@ -182,7 +181,7 @@ export class CartItem extends Component {
                                                     disabled={ele.num <= 1}
                                                     onClick={(e)=>{this.reduce(e,index)}}
                                                 >-</button>
-                                                <input className="selected_input" type="number" ref="nums" value={ele.num} onChange={(e)=>{this.getInputText(e,index)}}/>
+                                                <input className="selected_input" type="text" value={ele.num} onChange={(e)=>{this.getInputValue(e,index)}}/>
                                                 <button className="selected_button" onClick={(e)=>{this.augment(e,index)}}>+</button>
                                             </div>
                                         </div>
