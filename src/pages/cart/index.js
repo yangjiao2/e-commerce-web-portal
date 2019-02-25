@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { NavBar } from 'antd-mobile';
-import {Tab3} from "./Cart";
+import {CartItem} from "./CartItem";
 
 class Cart extends Component {
     constructor(props) {
@@ -15,12 +15,13 @@ class Cart extends Component {
             <div>
                 <NavBar
                     mode="light"
+                    style={{borderBottom: '1px solid #ebedf0'}}
                     rightContent={[
                         <span key={"1"}>编辑</span>
                     ]}
                 >购物袋
                 </NavBar>
-                <Tab3/>
+                <CartItem/>
             </div>
         )
     }
