@@ -28,6 +28,7 @@
 
 .guess-item-img {
     background-size: cover;
+    background-repeat: no-repeat;
     width: 60%;
     height: 80%;
     display: block;

@@ -9,18 +9,20 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedTab: 'home'
+            selectedTab: 'home',
+            tabHidden: false
         }
     }
 
-    changeTabBar = (tab) => {
+    changeTabBar = (tab, hidden) => {
         this.setState({
-            selectedTab: tab
+            selectedTab: tab,
+            tabHidden: hidden !== undefined ? hidden : false
         })
     }
 
     render() {
-        let {selectedTab} = this.state;
+        let {selectedTab, tabHidden} = this.state
         return (
             <div style={{
                 position: 'fixed',
@@ -32,6 +34,7 @@ class App extends Component {
                     unselectedTintColor="#949494"
                     tintColor="#33A3F4"
                     barTintColor="white"
+                    hidden={tabHidden}
                 >
                     <TabBar.Item
                         title="首页"
@@ -78,27 +81,19 @@ class App extends Component {
 export default App
 
 const HomeUnselectedIcon = () => (
-    <div style={{
-        width: '22px',
-        height: '22px',
-        background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat'
-    }}/>
+    <Icon type="home" style={{fontSize: 22}}/>
 )
 
 const HomeSelectedIcon = () => (
-    <div style={{
-        width: '22px',
-        height: '22px',
-        background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat'
-    }}/>
+    <Icon type="home" theme="twoTone" style={{fontSize: 22}}/>
 )
 
 const CartUnselectedIcon = () => (
-    <Icon type="shopping" style={{fontSize:22}}/>
+    <Icon type="shopping" style={{fontSize: 22}}/>
 )
 
 const CartSelectedIcon = () => (
-    <Icon type="shopping" theme="twoTone" style={{fontSize:22}}/>
+    <Icon type="shopping" theme="twoTone" style={{fontSize: 22}}/>
 )
 
 const MyUnselectedIcon = () => (

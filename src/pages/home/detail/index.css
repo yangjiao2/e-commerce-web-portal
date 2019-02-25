@@ -1,0 +1,97 @@
+.detail-wrap {
+    height: 100%;
+}
+
+.detail-wrapper {
+    height: 100%;
+}
+
+.detail-simple-show {
+    height: 70%;
+    background-color: white;
+}
+
+.detail-img {
+    width: 90%;
+    height: 75%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}
+
+.detail-below-img-in-simle-show-hahahahah {
+    height: 30%;
+    margin-left: 10px;
+}
+
+.detail-name {
+    font-size: 1.6rem;
+}
+
+.detail-price {
+    color: orangered;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.detail-price::before {
+    content: '￥';
+}
+
+.detail-stock {
+    font-size: 1.2rem;
+}
+
+.detail-stock::before {
+    content: '库存：';
+}
+
+.detail-complicate-show {
+    margin-top: 20px;
+    height: 700px;
+    background-color: #397f44;
+}
+
+.detail-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 8%;
+    background-color: white;
+}
+
+.detail-bottom-cart {
+    display: inline-block;
+    height: 100%;
+    width: 15%;
+    border: 1px solid lightgrey;
+}
+
+.detail-bottom-home {
+    display: inline-block;
+    height: 100%;
+    width: 15%;
+    border: 1px solid lightgrey;
+}
+
+.detail-bottom-add {
+    display: inline-block;
+    width: 35%;
+    text-align: center;
+    color: white;
+    background-color: orange;
+    height: 100%;
+    font-size: 20px;
+    border: 1px solid lightgrey;
+}
+
+.detail-bottom-buy {
+    display: inline-block;
+    width: 35%;
+    text-align: center;
+    color: white;
+    background-color: orangered;
+    height: 100%;
+    font-size: 20px;
+    border: 1px solid lightgrey;
+}
