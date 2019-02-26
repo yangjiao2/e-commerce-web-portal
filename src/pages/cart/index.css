@@ -77,7 +77,7 @@
     bottom:0;
 }
 
-.cart-list-num {
+.cart-list-count {
     width: 30%;
     position: relative;
 }
@@ -94,6 +94,10 @@
     font-size: 14px;
     align-items: center;
     background-color: #fff;
+}
+
+.jiesuan-disabled {
+    opacity: 0.5;
 }
 
 .jiesuan-checkbox_label {
