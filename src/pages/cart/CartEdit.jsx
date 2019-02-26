@@ -244,7 +244,7 @@ class CartEdit extends Component {
                                 <div className="jiesuan-total">
                                 </div>
                                 <button className="jiesuan-button" onClick={()=>{this.delete()}}>
-                                    <span>删除所选</span>
+                                    <span>删除({this.state.selectedCount})</span>
                                 </button>
                             </div>
                         </div>:''

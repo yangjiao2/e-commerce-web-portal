@@ -240,7 +240,7 @@ class CartItem extends Component {
                             disabled={!this.state.isSelectAll}
                             onClick={()=>{this.settleAccounts()}}
                         >
-                            <span>去结算({this.state.selectedCount})</span>
+                            <span>下单({this.state.selectedCount})</span>
                         </button>
                     </div>
                 </div>

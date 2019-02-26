@@ -5,24 +5,60 @@ import gql from "graphql-tag"
 
 import CartItem from "./CartItem";
 import CartEdit from "./CartEdit";
+import Empty from "./empty";
 import {cart_by_userid} from "../../utils/gql";
 
 class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            content:true
+            page:'detail'
         }
     }
 
-    changeCartPage =()=>{
+    componentWillMount(){
+        this.getHash();
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.getHash();
+    }
+
+    getHash = () => {
+        // console.log('location',window.location.hash);
+        let hash = window.location.hash || '#tab=cart&page=detail';
+        let page = 'detail';
+        if(window.location.hash && hash.indexOf("&")>0){
+            let pageHash = hash.split("&")[1];
+            page = pageHash.substr(pageHash.indexOf("=")+1);
+        }
         this.setState({
-            content:!this.state.content
-        })
+            page
+        });
+    };
+
+    changeCartPage =()=>{
+        this.setState((preState)=>({
+            page:preState.page === 'detail'?'edit':'detail'
+        }));
+    };
+
+    renderPage = (data) => {
+        let {page} = this.state;
+
+        switch (page) {
+            case 'detail':
+                return <CartItem cartList={data.cartList}/>;
+            case 'edit':
+                return <CartEdit cartList={data.cartList}/>;
+            default:
+                return <div>test</div>
+        }
     };
 
     render() {
-        let {content} = this.state;
+        let {page} = this.state;
+
         return (
             <Query query={gql(cart_by_userid)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
                 {
@@ -38,20 +74,22 @@ class Cart extends Component {
                             return 'error!'
                         }
                         console.log('cart data',data);
+
                         return (
                             <div>
                                 <NavBar
                                     mode="light"
                                     style={{borderBottom: '1px solid #ebedf0'}}
                                     rightContent={[
-                                        <span key={"1"} onClick={this.changeCartPage}>{content ? "编辑":"完成"}</span>
+                                        data.cartList.length ?
+                                            <span key={"1"} onClick={this.changeCartPage}>
+                                                {page === 'detail' ? "编辑":"完成"}
+                                            </span>:''
                                     ]}
                                 >购物袋
                                 </NavBar>
-                                {
-                                    content ?
-                                        <CartItem cartList={data.cartList}/>:<CartEdit cartList={data.cartList}/>
-
+                                {data.cartList.length ?
+                                        this.renderPage(data):<Empty/>
                                 }
                             </div>
                         )

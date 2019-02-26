@@ -10,9 +10,35 @@ class App extends Component {
         super(props)
         this.state = {
             selectedTab: 'home',
-            tabHidden: false
+            tabHidden: false,
+            page:'detail'
         }
     }
+
+    componentWillMount(){
+        this.getHash();
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.getHash();
+    }
+
+    getHash = () => {
+        let hash = window.location.hash || '#tab=home';
+        let tab = 'home',page = 'detail';
+        if(hash && hash.indexOf("&")>0){
+            let tabHash = hash.split("&")[0], pageHash = hash.split("&")[1];
+            tab = tabHash.substr(tabHash.indexOf("=")+1);
+            page = pageHash.substr(pageHash.indexOf("=")+1);
+        }
+        // console.log('tab',tab);
+        // console.log('page',page);
+
+        this.setState({
+            selectedTab: tab,
+            page
+        });
+    };
 
     changeTabBar = (tab, hidden) => {
         this.setState({
@@ -22,7 +48,7 @@ class App extends Component {
     }
 
     render() {
-        let {selectedTab, tabHidden} = this.state
+        let {selectedTab, tabHidden, page} = this.state;
         return (
             <div style={{
                 position: 'fixed',
@@ -43,6 +69,7 @@ class App extends Component {
                         selectedIcon={<HomeSelectedIcon/>}
                         selected={selectedTab === 'home'}
                         onPress={() => {
+                            window.location.hash = 'tab=home';
                             this.changeTabBar('home')
                         }}
                     >
@@ -55,6 +82,7 @@ class App extends Component {
                         key="cart"
                         selected={selectedTab === 'cart'}
                         onPress={() => {
+                            window.location.hash = `tab=cart&page=${page}`;
                             this.changeTabBar('cart')
                         }}
                     >
@@ -67,6 +95,7 @@ class App extends Component {
                         key="my"
                         selected={selectedTab === 'my'}
                         onPress={() => {
+                            window.location.hash = 'tab=my';
                             this.changeTabBar('my')
                         }}
                     >
