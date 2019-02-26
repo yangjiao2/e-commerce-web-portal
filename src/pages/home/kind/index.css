@@ -1,0 +1,84 @@
+.kind-wrap {
+    height: 100%
+}
+
+.kind-search-wrap {
+    height: 8%;
+    position: relative;
+    z-index: 100;
+}
+
+.kind-search {
+    height: 65%;
+    width: 90%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.kind-wrapper {
+    height: 100%;
+    background-color: white;
+    position: relative;
+}
+
+.kind-navbar-wrap {
+    width: 100%;
+}
+
+.kind-navbar {
+    /*position: fixed;*/
+    /*top: 0;*/
+    width: 100%;
+}
+
+.kind-title {
+    display: block;
+    color: #397f44;
+    font-size: 16px;
+    margin: 0 auto;
+    padding: 20px 0;
+    width: 120px;
+    text-align: center;
+}
+
+.kind-item {
+    width: 100%;
+    height: 100%;
+}
+
+.kind-item-img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 60%;
+    height: 80%;
+    display: block;
+    margin: 0 auto;
+}
+
+.kind-item-description {
+    margin-top: 10px;
+}
+
+.kind-item-name {
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 25px;
+    display: inline-block;
+    float: left;
+    color: grey;
+}
+
+.kind-item-price {
+    display: inline-block;
+    color: #397f44;
+    font-size: 20px;
+    font-weight: 600;
+    float: right;
+    margin-right: 25px;
+}
+
+.kind-item-price::before {
+    content: '￥';
+}
