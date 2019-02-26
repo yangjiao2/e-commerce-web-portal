@@ -1,0 +1,44 @@
+.my-wrap {
+    height: 100%;
+}
+
+.avatar-area {
+    height: 20%;
+    background-color: #397f44;
+    position: relative;
+}
+
+.avatar {
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    background-color: #e8e8e8;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nickname {
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    position: absolute;
+    left: 50%;
+    top: 90%;
+    transform: translate(-50%, -50%);
+}
+
+.my-card {
+    background-color: white;
+    margin-top: 15px;
+    height: 150px
+}
+
+.card-title {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 20px;
+    font-size: 18px;
+    border-bottom: 1px solid #F3F3F3;
+}
