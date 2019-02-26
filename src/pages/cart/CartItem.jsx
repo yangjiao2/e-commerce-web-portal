@@ -17,12 +17,12 @@ class CartItem extends Component {
 
     //获取数据
     componentWillMount(){
-        const cartList = [
-            {id:'1',name:'test1',count:1,img:'',price:10},
-            {id:'2',name:'test2',count:2,img:'',price:20}
-        ];
+        // const cartList = [
+        //     {id:'1',name:'test1',count:1,img:'',price:10},
+        //     {id:'2',name:'test2',count:2,img:'',price:20}
+        // ];
         this.setState({
-            cartList
+            cartList:this.props.cartList
         },()=>{
             this.checkedAll('',true);
         });
@@ -100,6 +100,20 @@ class CartItem extends Component {
                 return ele
             })
         });
+
+        let flag = this.state.cartList.every((ele,index)=>{
+            if(ele.checked===false) {
+                return false;
+            }else {
+                return true;
+            }
+        });
+
+        if(flag===true){
+            this.setState({isSelectAll:true});
+        }else {
+            this.setState({isSelectAll:false});
+        }
         this.sumPrice();
     };
 
@@ -132,7 +146,7 @@ class CartItem extends Component {
         let totalPrice=0,selectedCount=0;
         this.state.cartList.forEach((ele,index)=>{
             if(ele.checked===true){
-                totalPrice+=ele.count*ele.price;
+                totalPrice+=ele.count*ele.product_id.price;
                 selectedCount+=ele.count;
             }
         });
@@ -173,12 +187,12 @@ class CartItem extends Component {
                                             />
                                         </div>
                                         <div className="cart-list-image">
-                                            <img src={ele.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
+                                            <img src={ele.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
                                         </div>
                                         <div className="cart-list-intro">
-                                            <div>{ele.name}</div>
+                                            <div>{ele.product_id.name}</div>
                                             <div>颜色尺码等</div>
-                                            <div>¥ {ele.price}</div>
+                                            <div>¥ {ele.product_id.price}</div>
                                         </div>
                                         <div className="cart-list-count">
                                             <div className="selected">
@@ -213,7 +227,7 @@ class CartItem extends Component {
                         </div>
                         <div className={classNames({
                             'jiesuan-total': true,
-                            'jiesuan-disabled': !this.state.isSelectAll
+                            'jiesuan-disabled': !this.state.selectedCount
                         })}>
                             <span>合计：</span>
                             <span className="jiesuan-total_price">¥ {this.state.totalPrice}</span>
@@ -221,7 +235,7 @@ class CartItem extends Component {
                         <button
                             className={classNames({
                                 'jiesuan-button': true,
-                                'jiesuan-disabled': !this.state.isSelectAll
+                                'jiesuan-disabled': !this.state.selectedCount
                             })}
                             disabled={!this.state.isSelectAll}
                             onClick={()=>{this.settleAccounts()}}

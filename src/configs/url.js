@@ -1,3 +1,3 @@
-const graphqlFC = 'http://ec.ioobot.cn/graphql';
+const graphqlFC = 'https://ec.ioobot.cn/graphql';
 
 export {graphqlFC}

@@ -8,19 +8,22 @@ class CartEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            isSelectAll:false,
+            selectedCount:0
         }
     }
 
     //获取数据
     componentWillMount(){
-        const cartList = [
-            {id:'1',name:'test1',count:1,img:'',price:10},
-            {id:'2',name:'test2',count:2,img:'',price:20}
-        ];
+        // const cartList = [
+        //     {id:'1',name:'test1',count:1,img:'',price:10},
+        //     {id:'2',name:'test2',count:2,img:'',price:20}
+        // ];
         this.setState({
-            cartList
-        })
+            cartList:this.props.cartList
+        },()=>{
+            this.checkedAll('',false);
+        });
 
     }
 
@@ -36,6 +39,7 @@ class CartEdit extends Component {
                 }
             })
         });
+        this.sumCount();
     };
 
     // 增加
@@ -50,6 +54,7 @@ class CartEdit extends Component {
                 }
             })
         });
+        this.sumCount();
     };
 
     // 减少
@@ -64,6 +69,7 @@ class CartEdit extends Component {
                 }
             })
         });
+        this.sumCount();
     };
 
     //结算传值
@@ -71,10 +77,10 @@ class CartEdit extends Component {
         let {cartList} = this.state;
         let listLength = cartList.length;
 
-        alert('', '确定删除所选商品？', [
+        alert('', `确定要删除这${this.state.selectedCount}种商品吗？`, [
             { text: '取消', onPress: () => console.log('cancel') },
             {
-                text: '确认',
+                text: '确定',
                 onPress: () =>
                     new Promise((resolve) => {
                         for (let i = 0; i < listLength; i++) {
@@ -92,6 +98,7 @@ class CartEdit extends Component {
                     }),
             },
         ]);
+        this.sumCount();
     };
 
     //删除
@@ -106,7 +113,7 @@ class CartEdit extends Component {
             })
         });
         setTimeout(()=>{
-            this.sumPrice()
+            this.sumCount();
         },1)
     };
 
@@ -120,28 +127,59 @@ class CartEdit extends Component {
                 return ele
             })
         });
+
+        let flag = this.state.cartList.every((ele,index)=>{
+            if(ele.checked===false) {
+                return false;
+            }else {
+                return true;
+            }
+        });
+
+        if(flag===true){
+            this.setState({isSelectAll:true});
+        }else {
+            this.setState({isSelectAll:false});
+        }
+        this.sumCount();
     };
 
     //全选或全不选,判断全选状态
-    checkedAll=(e)=>{
-        // console.log('CheckedAll e',e);
-        if(e.target.checked===true){
+    checkedAll=(e,check)=>{
+        let checked = e.target ? e.target.checked : check;
+
+        if(checked===true){
             this.setState({
                 cartList:this.state.cartList.map((ele,index)=>{
                     ele.checked=true;
                     return ele
-                })
-            })
-        }else  if(e.target.checked===false){
+                }),
+                isSelectAll:true
+            });
+        }else  if(checked===false){
             this.setState({
                 cartList:this.state.cartList.map((ele,index)=>{
                     ele.checked=false;
                     return ele
-                })
-            })
+                }),
+                isSelectAll:false
+            });
         }
+        this.sumCount();
     };
 
+    //计算总合计
+    sumCount=()=>{
+        let selectedCount=0;
+        this.state.cartList.forEach((ele,index)=>{
+            if(ele.checked===true){
+                selectedCount+=ele.count;
+            }
+        });
+        this.setState({
+            selectedCount
+        });
+    };
 
     render() {
         let {cartList} = this.state;
@@ -163,12 +201,12 @@ class CartEdit extends Component {
                                             />
                                         </div>
                                         <div className="cart-list-image">
-                                            <img src={ele.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
+                                            <img src={ele.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
                                         </div>
                                         <div className="cart-list-intro">
-                                            <div>{ele.name}</div>
+                                            <div>{ele.product_id.name}</div>
                                             <div>颜色尺码等</div>
-                                            <div>¥ {ele.price}</div>
+                                            <div>¥ {ele.product_id.price}</div>
                                         </div>
                                         <div className="cart-list-count">
                                             <div className="selected">
@@ -196,7 +234,11 @@ class CartEdit extends Component {
                         <div className="footer">
                             <div className="jiesuan">
                                 <div className="jiesuan-checkbox">
-                                    <Checkbox onChange={(e)=>{this.checkedAll(e)}} style={{marginLeft:15}}/>,
+                                    <Checkbox
+                                        checked={this.state.isSelectAll}
+                                        onChange={(e)=>{this.checkedAll(e,'')}}
+                                        style={{marginLeft:15}}
+                                    />,
                                     <span className="jiesuan-checkbox_label">全选</span>
                                 </div>
                                 <div className="jiesuan-total">

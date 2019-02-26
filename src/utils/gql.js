@@ -34,7 +34,30 @@ const productbyid = `
     }
 `
 
+const cart_by_userid = `
+    query findUserCart($user_id:ID){
+        cartList:userCart_by_props(user_id:$user_id){
+            count
+            createdAt
+            id
+            product_id{
+                category
+                createdAt
+                img
+                intro
+                name
+                price
+                status
+                stock
+                unit
+                updatedAt
+            }
+        }
+    }
+`
+
 export {
     productbyprops,
-    productbyid
+    productbyid,
+    cart_by_userid
 }

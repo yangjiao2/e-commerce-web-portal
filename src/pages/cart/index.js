@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
-import { NavBar } from 'antd-mobile';
+import { NavBar,ActivityIndicator } from 'antd-mobile';
+import {Query} from "react-apollo"
+import gql from "graphql-tag"
 
 import CartItem from "./CartItem";
 import CartEdit from "./CartEdit";
-
+import {cart_by_userid} from "../../utils/gql";
 
 class Cart extends Component {
     constructor(props) {
@@ -22,25 +24,42 @@ class Cart extends Component {
     render() {
         let {content} = this.state;
         return (
-            <div>
-                <NavBar
-                    mode="light"
-                    style={{borderBottom: '1px solid #ebedf0'}}
-                    rightContent={[
-                        <span key={"1"} onClick={this.changeCartPage}>
-                              {content ? "编辑":"完成"}
-                        </span>
-                    ]}
-                >购物袋
-                </NavBar>
+            <Query query={gql(cart_by_userid)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
                 {
-                    content ?
-                        <CartItem/>:<CartEdit/>
+                    ({loading, error, data}) => {
+                        if (loading) {
+                            return (
+                                <div className="loading-center">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            )
+                        }
+                        if (error) {
+                            return 'error!'
+                        }
+                        console.log('cart data',data);
+                        return (
+                            <div>
+                                <NavBar
+                                    mode="light"
+                                    style={{borderBottom: '1px solid #ebedf0'}}
+                                    rightContent={[
+                                        <span key={"1"} onClick={this.changeCartPage}>{content ? "编辑":"完成"}</span>
+                                    ]}
+                                >购物袋
+                                </NavBar>
+                                {
+                                    content ?
+                                        <CartItem cartList={data.cartList}/>:<CartEdit cartList={data.cartList}/>
 
+                                }
+                            </div>
+                        )
+                    }
                 }
-            </div>
+            </Query>
         )
     }
 }
 
-export default Cart
+export default Cart;
