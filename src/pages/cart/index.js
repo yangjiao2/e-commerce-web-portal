@@ -37,7 +37,7 @@ class Cart extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        console.log('cart data',data);
+                        // console.log('cart data',data);
                         return (
                             <div>
                                 <NavBar

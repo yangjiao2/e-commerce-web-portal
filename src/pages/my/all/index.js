@@ -70,7 +70,7 @@ class All extends Component {
     }
 
     render() {
-        let {changePageInMy} = this.props;
+        let {changePageInMy, changeTabBar} = this.props;
         return (
             <div className='my-wrap all'>
                 <div className='avatar-area'>
@@ -101,7 +101,11 @@ class All extends Component {
                               columnNum={4}
                               hasLine={false}
                               onClick={(tools) => {
-                                  changePageInMy('tools', {id: tools.id})
+                                  if(tools.id === 'cart') {
+                                      changeTabBar('cart')
+                                  } else {
+                                      changePageInMy('tools', {id: tools.id})
+                                  }
                               }}
                         />
                     </div>
