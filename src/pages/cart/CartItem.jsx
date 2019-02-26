@@ -22,7 +22,6 @@ export class CartItem extends Component {
         this.setState({
             arr
         })
-
     }
 
     //获取输入框的值
