@@ -15,14 +15,18 @@ class Detail extends Component {
         let {id, changePageInHome} = this.props
         return (
             <div className='detail-wrap'>
-                <NavBar
-                    mode="light"
-                    icon={<Icon type="left"/>}
-                    onLeftClick={() => changePageInHome('all', {}, false)}
-                    rightContent={[
-                        <Icon key="1" type="ellipsis"/>,
-                    ]}
-                >商品详情</NavBar>
+                <div className='detail-navbar-wrap'>
+                    <NavBar
+                        className='detail-navbar'
+                        mode="light"
+                        icon={<Icon type="left"/>}
+                        onLeftClick={() => changePageInHome('all', {}, false)}
+                        rightContent={[
+                            <Icon key="1" type="ellipsis"/>,
+                        ]}
+                    >商品详情</NavBar>
+                </div>
+
                 <Query query={gql(productbyid)} variables={{id}}>
                     {
                         ({loading, error, data}) => {

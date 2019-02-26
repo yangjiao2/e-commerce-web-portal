@@ -3,6 +3,7 @@ import {productbyprops} from "../../../utils/gql"
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import {Grid, Carousel, WhiteSpace, ActivityIndicator} from 'antd-mobile'
+import './index.css'
 
 class All extends Component {
     constructor(props) {
