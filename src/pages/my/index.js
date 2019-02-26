@@ -24,10 +24,10 @@ class My extends Component {
 
     renderPage = () => {
         let {page, param} = this.state
-
+        let {changeTabBar} = this.props
         switch (page) {
             case 'all':
-                return <All changePageInMy={this.changePageInMy} {...param}/>
+                return <All changePageInMy={this.changePageInMy} changeTabBar={changeTabBar} {...param}/>
             case 'order':
                 return <Order changePageInMy={this.changePageInMy} {...param}/>
             case 'tools':
