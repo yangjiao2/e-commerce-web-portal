@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Row, Col, Icon} from 'antd'
-import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom'
+import {Switch, Route, NavLink, withRouter} from 'react-router-dom'
 import classnames from 'classnames'
 
 import Home from './pages/home'
@@ -18,11 +18,24 @@ class App extends Component {
         }
     }
 
-    changeTabBar = (tab, hidden) => {
-        this.setState({
-            selectedTab: tab,
-            tabHidden: hidden !== undefined ? hidden : false
-        })
+    componentWillMount() {
+        let {location} = this.props,
+            pathname = location.pathname,
+            state = location.state
+
+        // 有 state 的话，就隐藏 tabbar
+        if (location && state) {
+            this.setState({
+                tabHidden: true
+            })
+        }
+
+        // 根据 pathname 显示 icon 选中
+        if (location && pathname) {
+            this.setState({
+                selectedTab: pathname.substr(1) === ''? 'home' : pathname.substr(1)
+            })
+        }
     }
 
     chooseClassNames = (tabbar) => (
@@ -36,71 +49,84 @@ class App extends Component {
     render() {
         let {selectedTab, tabHidden} = this.state
         return (
-            <Router>
-                <div>
-                    <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
-                        <Row>
-                            {/*navlink 的 activeClass 有点问题*/}
-                            <NavLink exact to="/">
-                                <Col className={this.chooseClassNames('home')} span={8} onClick={() => {
-                                    this.changeTabBar('home')
-                                }}>
-                                    {
-                                        selectedTab === 'home' ?
-                                            <HomeSelectedIcon/>
-                                            :
-                                            <HomeUnselectedIcon/>
-                                    }
-                                    <div className='tabbar-title'>
-                                        主页
-                                    </div>
-                                </Col>
-                            </NavLink>
-                            <NavLink to="/cart">
-                                <Col className={this.chooseClassNames('cart')} span={8} onClick={() => {
-                                    this.changeTabBar('cart')
-                                }}>
-                                    {
-                                        selectedTab === 'cart' ?
-                                            <CartSelectedIcon/>
-                                            :
-                                            <CartUnselectedIcon/>
-                                    }
-                                    <div className='tabbar-title'>
-                                        购物篮
-                                    </div>
-                                </Col>
-                            </NavLink>
-                            <NavLink to="/my">
-                                <Col className={this.chooseClassNames('my')} span={8} onClick={() => {
-                                    this.changeTabBar('my')
-                                }}>
-                                    {
-                                        selectedTab === 'my' ?
-                                            <MySelectedIcon/>
-                                            :
-                                            <MyUnselectedIcon/>
-                                    }
-                                    <div className='tabbar-title'>
-                                        我
-                                    </div>
-                                </Col>
-                            </NavLink>
-                        </Row>
-                    </div>
-                    <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/home" component={Home}/>
-                        <Route path="/cart" component={Cart}/>
-                        <Route path="/my" component={My}/>
-                    </Switch>
+            <div>
+                <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
+                    <Row>
+                        <NavLink exact to="/">
+                            <Col className={this.chooseClassNames('home')} span={8} onClick={() => {
+                                this.props.history.push({
+                                    pathname: '/home'
+                                })
+                                this.setState({
+                                    selectedTab: 'home'
+                                })
+                            }}>
+                                {
+                                    selectedTab === 'home' ?
+                                        <HomeSelectedIcon/>
+                                        :
+                                        <HomeUnselectedIcon/>
+                                }
+                                <div className='tabbar-title'>
+                                    主页
+                                </div>
+                            </Col>
+                        </NavLink>
+                        <NavLink to="/cart">
+                            <Col className={this.chooseClassNames('cart')} span={8} onClick={() => {
+                                this.props.history.push({
+                                    pathname: '/cart'
+                                })
+                                this.setState({
+                                    selectedTab: 'cart'
+                                })
+                            }}>
+                                {
+                                    selectedTab === 'cart' ?
+                                        <CartSelectedIcon/>
+                                        :
+                                        <CartUnselectedIcon/>
+                                }
+                                <div className='tabbar-title'>
+                                    购物篮
+                                </div>
+                            </Col>
+                        </NavLink>
+                        <NavLink to="/my">
+                            <Col className={this.chooseClassNames('my')} span={8} onClick={() => {
+                                this.props.history.push({
+                                    pathname: '/my'
+                                })
+                                this.setState({
+                                    selectedTab: 'my'
+                                })
+                            }}>
+                                {
+                                    selectedTab === 'my' ?
+                                        <MySelectedIcon/>
+                                        :
+                                        <MyUnselectedIcon/>
+                                }
+                                <div className='tabbar-title'>
+                                    我
+                                </div>
+                            </Col>
+                        </NavLink>
+                    </Row>
                 </div>
-            </Router>
+                <Switch>
+                    <Route exact path="/" component={Home}/>
+                    <Route path="/home" component={Home}/>
+                    <Route path="/cart" component={Cart}/>
+                    <Route path="/my" component={My}/>
+                </Switch>
+            </div>
+
         )
     }
 }
 
-export default App
+export default withRouter(App)
 
 const HomeUnselectedIcon = () => (
     <Icon type="home" style={{fontSize: 22}}/>

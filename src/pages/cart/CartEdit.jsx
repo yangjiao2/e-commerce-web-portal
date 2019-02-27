@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Checkbox, WhiteSpace,Modal,Toast } from 'antd-mobile';
 import classNames from 'classnames';
+// import { Query,Mutation } from "react-apollo";
 
 const alert = Modal.alert;
 
@@ -94,11 +95,11 @@ class CartEdit extends Component {
                             cartList:cartList
                         });
                         Toast.info('删除成功', 1);
+                        this.sumCount();
                         setTimeout(resolve, 1000);
                     }),
             },
         ]);
-        this.sumCount();
     };
 
     //删除

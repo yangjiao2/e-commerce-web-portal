@@ -6,6 +6,7 @@ import ApolloClient from "apollo-boost"
 import {ApolloProvider} from "react-apollo"
 
 import {graphqlFC} from "./configs/url"
+import {BrowserRouter as Router} from 'react-router-dom'
 
 const client = new ApolloClient({
     uri: graphqlFC
@@ -13,7 +14,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <App/>
+        <Router>
+            <App/>
+        </Router>
     </ApolloProvider>,
     document.getElementById('root')
 )
