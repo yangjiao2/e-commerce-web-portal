@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {Icon} from 'antd'
-import {Row, Col} from 'antd'
+import {Row, Col, Icon} from 'antd'
+import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom'
+import classnames from 'classnames'
+
 import Home from './pages/home'
 import Cart from './pages/cart'
 import My from './pages/my'
 import './app.css'
-import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom'
-import classnames from 'classnames'
 
 class App extends Component {
     constructor(props) {
@@ -27,13 +27,14 @@ class App extends Component {
 
     chooseClassNames = (tabbar) => (
         classnames(
+            {'tabbar-content': true},
             {'tabbar-inactive': this.state.selectedTab !== tabbar},
             {'tabbar-active': this.state.selectedTab === tabbar}
         )
     )
 
     render() {
-        let {selectedTab, tabHidden, page} = this.state
+        let {selectedTab, tabHidden} = this.state
         return (
             <Router>
                 <div>
@@ -50,7 +51,7 @@ class App extends Component {
                                             :
                                             <HomeUnselectedIcon/>
                                     }
-                                    <div>
+                                    <div className='tabbar-title'>
                                         主页
                                     </div>
                                 </Col>
@@ -65,7 +66,7 @@ class App extends Component {
                                             :
                                             <CartUnselectedIcon/>
                                     }
-                                    <div>
+                                    <div className='tabbar-title'>
                                         购物篮
                                     </div>
                                 </Col>
@@ -80,7 +81,7 @@ class App extends Component {
                                             :
                                             <MyUnselectedIcon/>
                                     }
-                                    <div>
+                                    <div className='tabbar-title'>
                                         我
                                     </div>
                                 </Col>
