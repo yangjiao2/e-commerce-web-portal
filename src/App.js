@@ -5,7 +5,7 @@ import Home from './pages/home'
 import Cart from './pages/cart'
 import My from './pages/my'
 import './app.css'
-import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom'
+import {Switch, Route, NavLink, withRouter} from 'react-router-dom'
 import classnames from 'classnames'
 
 class App extends Component {
@@ -35,14 +35,18 @@ class App extends Component {
     render() {
         let {selectedTab, tabHidden, page} = this.state
         return (
-            <Router>
+
                 <div>
                     <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
                         <Row>
-                            {/*navlink 的 activeClass 有点问题*/}
                             <NavLink exact to="/">
                                 <Col className={this.chooseClassNames('home')} span={8} onClick={() => {
-                                    this.changeTabBar('home')
+                                    this.props.history.push({
+                                        pathname: '/home'
+                                    })
+                                    this.setState({
+                                        selectedTab: 'home'
+                                    })
                                 }}>
                                     {
                                         selectedTab === 'home' ?
@@ -57,7 +61,12 @@ class App extends Component {
                             </NavLink>
                             <NavLink to="/cart">
                                 <Col className={this.chooseClassNames('cart')} span={8} onClick={() => {
-                                    this.changeTabBar('cart')
+                                    this.props.history.push({
+                                        pathname: '/cart'
+                                    })
+                                    this.setState({
+                                        selectedTab: 'cart'
+                                    })
                                 }}>
                                     {
                                         selectedTab === 'cart' ?
@@ -72,7 +81,12 @@ class App extends Component {
                             </NavLink>
                             <NavLink to="/my">
                                 <Col className={this.chooseClassNames('my')} span={8} onClick={() => {
-                                    this.changeTabBar('my')
+                                    this.props.history.push({
+                                        pathname: '/my'
+                                    })
+                                    this.setState({
+                                        selectedTab: 'my'
+                                    })
                                 }}>
                                     {
                                         selectedTab === 'my' ?
@@ -94,12 +108,12 @@ class App extends Component {
                         <Route path="/my" component={My}/>
                     </Switch>
                 </div>
-            </Router>
+
         )
     }
 }
 
-export default App
+export default withRouter(App)
 
 const HomeUnselectedIcon = () => (
     <Icon type="home" style={{fontSize: 22}}/>
