@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import './index.css'
 import {Grid} from 'antd-mobile'
+import {withRouter} from 'react-router-dom'
 
 const orderIcon = [
     {
@@ -64,13 +65,10 @@ const memberIcon = [
 class All extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     render() {
-        let {changePageInMy, changeTabBar} = this.props;
         return (
             <div className='my-wrap all'>
                 <div className='avatar-area'>
@@ -86,7 +84,12 @@ class All extends Component {
                               columnNum={4}
                               hasLine={false}
                               onClick={(order) => {
-                                  changePageInMy('order', {id: order.id})
+                                  this.props.history.push({
+                                      pathname: '/my/order',
+                                      state: {
+                                          page: order.id
+                                      }
+                                  })
                               }}
                         />
                     </div>
@@ -101,10 +104,17 @@ class All extends Component {
                               columnNum={4}
                               hasLine={false}
                               onClick={(tools) => {
-                                  if(tools.id === 'cart') {
-                                      changeTabBar('cart')
+                                  if (tools.id === 'cart') {
+                                      this.props.history.push({
+                                          pathname: '/cart'
+                                      })
                                   } else {
-                                      changePageInMy('tools', {id: tools.id})
+                                      this.props.history.push({
+                                          pathname: '/my/tools',
+                                          state: {
+                                              page: tools.id
+                                          }
+                                      })
                                   }
                               }}
                         />
@@ -120,7 +130,12 @@ class All extends Component {
                               columnNum={4}
                               hasLine={false}
                               onClick={(member) => {
-                                  changePageInMy('member', {id: member.id})
+                                  this.props.history.push({
+                                      pathname: '/my/member',
+                                      state: {
+                                          page: member.id
+                                      }
+                                  })
                               }}
                         />
                     </div>
@@ -130,4 +145,4 @@ class All extends Component {
     }
 }
 
-export default All
+export default withRouter(All)

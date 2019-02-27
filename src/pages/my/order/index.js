@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import './index.css'
 import {NavBar, Icon} from 'antd-mobile'
+import {withRouter} from 'react-router-dom'
 
 class Order extends Component {
     constructor(props) {
@@ -9,7 +10,6 @@ class Order extends Component {
     }
 
     render() {
-        let {changePageInMy} = this.props
         return (
             <div className='order-wrap'>
                 <div className='order-navbar-wrap'>
@@ -17,7 +17,7 @@ class Order extends Component {
                         className='order-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => changePageInMy('all', {}, false)}
+                        onLeftClick={() => {this.props.history.push({pathname: '/my/all'})}}
                         rightContent={[
                             <Icon key="1" type="ellipsis"/>,
                         ]}
@@ -28,4 +28,4 @@ class Order extends Component {
     }
 }
 
-export default Order
+export default withRouter(Order)

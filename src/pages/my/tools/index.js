@@ -3,6 +3,7 @@ import './index.css'
 import {NavBar, Icon} from 'antd-mobile'
 import Message from './message'
 import Address from './address'
+import {withRouter, Route, Switch} from 'react-router-dom'
 
 class Tools extends Component {
     constructor(props) {
@@ -12,31 +13,33 @@ class Tools extends Component {
         }
     }
 
-    renderPage = (id) => {
-        switch (id) {
-            case 'address':
-                return <Address />
-            case 'message':
-                return <Message />
-            default:
-                return <div>此页面后不该出现</div>
+    componentWillMount() {
+        let {location} = this.props
+        if (location && location.state) {
+            this.props.history.push({
+                pathname: '/my/tools/' + location.state.page,
+                state: {}
+            })
+            let navTitle = ''
+            switch (location.state.page) {
+                case 'address':
+                    navTitle = '地址管理'
+                    break
+                case 'message':
+                    navTitle = '系统通知'
+                    break
+                default:
+                    navTitle = '无效页面'
+                    break
+            }
+            this.setState({
+                navTitle
+            })
         }
     }
 
     render() {
-        let {changePageInMy, id} = this.props
-        let navTitle = ''
-        switch (id) {
-            case 'address':
-                navTitle = '地址管理'
-                break
-            case 'message':
-                navTitle = '系统通知'
-                break
-            default:
-                navTitle = '无效页面'
-                break
-        }
+        let {navTitle} = this.state
 
         return (
             <div className='tools-wrap'>
@@ -45,18 +48,21 @@ class Tools extends Component {
                         className='tools-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => changePageInMy('all', {}, false)}
+                        onLeftClick={() => {
+                            this.props.history.push({pathname: '/my/all'})
+                        }}
                         rightContent={[
                             <Icon key="1" type="ellipsis"/>,
                         ]}
                     >{navTitle}</NavBar>
                 </div>
-                {
-                    this.renderPage(id)
-                }
+                <Switch>
+                    <Route path="/my/tools/address" component={Address}/>
+                    <Route path="/my/tools/message" component={Message}/>
+                </Switch>
             </div>
         )
     }
 }
 
-export default Tools
+export default withRouter(Tools)

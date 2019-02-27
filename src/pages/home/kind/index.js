@@ -12,11 +12,22 @@ const Search = Input.Search
 class Kind extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            id: ''
+        }
+    }
+
+    componentWillMount() {
+        let {location} = this.props
+        if(location && location.state) {
+            this.setState({
+                id: location.state.id
+            })
+        }
     }
 
     render() {
-        let {id, changePageInHome} = this.props
+        let {id} = this.state
         return (
             <div className='kind-wrap'>
                 <div className='kind-navbar-wrap'>
@@ -53,13 +64,12 @@ class Kind extends Component {
                             return (
                                 <KindRender
                                     data={data.productbyprops}
-                                    changePageInHome={changePageInHome}
+                                    history={this.props.history}
                                 />
                             )
                         }
                     }
                 </Query>
-
             </div>
         )
     }
@@ -74,14 +84,20 @@ class KindRender extends Component {
     }
 
     render() {
-        let {data, changePageInHome} = this.props
+        let {data} = this.props
         return (
             <div className='kind-wrapper'>
                 <Grid data={data}
                       columnNum={2}
                       hasLine={false}
-                      onClick={(kind) => {
-                          changePageInHome('detail', {id: kind.id})
+                      onClick={(product) => {
+                          console.log(product)
+                          this.props.history.push({
+                              pathname: '/home/detail',
+                              state: {
+                                  id: product.id
+                              }
+                          })
                       }}
                       renderItem={dataItem => (
                           <div key={dataItem.id} className='kind-item'>

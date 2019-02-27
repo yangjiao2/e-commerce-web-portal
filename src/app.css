@@ -7,6 +7,7 @@
     z-index: 1;
     border-top: 1px solid #F3F3F3;
     text-align: center;
+    transition: all ease 0.3s;
 }
 
 .tabbar-content {

@@ -1,54 +1,21 @@
-import React, {Component} from 'react'
+import React from 'react'
 import './index.css'
 import All from './all'
 import Order from './order'
 import Tools from './tools'
 import Member from './member'
+import {Switch, Route} from 'react-router-dom'
 
-class My extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            page: 'all',
-            param: {}
-        }
-    }
-
-    changePageInMy = (page, param, hidden) => {
-        this.props.changeTabBar('my', hidden !== undefined ? hidden : true)
-        this.setState({
-            page,
-            param: param ? param : {}
-        })
-    }
-
-    renderPage = () => {
-        let {page, param} = this.state
-        let {changeTabBar} = this.props
-        switch (page) {
-            case 'all':
-                return <All changePageInMy={this.changePageInMy} changeTabBar={changeTabBar} {...param}/>
-            case 'order':
-                return <Order changePageInMy={this.changePageInMy} {...param}/>
-            case 'tools':
-                return <Tools changePageInMy={this.changePageInMy} {...param}/>
-            case 'member':
-                return <Member changePageInMy={this.changePageInMy} {...param}/>
-            default:
-                return <div>这个页面不应该出现是</div>
-        }
-    }
-
-    render() {
-        return (
-            <div style={{height: '100%'}}>
-                {
-                    this.renderPage()
-                }
-            </div>
-        )
-    }
-}
+const My = () => (
+    <div style={{height: '100%'}}>
+        <Switch>
+            <Route exact path="/my" component={All}/>
+            <Route exact path="/my/all" component={All}/>
+            <Route path="/my/order" component={Order}/>
+            <Route path="/my/tools" component={Tools}/>
+            <Route path="/my/member" component={Member}/>
+        </Switch>
+    </div>
+)
 
 export default My
-

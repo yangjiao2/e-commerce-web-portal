@@ -31,7 +31,7 @@ class App extends Component {
 
         // 如果不是首页的初始界面，就隐藏 tabbar
         // 如在 /home/detail 刷新
-        if(location.pathname.split('/').length>2) {
+        if (location.pathname.split('/').length > 2) {
             this.setState({
                 tabHidden: true
             })
@@ -65,17 +65,21 @@ class App extends Component {
     }
 
     isActiveFunc = (navKind) => (match, location) => {
-        return navKind === location.pathname.split('/')[1]
+        if (navKind === 'home' && location.pathname.split('/')[1] === '') {
+            return true
+        } else {
+            return navKind === location.pathname.split('/')[1]
+        }
     }
 
     render() {
         let {selectedTab, tabHidden} = this.state
         return (
-            <div>
+            <div style={{height: '100%'}}>
                 <div className={classnames('tabbar', {'tabbar-hidden': tabHidden})}>
                     <Row>
                         <Col span={8} className='tabbar-content'>
-                            <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/">
+                            <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/home">
                                 {
                                     selectedTab === 'home' ?
                                         <HomeSelectedIcon/>
