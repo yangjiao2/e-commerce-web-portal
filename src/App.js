@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
 import {Icon} from 'antd'
-import {TabBar} from 'antd-mobile'
+import {Row, Col} from 'antd'
 import Home from './pages/home'
 import Cart from './pages/cart'
 import My from './pages/my'
+import './app.css'
+import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom'
+import classnames from 'classnames'
 
 class App extends Component {
     constructor(props) {
@@ -11,34 +14,9 @@ class App extends Component {
         this.state = {
             selectedTab: 'home',
             tabHidden: false,
-            page:'detail'
+            page: 'detail'
         }
     }
-
-    componentWillMount(){
-        this.getHash();
-    }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        this.getHash();
-    }
-
-    getHash = () => {
-        let hash = window.location.hash || '#tab=home';
-        let tab = 'home',page = 'detail';
-        if(hash && hash.indexOf("&")>0){
-            let tabHash = hash.split("&")[0], pageHash = hash.split("&")[1];
-            tab = tabHash.substr(tabHash.indexOf("=")+1);
-            page = pageHash.substr(pageHash.indexOf("=")+1);
-        }
-        // console.log('tab',tab);
-        // console.log('page',page);
-
-        this.setState({
-            selectedTab: tab,
-            page
-        });
-    };
 
     changeTabBar = (tab, hidden) => {
         this.setState({
@@ -47,62 +25,76 @@ class App extends Component {
         })
     }
 
+    chooseClassNames = (tabbar) => (
+        classnames(
+            {'tabbar-inactive': this.state.selectedTab !== tabbar},
+            {'tabbar-active': this.state.selectedTab === tabbar}
+        )
+    )
+
     render() {
-        let {selectedTab, tabHidden, page} = this.state;
+        let {selectedTab, tabHidden, page} = this.state
         return (
-            <div style={{
-                position: 'fixed',
-                height: '100%',
-                width: '100%',
-                top: 0
-            }}>
-                <TabBar
-                    unselectedTintColor="#949494"
-                    tintColor="#33A3F4"
-                    barTintColor="white"
-                    hidden={tabHidden}
-                >
-                    <TabBar.Item
-                        title="首页"
-                        key="home"
-                        icon={<HomeUnselectedIcon/>}
-                        selectedIcon={<HomeSelectedIcon/>}
-                        selected={selectedTab === 'home'}
-                        onPress={() => {
-                            window.location.hash = 'tab=home';
-                            this.changeTabBar('home')
-                        }}
-                    >
-                        <Home changeTabBar={this.changeTabBar}/>
-                    </TabBar.Item>
-                    <TabBar.Item
-                        icon={<CartUnselectedIcon/>}
-                        selectedIcon={<CartSelectedIcon/>}
-                        title="购物袋"
-                        key="cart"
-                        selected={selectedTab === 'cart'}
-                        onPress={() => {
-                            window.location.hash = `tab=cart&page=${page}`;
-                            this.changeTabBar('cart')
-                        }}
-                    >
-                        <Cart changeTabBar={this.changeTabBar}/>
-                    </TabBar.Item>
-                    <TabBar.Item
-                        icon={<MyUnselectedIcon/>}
-                        selectedIcon={<MySelectedIcon/>}
-                        title="我的"
-                        key="my"
-                        selected={selectedTab === 'my'}
-                        onPress={() => {
-                            window.location.hash = 'tab=my';
-                            this.changeTabBar('my')
-                        }}
-                    >
-                        <My changeTabBar={this.changeTabBar}/>
-                    </TabBar.Item>
-                </TabBar>
-            </div>
+            <Router>
+                <div>
+                    <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
+                        <Row>
+                            {/*navlink 的 activeClass 有点问题*/}
+                            <NavLink exact to="/">
+                                <Col className={this.chooseClassNames('home')} span={8} onClick={() => {
+                                    this.changeTabBar('home')
+                                }}>
+                                    {
+                                        selectedTab === 'home' ?
+                                            <HomeSelectedIcon/>
+                                            :
+                                            <HomeUnselectedIcon/>
+                                    }
+                                    <div>
+                                        主页
+                                    </div>
+                                </Col>
+                            </NavLink>
+                            <NavLink to="/cart">
+                                <Col className={this.chooseClassNames('cart')} span={8} onClick={() => {
+                                    this.changeTabBar('cart')
+                                }}>
+                                    {
+                                        selectedTab === 'cart' ?
+                                            <CartSelectedIcon/>
+                                            :
+                                            <CartUnselectedIcon/>
+                                    }
+                                    <div>
+                                        购物篮
+                                    </div>
+                                </Col>
+                            </NavLink>
+                            <NavLink to="/my">
+                                <Col className={this.chooseClassNames('my')} span={8} onClick={() => {
+                                    this.changeTabBar('my')
+                                }}>
+                                    {
+                                        selectedTab === 'my' ?
+                                            <MySelectedIcon/>
+                                            :
+                                            <MyUnselectedIcon/>
+                                    }
+                                    <div>
+                                        我
+                                    </div>
+                                </Col>
+                            </NavLink>
+                        </Row>
+                    </div>
+                    <Switch>
+                        <Route exact path="/" component={Home}/>
+                        <Route path="/home" component={Home}/>
+                        <Route path="/cart" component={Cart}/>
+                        <Route path="/my" component={My}/>
+                    </Switch>
+                </div>
+            </Router>
         )
     }
 }
@@ -126,17 +118,9 @@ const CartSelectedIcon = () => (
 )
 
 const MyUnselectedIcon = () => (
-    <div style={{
-        width: '22px',
-        height: '22px',
-        background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat'
-    }}/>
+    <Icon type="setting" style={{fontSize: 22}}/>
 )
 
 const MySelectedIcon = () => (
-    <div style={{
-        width: '22px',
-        height: '22px',
-        background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat'
-    }}/>
+    <Icon type="setting" theme="twoTone" style={{fontSize: 22}}/>
 )

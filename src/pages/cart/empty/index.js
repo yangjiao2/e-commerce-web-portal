@@ -22,9 +22,11 @@ class Empty extends Component {
                 <div>
                     <button className="empty-button"
                             onClick={()=>{
-                                this.props.history.push({
-                                    pathname: `/`
-                            })}}>
+                                window.location = '/#tab=my'
+                            //     this.props.history.push({
+                            //         pathname: `/`
+                            // })
+                            }}>
                         去逛逛
                     </button>
                 </div>
