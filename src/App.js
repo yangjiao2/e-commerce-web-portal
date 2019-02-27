@@ -22,9 +22,18 @@ class App extends Component {
             pathname = location.pathname
 
         // 根据首次的 pathname 显示 icon 选中
+        // 如 /cart 刷新
         if (location && pathname) {
             this.setState({
                 selectedTab: pathname.split('/')[1] === '' ? 'home' : pathname.split('/')[1]
+            })
+        }
+
+        // 如果不是首页的初始界面，就隐藏 tabbar
+        // 如在 /home/detail 刷新
+        if(location.pathname.split('/').length>2) {
+            this.setState({
+                tabHidden: true
             })
         }
     }
@@ -34,14 +43,20 @@ class App extends Component {
             pathname = location.pathname,
             state = location.state
 
-        // 有 state 的话，就隐藏 tabbar
+        // 有 state 的话，就隐藏 tabbar, （进入子界面）
+        // 无 state 的话，就显示 tabbar （返回到主界面）
         if (location && state) {
             this.setState({
                 tabHidden: true
             })
+        } else {
+            this.setState({
+                tabHidden: false
+            })
         }
 
         // 根据非首次的 pathname 显示 icon 选中
+        // 如 /home 跳转到 /home/kind, /cart 跳转到 /home 等
         if (location && pathname) {
             this.setState({
                 selectedTab: pathname.split('/')[1] === '' ? 'home' : pathname.split('/')[1]
@@ -57,7 +72,7 @@ class App extends Component {
         let {selectedTab, tabHidden} = this.state
         return (
             <div>
-                <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
+                <div className={classnames('tabbar', {'tabbar-hidden': tabHidden})}>
                     <Row>
                         <Col span={8} className='tabbar-content'>
                             <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/">

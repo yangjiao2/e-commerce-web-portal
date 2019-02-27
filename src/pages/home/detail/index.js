@@ -9,11 +9,22 @@ import {withRouter} from 'react-router-dom'
 class Detail extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            id: ''
+        }
+    }
+
+    componentWillMount() {
+        let {location} = this.props
+        if(location && location.state) {
+            this.setState({
+                id: location.state.id
+            })
+        }
     }
 
     render() {
-        let {id, changePageInHome} = this.props
+        let {id} = this.state
         return (
             <div className='detail-wrap'>
                 <div className='detail-navbar-wrap'>

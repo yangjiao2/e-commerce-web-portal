@@ -26,7 +26,8 @@
 }
 
 .tabbar-hidden {
-    display: none;
+    height: 0;
+    transition: all ease 0.3s;
 }
 
 .tabbar-title {
