@@ -5,6 +5,7 @@ import './index.css'
 import {productbyprops} from "../../../utils/gql"
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
+import {withRouter} from 'react-router-dom'
 
 const Search = Input.Search
 
@@ -23,7 +24,7 @@ class Kind extends Component {
                         className='kind-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => changePageInHome('all', {}, false)}
+                        onLeftClick={() => {this.props.history.push({pathname: '/'})}}
                         rightContent={[
                             <Icon key="1" type="ellipsis"/>,
                         ]}
@@ -64,7 +65,7 @@ class Kind extends Component {
     }
 }
 
-export default Kind
+export default withRouter(Kind)
 
 class KindRender extends Component {
     constructor(props) {

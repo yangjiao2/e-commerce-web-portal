@@ -4,6 +4,7 @@ import {productbyid} from "../../../utils/gql"
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import './index.css'
+import {withRouter} from 'react-router-dom'
 
 class Detail extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class Detail extends Component {
                         className='detail-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => changePageInHome('all', {}, false)}
+                        onLeftClick={() => {this.props.history.push({pathname: '/'})}}
                         rightContent={[
                             <Icon key="1" type="ellipsis"/>,
                         ]}
@@ -52,7 +53,7 @@ class Detail extends Component {
     }
 }
 
-export default Detail
+export default withRouter(Detail)
 
 class DetailRender extends Component {
     constructor(props) {

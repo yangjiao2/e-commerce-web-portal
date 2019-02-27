@@ -13,21 +13,18 @@ class App extends Component {
         super(props)
         this.state = {
             selectedTab: 'home',
-            tabHidden: false,
-            page: 'detail'
+            tabHidden: false
         }
     }
 
     componentWillMount() {
-        console.log('this.props',this.props)
         let {location} = this.props,
             pathname = location.pathname
 
         // 根据首次的 pathname 显示 icon 选中
-        console.log(pathname)
         if (location && pathname) {
             this.setState({
-                selectedTab: pathname.substr(1) === '' ? 'home' : pathname.substr(1)
+                selectedTab: pathname.split('/')[1] === '' ? 'home' : pathname.split('/')[1]
             })
         }
     }
@@ -47,76 +44,23 @@ class App extends Component {
         // 根据非首次的 pathname 显示 icon 选中
         if (location && pathname) {
             this.setState({
-                selectedTab: pathname.substr(1) === '' ? 'home' : pathname.substr(1)
+                selectedTab: pathname.split('/')[1] === '' ? 'home' : pathname.split('/')[1]
             })
         }
     }
 
-    chooseClassNames = (tabbar) => (
-        classnames(
-            {'tabbar-content': true},
-            {'tabbar-inactive': this.state.selectedTab !== tabbar},
-            {'tabbar-active': this.state.selectedTab === tabbar}
-        )
-    )
-
-     isActiveFunc = (match, location) => {
-        console.log(match,'contact')
-        return match
+    isActiveFunc = (navKind) => (match, location) => {
+        return navKind === location.pathname.split('/')[1]
     }
 
     render() {
         let {selectedTab, tabHidden} = this.state
         return (
             <div>
-                <div className="tabbar1">
-                    <Row>
-                        <Col span={8}>
-                            <NavLink exact activeClassName="active" to="/">
-                                {
-                                    selectedTab === 'home' ?
-                                        <HomeSelectedIcon/>
-                                        :
-                                        <HomeUnselectedIcon/>
-                                }
-                                <div className='tabbar-title'>
-                                    主页
-                                </div>
-                            </NavLink>
-                        </Col>
-                        <Col span={8}>
-                            <NavLink activeClassName="active" to={{pathname: '/cart'}}>
-                                {
-                                    selectedTab === 'cart' ?
-                                        <CartSelectedIcon/>
-                                        :
-                                        <CartUnselectedIcon/>
-                                }
-                                <div className='tabbar-title'>
-                                    购物篮
-                                </div>
-                            </NavLink>
-                        </Col>
-                        <Col span={8}>
-                            <NavLink isActive={this.isActiveFunc} activeClassName="active" to="/my">
-                                {
-                                    selectedTab === 'my' ?
-                                        <MySelectedIcon/>
-                                        :
-                                        <MyUnselectedIcon/>
-                                }
-                                <div className='tabbar-title'>
-                                    我
-                                </div>
-                            </NavLink>
-                        </Col>
-                    </Row>
-
-                </div>
                 <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
                     <Row>
-                        <NavLink exact to="/">
-                            <Col className={this.chooseClassNames('home')} span={8}>
+                        <Col span={8} className='tabbar-content'>
+                            <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/">
                                 {
                                     selectedTab === 'home' ?
                                         <HomeSelectedIcon/>
@@ -126,10 +70,10 @@ class App extends Component {
                                 <div className='tabbar-title'>
                                     主页
                                 </div>
-                            </Col>
-                        </NavLink>
-                        <NavLink to="/cart">
-                            <Col className={this.chooseClassNames('cart')} span={8}>
+                            </NavLink>
+                        </Col>
+                        <Col span={8} className='tabbar-content'>
+                            <NavLink isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
                                 {
                                     selectedTab === 'cart' ?
                                         <CartSelectedIcon/>
@@ -139,10 +83,10 @@ class App extends Component {
                                 <div className='tabbar-title'>
                                     购物篮
                                 </div>
-                            </Col>
-                        </NavLink>
-                        <NavLink to="/my">
-                            <Col className={this.chooseClassNames('my')} span={8}>
+                            </NavLink>
+                        </Col>
+                        <Col span={8} className='tabbar-content'>
+                            <NavLink isActive={this.isActiveFunc('my')} activeClassName="active" to="/my">
                                 {
                                     selectedTab === 'my' ?
                                         <MySelectedIcon/>
@@ -152,8 +96,8 @@ class App extends Component {
                                 <div className='tabbar-title'>
                                     我
                                 </div>
-                            </Col>
-                        </NavLink>
+                            </NavLink>
+                        </Col>
                     </Row>
                 </div>
                 <Switch>

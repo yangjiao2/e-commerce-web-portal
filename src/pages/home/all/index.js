@@ -128,7 +128,7 @@ class Like extends Component {
     }
 
     render() {
-        let {data, changePageInHome} = this.props
+        let {data} = this.props
         return (
             <div className='guess-wrapper'>
                 <div className='guess-title'>- 猜你喜欢 -</div>
@@ -137,7 +137,7 @@ class Like extends Component {
                       hasLine={false}
                       onClick={(guess)=>{
                           this.props.history.push({
-                              pathname: 'detail',
+                              pathname: '/home/detail',
                               state: {
                                   id: guess.id
                               }
