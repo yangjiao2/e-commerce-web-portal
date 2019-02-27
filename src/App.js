@@ -20,6 +20,19 @@ class App extends Component {
 
     componentWillMount() {
         let {location} = this.props,
+            pathname = location.pathname
+
+        // 根据首次的 pathname 显示 icon 选中
+        console.log(pathname)
+        if (location && pathname) {
+            this.setState({
+                selectedTab: pathname.substr(1) === '' ? 'home' : pathname.substr(1)
+            })
+        }
+    }
+
+    componentWillReceiveProps(next) {
+        let {location} = next,
             pathname = location.pathname,
             state = location.state
 
@@ -30,10 +43,10 @@ class App extends Component {
             })
         }
 
-        // 根据 pathname 显示 icon 选中
+        // 根据非首次的 pathname 显示 icon 选中
         if (location && pathname) {
             this.setState({
-                selectedTab: pathname.substr(1) === ''? 'home' : pathname.substr(1)
+                selectedTab: pathname.substr(1) === '' ? 'home' : pathname.substr(1)
             })
         }
     }
