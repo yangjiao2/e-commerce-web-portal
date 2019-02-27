@@ -4,6 +4,7 @@ import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import {Grid, Carousel, WhiteSpace, ActivityIndicator} from 'antd-mobile'
 import './index.css'
+import {withRouter} from 'react-router-dom'
 
 class All extends Component {
     constructor(props) {
@@ -56,7 +57,6 @@ class All extends Component {
                 id: 'more'
             }
         ]
-        let {changePageInHome} = this.props
         return (
             <div>
                 <Carousel
@@ -87,7 +87,12 @@ class All extends Component {
                     data={data}
                     hasLine={false}
                     onClick={(kind)=>{
-                        changePageInHome('kind', {id: kind.id})
+                        this.props.history.push({
+                            pathname: '/home/kind',
+                            state: {
+                                id: kind.id
+                            }
+                        })
                     }}/>
                 <WhiteSpace/>
                 <div className='guess-wrap'>
@@ -105,10 +110,7 @@ class All extends Component {
                                     return 'error!'
                                 }
                                 return (
-                                    <Like
-                                        data={data.productbyprops}
-                                        changePageInHome={changePageInHome}
-                                    />
+                                    <Like data={data.productbyprops} history={this.props.history}/>
                                 )
                             }
                         }
@@ -134,7 +136,12 @@ class Like extends Component {
                       columnNum={2}
                       hasLine={false}
                       onClick={(guess)=>{
-                          changePageInHome('detail', {id: guess.id})
+                          this.props.history.push({
+                              pathname: 'detail',
+                              state: {
+                                  id: guess.id
+                              }
+                          })
                       }}
                       renderItem={dataItem => (
                           <div key={dataItem.id} className='guess-item'>
@@ -151,4 +158,4 @@ class Like extends Component {
     }
 }
 
-export default All
+export default withRouter(All)

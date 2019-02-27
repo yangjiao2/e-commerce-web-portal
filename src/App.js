@@ -66,14 +66,7 @@ class App extends Component {
                 <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
                     <Row>
                         <NavLink exact to="/">
-                            <Col className={this.chooseClassNames('home')} span={8} onClick={() => {
-                                this.props.history.push({
-                                    pathname: '/home'
-                                })
-                                this.setState({
-                                    selectedTab: 'home'
-                                })
-                            }}>
+                            <Col className={this.chooseClassNames('home')} span={8}>
                                 {
                                     selectedTab === 'home' ?
                                         <HomeSelectedIcon/>
@@ -86,14 +79,7 @@ class App extends Component {
                             </Col>
                         </NavLink>
                         <NavLink to="/cart">
-                            <Col className={this.chooseClassNames('cart')} span={8} onClick={() => {
-                                this.props.history.push({
-                                    pathname: '/cart'
-                                })
-                                this.setState({
-                                    selectedTab: 'cart'
-                                })
-                            }}>
+                            <Col className={this.chooseClassNames('cart')} span={8}>
                                 {
                                     selectedTab === 'cart' ?
                                         <CartSelectedIcon/>
@@ -106,14 +92,7 @@ class App extends Component {
                             </Col>
                         </NavLink>
                         <NavLink to="/my">
-                            <Col className={this.chooseClassNames('my')} span={8} onClick={() => {
-                                this.props.history.push({
-                                    pathname: '/my'
-                                })
-                                this.setState({
-                                    selectedTab: 'my'
-                                })
-                            }}>
+                            <Col className={this.chooseClassNames('my')} span={8}>
                                 {
                                     selectedTab === 'my' ?
                                         <MySelectedIcon/>
