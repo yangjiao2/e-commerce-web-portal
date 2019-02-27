@@ -19,6 +19,7 @@ class App extends Component {
     }
 
     componentWillMount() {
+        console.log('this.props',this.props)
         let {location} = this.props,
             pathname = location.pathname
 
@@ -59,10 +60,59 @@ class App extends Component {
         )
     )
 
+     isActiveFunc = (match, location) => {
+        console.log(match,'contact')
+        return match
+    }
+
     render() {
         let {selectedTab, tabHidden} = this.state
         return (
             <div>
+                <div className="tabbar1">
+                    <Row>
+                        <Col span={8}>
+                            <NavLink exact activeClassName="active" to="/">
+                                {
+                                    selectedTab === 'home' ?
+                                        <HomeSelectedIcon/>
+                                        :
+                                        <HomeUnselectedIcon/>
+                                }
+                                <div className='tabbar-title'>
+                                    主页
+                                </div>
+                            </NavLink>
+                        </Col>
+                        <Col span={8}>
+                            <NavLink activeClassName="active" to={{pathname: '/cart'}}>
+                                {
+                                    selectedTab === 'cart' ?
+                                        <CartSelectedIcon/>
+                                        :
+                                        <CartUnselectedIcon/>
+                                }
+                                <div className='tabbar-title'>
+                                    购物篮
+                                </div>
+                            </NavLink>
+                        </Col>
+                        <Col span={8}>
+                            <NavLink isActive={this.isActiveFunc} activeClassName="active" to="/my">
+                                {
+                                    selectedTab === 'my' ?
+                                        <MySelectedIcon/>
+                                        :
+                                        <MyUnselectedIcon/>
+                                }
+                                <div className='tabbar-title'>
+                                    我
+                                </div>
+                            </NavLink>
+                        </Col>
+                    </Row>
+
+                </div>
                 <div className={classnames('tabbar', {'tarbar-hidden': tabHidden})}>
                     <Row>
                         <NavLink exact to="/">

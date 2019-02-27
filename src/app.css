@@ -9,6 +9,17 @@
     text-align: center;
 }
 
+.tabbar1 {
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+    border-top: 1px solid #F3F3F3;
+    text-align: center;
+}
+
 .tabbar-content {
     display: flex;
     flex-direction: column;
@@ -34,4 +45,14 @@
     margin: 3px 0 0 0;
     line-height: 1;
     text-align: center;
+}
+
+a.active {
+    color: #258fff;
+    text-decoration: none;
+}
+
+a{
+    color: #b9b9b9;
+    text-decoration: none;
 }
