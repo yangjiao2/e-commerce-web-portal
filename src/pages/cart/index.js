@@ -2,7 +2,7 @@ import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 
 import All from './all'
-import CartOrder from './order'
+import CartOrders from './orders'
 import './index.css'
 
 const Cart = () => (
@@ -10,7 +10,7 @@ const Cart = () => (
         <Switch>
             <Route exact path="/cart" component={All}/>
             <Route exact path="/cart/all" component={All}/>
-            <Route path="/cart/order" component={CartOrder}/>
+            <Route path="/cart/order" component={CartOrders}/>
         </Switch>
     </div>
 )

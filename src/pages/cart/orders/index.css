@@ -1,0 +1,86 @@
+.orders-content-wrap > div {
+    margin-bottom: 10px;
+    background: white;
+}
+
+.orders-address:after {
+    left: 0;
+    right: 0;
+    content: "";
+    height: 2px;
+    position: absolute;
+    background: repeating-linear-gradient(-45deg,#ff6d6d,#ff6d6d 20%,transparent 0,transparent 25%,#3283fa 0,#3283fa 45%,transparent 0,transparent 50%);
+    background-size: 80px;
+}
+
+.orders-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.orders-delivery > div:nth-child(1) {
+    border-bottom: 1px solid #ebedf0;
+}
+
+.orders-delivery > div:nth-child(2) {
+    padding: 10px 15px;
+}
+
+.orders-price > div {
+    padding: 10px 15px;
+}
+
+.cart-orders-intro {
+    width: 55%;
+}
+
+.cart-orders-count {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.am-list-content, .am-list-extra{
+    font-size: 14px!important;
+    color: #323233!important;
+}
+
+.orders-message {
+    width: 100%;
+    display: flex;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    line-height: 24px;
+    position: relative;
+    background-color: #fff;
+    color: #323233;
+    font-size: 14px;
+}
+
+.orders-message-title {
+    width: 20%;
+    max-width: 90px;
+}
+
+.orders-message-textarea {
+    width: 80%;
+    color: #969799;
+    text-align: right;
+    position: relative;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
+.message-textarea {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    resize: none;
+    display: block;
+    color: #323233;
+    box-sizing: border-box;
+    background-color: transparent;
+}

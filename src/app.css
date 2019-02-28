@@ -39,3 +39,7 @@ a {
     color: #b9b9b9;
     text-decoration: none;
 }
+
+.navbar {
+    border-bottom: 1px solid #f5f5f9;
+}

@@ -85,11 +85,12 @@
 .footer{
     position: fixed;
     bottom: 50px;
+    height: 45px;
     width: 100%;
 }
 
 .jiesuan {
-    height: 45px;
+    height: 100%;
     display: flex;
     font-size: 14px;
     align-items: center;
