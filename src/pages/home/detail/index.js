@@ -54,7 +54,7 @@ class Detail extends Component {
                             }
 
                             return (
-                                <DetailRender data={data.productbyid}/>
+                                <DetailRender data={data.productbyid} history={this.props.history}/>
                             )
                         }
                     }
@@ -88,10 +88,10 @@ class DetailRender extends Component {
                 </div>
                 <div className='detail-complicate-show'>详情详情</div>
                 <div className='detail-bottom'>
-                    <div className='detail-bottom-cart'>购物车</div>
-                    <div className='detail-bottom-home'>店铺</div>
-                    <div className='detail-bottom-add'>加入购物车</div>
-                    <div className='detail-bottom-buy'>立即购买</div>
+                    <span className='detail-bottom-cart' onClick={()=>{this.props.history.push({pathname: '/cart'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-cart'/><div>购物车</div></div></span>
+                    <span className='detail-bottom-home' onClick={()=>{this.props.history.push({pathname: '/home'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-shop'/><div>店铺</div></div></span>
+                    <span className='detail-bottom-add' onClick={()=>{}}>加入购物车</span>
+                    <span className='detail-bottom-buy' onClick={()=>{}}>立即购买</span>
                 </div>
             </div>
         )

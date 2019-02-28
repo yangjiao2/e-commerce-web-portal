@@ -17,6 +17,7 @@ class App extends Component {
         }
     }
 
+    // componentWillMount 适用于刷新的 tabbar 的展示
     componentWillMount() {
         let {location} = this.props,
             pathname = location.pathname
@@ -30,7 +31,7 @@ class App extends Component {
         }
 
         // 如果不是首页的初始界面，就隐藏 tabbar
-        // 如在 /home/detail 刷新
+        // 如在 /home/detail 或 /home/detail/ 刷新
         let pathnameArray = location.pathname.split('/')
         let length = pathnameArray.length
         if (length > 2 && pathnameArray[length - 1] !== '') {
@@ -40,6 +41,7 @@ class App extends Component {
         }
     }
 
+    // componentWillReceiveProps 适用于跳转的 tabbar 的展示
     componentWillReceiveProps(next) {
         let {location} = next,
             pathname = location.pathname,
@@ -102,7 +104,7 @@ class App extends Component {
                                         <CartUnselectedIcon/>
                                 }
                                 <div className='tabbar-title'>
-                                    购物篮
+                                    购物袋
                                 </div>
                             </NavLink>
                         </Col>

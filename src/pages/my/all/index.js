@@ -5,22 +5,22 @@ import {withRouter} from 'react-router-dom'
 
 const orderIcon = [
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/pay.png',
         text: '待付款',
         id: 'pay'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/ship.png',
         text: '待发货',
         id: 'ship'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/unbox.png',
         text: '待收货',
         id: 'unbox'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/judge.png',
         text: '待评价',
         id: 'judge'
     }
@@ -28,17 +28,17 @@ const orderIcon = [
 
 const toolsIcon = [
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/address.png',
         text: '收货地址',
         id: 'address'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
-        text: '购物车',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/cart.png',
+        text: '购物袋',
         id: 'cart'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/message.png',
         text: '系统通知',
         id: 'message'
     }
@@ -46,17 +46,17 @@ const toolsIcon = [
 
 const memberIcon = [
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/card.png',
         text: '会员卡',
         id: 'card'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/coupon.png',
         text: '优惠券',
         id: 'coupon'
     },
     {
-        icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/credit.png',
         text: '积分',
         id: 'credit'
     }
