@@ -1,4 +1,5 @@
-import React, { Component } from 'react' 
+import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom'
 import { Checkbox, WhiteSpace  } from 'antd-mobile' 
 import classNames from 'classnames' 
 
@@ -163,13 +164,16 @@ class CartDetail extends Component {
         console.log('shopping',shopping) 
         window.localStorage.setItem("shopping",JSON.stringify(shopping)) 
         window.localStorage.setItem("sumprice",JSON.stringify(this.state.totalPrice)) 
-        this.props.history.push('/jiesuan')
+        this.props.history.push({
+            pathname: '/cart/order',
+            state:{}
+        })
     } 
 
     render() {
         return (
             <div className="Cart">
-                <div className='section'>
+                <div className='cart-content'>
                     {
                         this.state.cartList.map((ele,index)=>{
                             return(
@@ -233,7 +237,6 @@ class CartDetail extends Component {
                                 'jiesuan-button': true,
                                 'jiesuan-disabled': !this.state.selectedCount
                             })}
-                            disabled={!this.state.isSelectAll}
                             onClick={()=>{this.settleAccounts()}}
                         >
                             <span>下单({this.state.selectedCount})</span>
@@ -245,4 +248,4 @@ class CartDetail extends Component {
     }
 }
 
-export default CartDetail
+export default withRouter(CartDetail)
