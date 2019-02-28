@@ -57,7 +57,7 @@ class Tools extends Component {
                     >{navTitle}</NavBar>
                 </div>
                 <Switch>
-                    <Route path="/my/tools/address" component={Address}/>
+                    <Route exact path="/my/tools/address" component={Address}/>
                     <Route path="/my/tools/message" component={Message}/>
                 </Switch>
             </div>

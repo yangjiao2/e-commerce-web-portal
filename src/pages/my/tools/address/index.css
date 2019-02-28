@@ -1,5 +1,20 @@
 .address-card {
     background-color: white;
+    padding: 10px;
+    font-size: 16px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.address-card-title {
+    width: 85px;
+    display: inline-block;
+}
+
+.address-address {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
 }
 
 .address-add {
@@ -10,6 +25,7 @@
     font-size: 20px;
     background-color: white;
     border-top: 1px solid #F3F3F3;
-    height: 50px;
-    line-height: 50px;
+    height: 70px;
+    line-height: 70px;
+    box-shadow: 3px -1px 1px #ebedf0;
 }

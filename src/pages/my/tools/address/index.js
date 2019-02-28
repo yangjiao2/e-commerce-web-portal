@@ -6,11 +6,20 @@ import {Button, Icon} from 'antd'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import './index.css'
+import AddAddress from "./addaddress"
 
 class Address extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            add: false
+        }
+    }
+
+    changePage = (bool) => {
+        this.setState({
+            add: bool
+        })
     }
 
     render() {
@@ -31,7 +40,14 @@ class Address extends Component {
                             }
 
                             return (
-                                <AddressRender data={data.userAddressbyprops}/>
+                                <div>
+                                    {
+                                        this.state.add?
+                                            <AddAddress changePage={this.changePage}/>
+                                            :
+                                            <AddressRender data={data.userAddressbyprops} changePage={this.changePage}/>
+                                    }
+                                </div>
                             )
                         }
                     }
@@ -51,25 +67,27 @@ class AddressRender extends Component {
     }
 
     render() {
-        let {data} = this.props
+        let {data, changePage} = this.props
         return (
             <div>
-                <div className='address-add'>
-                    <Icon type="plus" style={{fontSize: 22}}/>&nbsp;
+                <div className='address-add' onClick={()=>{
+                    changePage(true)
+                }}>
+                    <Icon type="plus" style={{fontSize: 22, fontWeight: 800}}/>&nbsp;
                     添加新地址
                 </div>
                 <div>
                     {data.map(address => {
                         return (
                             <div key={address.id} className='address-card'>
-                                <div>
-                                    收件人：{address.username}
+                                <div className='address-username'>
+                                    <span className='address-card-title'>收件人：</span>{address.username}
                                 </div>
-                                <div>
-                                    联系电话：{address.telephone}
+                                <div className='address-telephone'>
+                                    <span className='address-card-title'>联系电话：</span>{address.telephone}
                                 </div>
-                                <div>
-                                    联系地址：{address.province + address.city + address.area + address.address}
+                                <div className='address-address'>
+                                    <span className='address-card-title'>联系地址：</span>{address.province + address.city + address.area + address.address}
                                 </div>
                                 <Button type='danger' className='address-delete'>删除</Button>
                             </div>
