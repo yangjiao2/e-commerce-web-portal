@@ -3,10 +3,11 @@ import {NavBar, ActivityIndicator} from 'antd-mobile'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 
-import CartItem from "./detail"
+import CartDetail from "./detail"
 import CartEdit from "./edit"
 import Empty from "../empty"
 import './index.css'
+
 import {cart_by_userid} from "../../../utils/gql"
 
 class All extends Component {
@@ -26,7 +27,7 @@ class All extends Component {
     }
 
     getHash = () => {
-        // console.log('location',window.location.hash);
+        // console.log('location',window.location.hash)
         let hash = window.location.hash || '#tab=cart&page=detail'
         let page = 'detail'
         if (window.location.hash && hash.indexOf("&") > 0) {
@@ -49,7 +50,7 @@ class All extends Component {
 
         switch (page) {
             case 'detail':
-                return <CartItem cartList={data.cartList}/>
+                return <CartDetail cartList={data.cartList}/>
             case 'edit':
                 return <CartEdit cartList={data.cartList}/>
             default:
@@ -74,7 +75,7 @@ class All extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        // console.log('cart data',data);
+                        // console.log('cart data',data)
 
                         return (
                             <div>
