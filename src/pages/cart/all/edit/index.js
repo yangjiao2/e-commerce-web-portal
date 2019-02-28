@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
-import { Checkbox, WhiteSpace  } from 'antd-mobile';
+import { Checkbox, WhiteSpace, Modal, Toast } from 'antd-mobile';
 import classNames from 'classnames';
+// import { Query,Mutation } from "react-apollo";
 
-import './index.css'
+import '../index.css'
+const alert = Modal.alert;
 
-class CartItem extends Component {
-    constructor(props){
+class CartEdit extends Component {
+    constructor(props) {
         super(props);
-        this.state={
-            cartList:[],
-            totalPrice:0,
-            isSelectAll:true,
+        this.state = {
+            isSelectAll:false,
             selectedCount:0
-        };
+        }
     }
 
     //获取数据
     componentWillMount(){
-        // const cartList = [
-        //     {id:'1',name:'test1',count:1,img:'',price:10},
-        //     {id:'2',name:'test2',count:2,img:'',price:20}
-        // ];
         this.setState({
             cartList:this.props.cartList
         },()=>{
-            this.checkedAll('',true);
+            this.checkedAll('',false);
         });
 
     }
@@ -41,7 +37,7 @@ class CartItem extends Component {
                 }
             })
         });
-        this.sumPrice();
+        this.sumCount();
     };
 
     // 增加
@@ -56,7 +52,7 @@ class CartItem extends Component {
                 }
             })
         });
-        this.sumPrice()
+        this.sumCount();
     };
 
     // 减少
@@ -71,7 +67,36 @@ class CartItem extends Component {
                 }
             })
         });
-        this.sumPrice();
+        this.sumCount();
+    };
+
+    //结算传值
+    delete=()=>{
+        let {cartList} = this.state;
+        let listLength = cartList.length;
+
+        alert('', `确定要删除这${this.state.selectedCount}种商品吗？`, [
+            { text: '取消', onPress: () => console.log('cancel') },
+            {
+                text: '确定',
+                onPress: () =>
+                    new Promise((resolve) => {
+                        for (let i = 0; i < listLength; i++) {
+                            if (cartList[i] && cartList[i].checked===true) {
+                                cartList.splice(i, 1); // 将使后面的元素依次前移，数组长度减1
+                                i--; // 如果不减，将漏掉一个元素
+                            }
+                        }
+
+                        this.setState({
+                            cartList:cartList
+                        });
+                        Toast.info('删除成功', 1);
+                        this.sumCount();
+                        setTimeout(resolve, 1000);
+                    }),
+            },
+        ]);
     };
 
     //删除
@@ -86,7 +111,7 @@ class CartItem extends Component {
             })
         });
         setTimeout(()=>{
-            this.sumPrice()
+            this.sumCount();
         },1)
     };
 
@@ -114,7 +139,7 @@ class CartItem extends Component {
         }else {
             this.setState({isSelectAll:false});
         }
-        this.sumPrice();
+        this.sumCount();
     };
 
     //全选或全不选,判断全选状态
@@ -138,39 +163,26 @@ class CartItem extends Component {
                 isSelectAll:false
             });
         }
-        this.sumPrice();
+        this.sumCount();
     };
 
     //计算总合计
-    sumPrice=()=>{
-        let totalPrice=0,selectedCount=0;
+    sumCount=()=>{
+        let selectedCount=0;
         this.state.cartList.forEach((ele,index)=>{
             if(ele.checked===true){
-                totalPrice+=ele.count*ele.product_id.price;
                 selectedCount+=ele.count;
             }
         });
         this.setState({
-            totalPrice,
             selectedCount
         });
     };
 
-    //结算传值
-    settleAccounts=()=>{
-        let shopping=[];
-        this.state.cartList.forEach((ele,index)=>{
-            if(ele.checked===true){
-                shopping.push(ele)
-            }
-        });
-        console.log('shopping',shopping);
-        window.localStorage.setItem("shopping",JSON.stringify(shopping));
-        window.localStorage.setItem("sumprice",JSON.stringify(this.state.totalPrice));
-        this.props.history.push('/jiesuan')
-    };
-
     render() {
+        let {cartList} = this.state;
+        let listLength = cartList.length;
+
         return (
             <div className="Cart">
                 <div className='section'>
@@ -215,38 +227,29 @@ class CartItem extends Component {
                         })
                     }
                 </div>
-                <div className="footer">
-                    <div className="jiesuan">
-                        <div className="jiesuan-checkbox">
-                            <Checkbox
-                                checked={this.state.isSelectAll}
-                                onChange={(e)=>{this.checkedAll(e,'')}}
-                                style={{marginLeft:15}}
-                            />,
-                            <span className="jiesuan-checkbox_label">全选</span>
-                        </div>
-                        <div className={classNames({
-                            'jiesuan-total': true,
-                            'jiesuan-disabled': !this.state.selectedCount
-                        })}>
-                            <span>合计：</span>
-                            <span className="jiesuan-total_price">¥ {this.state.totalPrice}</span>
-                        </div>
-                        <button
-                            className={classNames({
-                                'jiesuan-button': true,
-                                'jiesuan-disabled': !this.state.selectedCount
-                            })}
-                            disabled={!this.state.isSelectAll}
-                            onClick={()=>{this.settleAccounts()}}
-                        >
-                            <span>下单({this.state.selectedCount})</span>
-                        </button>
-                    </div>
-                </div>
+                {
+                    listLength ?
+                        <div className="footer">
+                            <div className="jiesuan">
+                                <div className="jiesuan-checkbox">
+                                    <Checkbox
+                                        checked={this.state.isSelectAll}
+                                        onChange={(e)=>{this.checkedAll(e,'')}}
+                                        style={{marginLeft:15}}
+                                    />,
+                                    <span className="jiesuan-checkbox_label">全选</span>
+                                </div>
+                                <div className="jiesuan-total">
+                                </div>
+                                <button className="jiesuan-button" onClick={()=>{this.delete()}}>
+                                    <span>删除({this.state.selectedCount})</span>
+                                </button>
+                            </div>
+                        </div>:''
+                }
             </div>
         );
     }
 }
 
-export default CartItem;
+export default CartEdit;
