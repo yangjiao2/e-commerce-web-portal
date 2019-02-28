@@ -87,29 +87,33 @@ class KindRender extends Component {
         let {data} = this.props
         return (
             <div className='kind-wrapper'>
-                <Grid data={data}
-                      columnNum={2}
-                      hasLine={false}
-                      onClick={(product) => {
-                          console.log(product)
-                          this.props.history.push({
-                              pathname: '/home/detail',
-                              state: {
-                                  id: product.id
-                              }
-                          })
-                      }}
-                      renderItem={dataItem => (
-                          <div key={dataItem.id} className='kind-item'>
-                              <div className='kind-item-img'
-                                   style={{backgroundImage: "url('" + dataItem.img + "')"}}/>
-                              <div className='kind-item-description'>
-                                  <div className='kind-item-name'>{dataItem.name}</div>
-                                  <div className='kind-item-price'>{dataItem.price}</div>
-                              </div>
-                          </div>
-                      )}
-                />
+                {
+                    data.length === 0?
+                        '这个分类还没有商品呢'
+                        :
+                        <Grid data={data}
+                              columnNum={2}
+                              hasLine={false}
+                              onClick={(product) => {
+                                  this.props.history.push({
+                                      pathname: '/home/detail',
+                                      state: {
+                                          id: product.id
+                                      }
+                                  })
+                              }}
+                              renderItem={dataItem => (
+                                  <div key={dataItem.id} className='kind-item'>
+                                      <div className='kind-item-img'
+                                           style={{backgroundImage: "url('" + dataItem.img + "')"}}/>
+                                      <div className='kind-item-description'>
+                                          <div className='kind-item-name'>{dataItem.name}</div>
+                                          <div className='kind-item-price'>{dataItem.price}</div>
+                                      </div>
+                                  </div>
+                              )}
+                        />
+                }
             </div>
         )
     }

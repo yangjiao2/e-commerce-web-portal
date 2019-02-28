@@ -104,7 +104,7 @@ class App extends Component {
                                         <CartUnselectedIcon/>
                                 }
                                 <div className='tabbar-title'>
-                                    购物篮
+                                    购物袋
                                 </div>
                             </NavLink>
                         </Col>

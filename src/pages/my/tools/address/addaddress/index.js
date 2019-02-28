@@ -4,7 +4,15 @@ import {NavBar, Icon, InputItem, PickerView, TextareaItem} from 'antd-mobile'
 import { Button } from 'antd';
 import './index.css'
 
-const province = [
+const provinceAll = [
+    {
+        label: '江苏省',
+        value: '江苏省',
+    },
+    {
+        label: '河南省',
+        value: '河南省',
+    },
     {
         label: '安徽省',
         value: '安徽省',
@@ -62,7 +70,15 @@ const province = [
                 value: '黄山',
             }
         ]
-    }
+    },
+    {
+        label: '湖北省',
+        value: '湖北省',
+    },
+    {
+        label: '江西省',
+        value: '江西省',
+    },
 ]
 
 class AddAddress extends Component {
@@ -71,15 +87,16 @@ class AddAddress extends Component {
         this.state = {
             username: '',
             telephone: '',
-            province: '',
-            city: '',
-            area: '',
+            province: '安徽省',
+            city: '合肥市',
+            area: '包河区',
             address: ''
         }
     }
 
     render() {
         let {changePage} = this.props
+        let {username, telephone, province, city, area, address} = this.state
         return (
             <div>
                 <div className='tools-addressadd-navbar-wrap'>
@@ -94,7 +111,7 @@ class AddAddress extends Component {
                 </div>
 
                 <div>
-                    <InputItem placeholder="输入姓名" onChange={(username) => {
+                    <InputItem placeholder="输入姓名" labelNumber={5} onChange={(username) => {
                         this.setState({username})
                     }}>
                         <div>联系人姓名</div>
@@ -109,8 +126,8 @@ class AddAddress extends Component {
                         editable={false}
                     />
                     <PickerView
-                        data={province}
-                        value={[this.state.province, this.state.city, this.state.area ? this.state.area : '']}
+                        data={provinceAll}
+                        value={[province, city, area ? area : '']}
                         onChange={(area) => {
                             this.setState({province: area[0], city: area[1], area: area[2]})
                         }}
@@ -118,19 +135,44 @@ class AddAddress extends Component {
                     <TextareaItem
                         title="详细地址"
                         autoHeight
-                        labelNumber={5}
+                        labelNumber={4}
                         onChange={(address) => {
                             this.setState({address})
                         }}
                     />
                 </div>
 
-                <div className='add-address-button'>
-                    <Button type='primary' block size='large'>保存并使用</Button>
-                </div>
+                <AddAddressButton
+                    data = {{
+                        username,
+                        telephone,
+                        province,
+                        city,
+                        area,
+                        address
+                    }}
+                />
             </div>
         )
     }
 }
 
 export default AddAddress
+
+class AddAddressButton extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+
+        }
+    }
+
+    render() {
+        // let {data} = this.props
+        return (
+            <div className='add-address-button'>
+                <Button type='primary' block size='large'>保存并使用</Button>
+            </div>
+        )
+    }
+}

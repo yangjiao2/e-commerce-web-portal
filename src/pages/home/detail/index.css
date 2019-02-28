@@ -8,11 +8,12 @@
 
 .detail-navbar-wrap {
     width: 100%;
+    height: 5%
 }
 
 .detail-navbar {
-    /*position: fixed;*/
-    /*top: 0;*/
+    position: fixed;
+    top: 0;
     width: 100%;
 }
 
@@ -66,22 +67,23 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 8%;
+    height: 60px;
     background-color: white;
+    border-top: 1px solid #F3F3F3;
 }
 
 .detail-bottom-cart {
     display: inline-block;
     height: 100%;
     width: 15%;
-    border: 1px solid lightgrey;
+    text-align: center;
 }
 
 .detail-bottom-home {
     display: inline-block;
     height: 100%;
     width: 15%;
-    border: 1px solid lightgrey;
+    text-align: center;
 }
 
 .detail-bottom-add {
@@ -91,8 +93,8 @@
     color: white;
     background-color: orange;
     height: 100%;
-    font-size: 20px;
-    border: 1px solid lightgrey;
+    font-size: 18px;
+    line-height: 60px;
 }
 
 .detail-bottom-buy {
@@ -102,6 +104,28 @@
     color: white;
     background-color: orangered;
     height: 100%;
-    font-size: 20px;
-    border: 1px solid lightgrey;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.detail-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.detail-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.detail-icon-cart {
+    background: url("https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/cart.png") no-repeat;
+    background-size: cover;
+}
+
+.detail-icon-shop {
+    background: url("https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/ship.png") no-repeat;
+    background-size: cover;
 }
