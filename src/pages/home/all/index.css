@@ -6,7 +6,7 @@
 
 .guess-title {
     display: block;
-    color: goldenrod;
+    color: #fb9494;
     font-size: 16px;
     margin: 0 auto;
     padding: 20px 0;
@@ -43,7 +43,7 @@
 
 .guess-item-price {
     display: inline-block;
-    color: #f44;
+    color: #fd7373;
     font-size: 20px;
     font-weight: 600;
     float: right;
