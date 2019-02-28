@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Checkbox, WhiteSpace,Modal,Toast } from 'antd-mobile';
+import { Checkbox, WhiteSpace, Modal, Toast } from 'antd-mobile';
 import classNames from 'classnames';
 // import { Query,Mutation } from "react-apollo";
 
+import '../index.css'
 const alert = Modal.alert;
 
 class CartEdit extends Component {
@@ -16,10 +17,6 @@ class CartEdit extends Component {
 
     //获取数据
     componentWillMount(){
-        // const cartList = [
-        //     {id:'1',name:'test1',count:1,img:'',price:10},
-        //     {id:'2',name:'test2',count:2,img:'',price:20}
-        // ];
         this.setState({
             cartList:this.props.cartList
         },()=>{

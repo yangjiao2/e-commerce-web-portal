@@ -1,31 +1,27 @@
-import React, { Component } from 'react';
-import { Checkbox, WhiteSpace  } from 'antd-mobile';
-import classNames from 'classnames';
+import React, { Component } from 'react' 
+import { Checkbox, WhiteSpace  } from 'antd-mobile' 
+import classNames from 'classnames' 
 
-import './index.css'
+import '../index.css'
 
-class CartItem extends Component {
+class CartDetail extends Component {
     constructor(props){
-        super(props);
+        super(props) 
         this.state={
             cartList:[],
             totalPrice:0,
             isSelectAll:true,
             selectedCount:0
-        };
+        } 
     }
 
     //获取数据
     componentWillMount(){
-        // const cartList = [
-        //     {id:'1',name:'test1',count:1,img:'',price:10},
-        //     {id:'2',name:'test2',count:2,img:'',price:20}
-        // ];
         this.setState({
             cartList:this.props.cartList
         },()=>{
-            this.checkedAll('',true);
-        });
+            this.checkedAll('',true) 
+        }) 
 
     }
 
@@ -34,45 +30,45 @@ class CartItem extends Component {
         this.setState({
             cartList:this.state.cartList.map((ele,index)=>{
                 if(index===i){
-                    ele.count=e.target.value;
+                    ele.count=e.target.value 
                     return ele
                 }else {
                     return ele
                 }
             })
-        });
-        this.sumPrice();
-    };
+        }) 
+        this.sumPrice() 
+    } 
 
     // 增加
     augment=(e,i)=>{
         this.setState({
             cartList:this.state.cartList.map((ele,index)=>{
                 if(index===i){
-                    ele.count=ele.count*1+1;
+                    ele.count=ele.count*1+1 
                     return ele
                 }else {
                     return ele
                 }
             })
-        });
+        }) 
         this.sumPrice()
-    };
+    } 
 
     // 减少
     reduce=(e,i)=> {
         this.setState({
             cartList:this.state.cartList.map((ele,index)=>{
                 if(index===i){
-                    ele.count=ele.count*1-1;
+                    ele.count=ele.count*1-1 
                     return ele
                 }else {
                     return ele
                 }
             })
-        });
-        this.sumPrice();
-    };
+        }) 
+        this.sumPrice() 
+    } 
 
     //删除
     del=(e,i)=> {
@@ -84,11 +80,11 @@ class CartItem extends Component {
                     return false
                 }
             })
-        });
+        }) 
         setTimeout(()=>{
             this.sumPrice()
         },1)
-    };
+    } 
 
     // 改变选择
     changeCheckedStatus=(e,i)=>{
@@ -99,76 +95,76 @@ class CartItem extends Component {
                 }
                 return ele
             })
-        });
+        }) 
 
         let flag = this.state.cartList.every((ele,index)=>{
             if(ele.checked===false) {
-                return false;
+                return false 
             }else {
-                return true;
+                return true 
             }
-        });
+        }) 
 
         if(flag===true){
-            this.setState({isSelectAll:true});
+            this.setState({isSelectAll:true}) 
         }else {
-            this.setState({isSelectAll:false});
+            this.setState({isSelectAll:false}) 
         }
-        this.sumPrice();
-    };
+        this.sumPrice() 
+    } 
 
     //全选或全不选,判断全选状态
     checkedAll=(e,check)=>{
-        let checked = e.target ? e.target.checked : check;
+        let checked = e.target ? e.target.checked : check 
 
         if(checked===true){
             this.setState({
                 cartList:this.state.cartList.map((ele,index)=>{
-                    ele.checked=true;
+                    ele.checked=true 
                     return ele
                 }),
                 isSelectAll:true
-            });
+            }) 
         }else  if(checked===false){
             this.setState({
                 cartList:this.state.cartList.map((ele,index)=>{
-                    ele.checked=false;
+                    ele.checked=false 
                     return ele
                 }),
                 isSelectAll:false
-            });
+            }) 
         }
-        this.sumPrice();
-    };
+        this.sumPrice()
+    } 
 
     //计算总合计
     sumPrice=()=>{
-        let totalPrice=0,selectedCount=0;
+        let totalPrice=0,selectedCount=0 
         this.state.cartList.forEach((ele,index)=>{
             if(ele.checked===true){
-                totalPrice+=ele.count*ele.product_id.price;
-                selectedCount+=ele.count;
+                totalPrice+=ele.count*ele.product_id.price 
+                selectedCount+=ele.count 
             }
-        });
+        })
         this.setState({
             totalPrice,
             selectedCount
-        });
-    };
+        })
+    } 
 
     //结算传值
     settleAccounts=()=>{
-        let shopping=[];
+        let shopping=[] 
         this.state.cartList.forEach((ele,index)=>{
             if(ele.checked===true){
                 shopping.push(ele)
             }
-        });
-        console.log('shopping',shopping);
-        window.localStorage.setItem("shopping",JSON.stringify(shopping));
-        window.localStorage.setItem("sumprice",JSON.stringify(this.state.totalPrice));
+        }) 
+        console.log('shopping',shopping) 
+        window.localStorage.setItem("shopping",JSON.stringify(shopping)) 
+        window.localStorage.setItem("sumprice",JSON.stringify(this.state.totalPrice)) 
         this.props.history.push('/jiesuan')
-    };
+    } 
 
     render() {
         return (
@@ -245,8 +241,8 @@ class CartItem extends Component {
                     </div>
                 </div>
             </div>
-        );
+        ) 
     }
 }
 
-export default CartItem;
+export default CartDetail
