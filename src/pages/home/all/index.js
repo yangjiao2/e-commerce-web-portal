@@ -52,7 +52,7 @@ class All extends Component {
                 id: 'pants'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/more.png',
                 text: '更多',
                 id: 'more'
             }
