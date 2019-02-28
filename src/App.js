@@ -31,7 +31,9 @@ class App extends Component {
 
         // 如果不是首页的初始界面，就隐藏 tabbar
         // 如在 /home/detail 刷新
-        if (location.pathname.split('/').length > 2) {
+        let pathnameArray = location.pathname.split('/')
+        let length = pathnameArray.length
+        if (length > 2 && pathnameArray[length - 1] !== '') {
             this.setState({
                 tabHidden: true
             })
