@@ -1,94 +1,80 @@
 import {Component} from "react"
 import React from "react"
 import {NavBar, Icon, InputItem, PickerView, TextareaItem} from 'antd-mobile'
+import { Button } from 'antd';
+import './index.css'
+
 const province = [
     {
-        label: '北京',
-        value: '01',
+        label: '安徽省',
+        value: '安徽省',
         children: [
             {
-                label: '东城区',
-                value: '01-1',
-            },
-            {
-                label: '西城区',
-                value: '01-2',
-            },
-            {
-                label: '崇文区',
-                value: '01-3',
-            },
-            {
-                label: '宣武区',
-                value: '01-4',
-            },
-        ],
-    },
-    {
-        label: '浙江',
-        value: '02',
-        children: [
-            {
-                label: '杭州',
-                value: '02-1',
+                label: '合肥',
+                value: '合肥',
                 children: [
                     {
-                        label: '西湖区',
-                        value: '02-1-1',
+                        label: '包河区',
+                        value: '包河区',
                     },
                     {
-                        label: '上城区',
-                        value: '02-1-2',
+                        label: '庐阳区',
+                        value: '庐阳区',
                     },
                     {
-                        label: '江干区',
-                        value: '02-1-3',
+                        label: '蜀山区',
+                        value: '蜀山区',
                     },
                     {
-                        label: '下城区',
-                        value: '02-1-4',
+                        label: '瑶海区',
+                        value: '瑶海区',
                     },
                 ],
             },
             {
-                label: '宁波',
-                value: '02-2',
+                label: '芜湖',
+                value: '芜湖',
                 children: [
                     {
-                        label: 'xx区',
-                        value: '02-2-1',
+                        label: '镜湖区',
+                        value: '镜湖区',
                     },
                     {
-                        label: 'yy区',
-                        value: '02-2-2',
+                        label: '弋江区',
+                        value: '弋江区',
                     },
                 ],
             },
             {
-                label: '温州',
-                value: '02-3',
+                label: '六安',
+                value: '六安',
             },
             {
-                label: '嘉兴',
-                value: '02-4',
+                label: '淮南',
+                value: '淮南',
             },
             {
-                label: '湖州',
-                value: '02-5',
+                label: '马鞍山',
+                value: '马鞍山',
             },
             {
-                label: '绍兴',
-                value: '02-6',
-            },
-        ],
-    },
-];
+                label: '黄山',
+                value: '黄山',
+            }
+        ]
+    }
+]
 
 class AddAddress extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            username: '',
+            telephone: '',
+            province: '',
+            city: '',
+            area: '',
+            address: ''
         }
     }
 
@@ -104,28 +90,43 @@ class AddAddress extends Component {
                         onLeftClick={() => {
                             changePage(false)
                         }}
-                        rightContent={[
-                            <div>保存</div>,
-                        ]}
                     >添加新地址</NavBar>
                 </div>
 
                 <div>
-                    <InputItem placeholder="输入姓名"><div>联系人姓名</div></InputItem>
-                    <InputItem placeholder="输入号码"><div>手机号码</div></InputItem>
+                    <InputItem placeholder="输入姓名" onChange={(username) => {
+                        this.setState({username})
+                    }}>
+                        <div>联系人姓名</div>
+                    </InputItem>
+                    <InputItem placeholder="输入号码" onChange={(telephone) => {
+                        this.setState({telephone})
+                    }}>
+                        <div>手机号码</div>
+                    </InputItem>
                     <TextareaItem
                         title="选择地区"
                         editable={false}
                     />
                     <PickerView
                         data={province}
-                        value={['02', '02-1', '02-1-1']}
+                        value={[this.state.province, this.state.city, this.state.area ? this.state.area : '']}
+                        onChange={(area) => {
+                            this.setState({province: area[0], city: area[1], area: area[2]})
+                        }}
                     />
                     <TextareaItem
                         title="详细地址"
                         autoHeight
                         labelNumber={5}
+                        onChange={(address) => {
+                            this.setState({address})
+                        }}
                     />
+                </div>
+
+                <div className='add-address-button'>
+                    <Button type='primary' block size='large'>保存并使用</Button>
                 </div>
             </div>
         )
