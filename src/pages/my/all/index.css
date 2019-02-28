@@ -4,8 +4,10 @@
 
 .avatar-area {
     height: 20%;
-    background-color: #397f44;
+    background-color: goldenrod;
     position: relative;
+    border-bottom-left-radius: 80% 15%;
+    border-bottom-right-radius: 80% 15%;
 }
 
 .avatar {

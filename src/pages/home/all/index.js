@@ -17,37 +17,37 @@ class All extends Component {
     render() {
         const data = [
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/jacket.png',
                 text: '夹克',
                 id: 'jacket'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/coat.png',
                 text: '外套',
                 id: 'coat'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/shirt.png',
                 text: '衬衫',
                 id: 'shirt'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/skirts.png',
                 text: '半身裙',
                 id: 'skirts'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/sweater.png',
                 text: '针织衫',
                 id: 'sweater'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/windbreak.png',
                 text: '风衣',
                 id: 'windbreak'
             },
             {
-                icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/pants.png',
                 text: '裤子',
                 id: 'pants'
             },

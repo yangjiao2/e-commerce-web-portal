@@ -35,7 +35,7 @@
 
 .kind-title {
     display: block;
-    color: #397f44;
+    color: #f44;
     font-size: 16px;
     margin: 0 auto;
     padding: 20px 0;
@@ -72,7 +72,7 @@
 
 .kind-item-price {
     display: inline-block;
-    color: #397f44;
+    color: #f44;
     font-size: 20px;
     font-weight: 600;
     float: right;
