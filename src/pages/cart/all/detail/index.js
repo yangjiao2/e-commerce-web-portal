@@ -172,7 +172,7 @@ class CartDetail extends Component {
 
     render() {
         return (
-            <div className="cart-wrap">
+            <div className="cart-content-wrap">
                 <div className='cart-content'>
                     {
                         this.state.cartList.map((ele,index)=>{

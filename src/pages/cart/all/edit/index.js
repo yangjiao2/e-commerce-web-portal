@@ -184,7 +184,7 @@ class CartEdit extends Component {
         let listLength = cartList.length;
 
         return (
-            <div className="cart-wrap">
+            <div className="cart-content-wrap">
                 <div className='cart-content'>
                     {
                         this.state.cartList.map((ele,index)=>{

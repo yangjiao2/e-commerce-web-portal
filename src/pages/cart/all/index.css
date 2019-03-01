@@ -35,8 +35,8 @@
     text-align: center;
 }
 
-.cart-content {
-    margin-bottom: 45px;
+.cart-content-wrap {
+    padding: 45px 0;
 }
 
 .cart-list {

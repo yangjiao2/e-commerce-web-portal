@@ -76,7 +76,7 @@ class CartOrders extends Component {
                         onLeftClick={() => {this.props.history.goBack()}}
                     >订单确认</NavBar>
                 </div>
-                <div className='orders-content-wrap'>
+                <div className='orders-content-wrap content-wrap'>
                     <div className='orders-address'>
                         <List>
                             <Item

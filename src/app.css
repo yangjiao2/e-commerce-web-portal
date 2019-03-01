@@ -42,8 +42,15 @@ a {
 
 .navbar {
     border-bottom: 1px solid #f5f5f9;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
 }
 
 .tabbar-route-content {
     margin-bottom: 50px;
+}
+
+.content-wrap {
+    padding-top: 45px;
 }

@@ -78,18 +78,19 @@ class All extends Component {
                         // console.log('cart data',data)
 
                         return (
-                            <div>
-                                <NavBar
-                                    mode="light"
-                                    style={{borderBottom: '1px solid #ebedf0'}}
-                                    rightContent={[
-                                        data.cartList.length ?
-                                            <span key={"1"} onClick={this.changeCartPage}>
+                            <div className='cart-wrap'>
+                                <div className='cart-navbar-wrap navbar'>
+                                    <NavBar
+                                        mode="light"
+                                        rightContent={[
+                                            data.cartList.length ?
+                                                <span key={"1"} onClick={this.changeCartPage}>
                                                 {page === 'detail' ? "编辑" : "完成"}
                                             </span> : ''
-                                    ]}
-                                >购物袋
-                                </NavBar>
+                                        ]}
+                                    >购物袋
+                                    </NavBar>
+                                </div>
                                 {data.cartList.length ?
                                     this.renderPage(data) : <Empty/>
                                 }
