@@ -69,8 +69,9 @@ class All extends Component {
     }
 
     render() {
+        let contentHeight = window.innerHeight - 95
         return (
-            <div className='my-wrap all'>
+            <div className='my-wrap all' style={{height: contentHeight}}>
                 <div className='avatar-area'>
                     <div className='avatar'/>
                     <div className='nickname'>110</div>

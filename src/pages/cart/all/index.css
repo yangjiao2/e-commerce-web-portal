@@ -35,6 +35,10 @@
     text-align: center;
 }
 
+.cart-content {
+    margin-bottom: 45px;
+}
+
 .cart-list {
     width: 100%;
     background-color: #fff;
