@@ -55,7 +55,7 @@ class Order extends Component {
         let {navTitle, orderStatus} = this.state
         return (
             <div className='order-wrap'>
-                <div className='order-navbar-wrap'>
+                <div className='order-navbar-wrap navbar'>
                     <NavBar
                         className='order-navbar'
                         mode="light"
@@ -102,7 +102,7 @@ class OrderRender extends Component {
         let {data} = this.props
         console.log(data)
         return (
-            <div>
+            <div className='order-my-content'>
                 {
                     data.length === 0 ?
                         <div>
