@@ -88,7 +88,7 @@ class DetailRender extends Component {
                 </div>
                 <div className='detail-complicate-show'>详情详情</div>
                 <div className='detail-bottom'>
-                    <span className='detail-bottom-cart' onClick={()=>{this.props.history.push({pathname: '/cart'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-cart'/><div>购物车</div></div></span>
+                    <span className='detail-bottom-cart' onClick={()=>{this.props.history.push({pathname: '/cart'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-cart'/><div>购物袋</div></div></span>
                     <span className='detail-bottom-home' onClick={()=>{this.props.history.push({pathname: '/home'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-shop'/><div>店铺</div></div></span>
                     <span className='detail-bottom-add' onClick={()=>{}}>加入购物车</span>
                     <span className='detail-bottom-buy' onClick={()=>{}}>立即购买</span>
