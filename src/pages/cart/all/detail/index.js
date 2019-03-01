@@ -163,7 +163,7 @@ class CartDetail extends Component {
         }) 
         console.log('shopping',shopping) 
         window.localStorage.setItem("shopping",JSON.stringify(shopping)) 
-        window.localStorage.setItem("sumprice",JSON.stringify(this.state.totalPrice)) 
+        window.localStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
         this.props.history.push({
             pathname: '/cart/order',
             state:{}

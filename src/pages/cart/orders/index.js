@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {NavBar, Icon,List,Picker} from 'antd-mobile'
+import classNames from 'classnames'
 
 import './index.css'
 const Item = List.Item;
@@ -20,24 +21,54 @@ const delivery = [
 class CartOrders extends Component {
     constructor(props) {
         super(props)
-        console.log('props',props)
         console.log('shopping',JSON.parse(window.localStorage.getItem("shopping")))
         this.state = {
-            cartList: JSON.parse(window.localStorage.getItem("shopping")),
+            cartList: [],
+            unfoldList: [],
+            totalPrice:JSON.parse(window.localStorage.getItem('totalPrice')),
             delivery: ["快递配送"],
+            height:'100%',
+            unfoldStatus:true,
+            foldStatus:false,
+        }
+    }
+
+    componentWillMount() {
+        let cartList = JSON.parse(window.localStorage.getItem("shopping"))
+        if(cartList.length > 3){
+            let cartList1 = cartList.slice(0,3)
+            let unfoldList = cartList.slice(3)
+            this.setState({
+                cartList:cartList1,
+                unfoldList
+            })
+        }else {
+            this.setState({
+                cartList
+            })
         }
     }
 
     onChangeDelivery = (val) => {
         this.setState({
             delivery: val,
-        });
-    };
+        })
+    }
+
+    onChangeHeight = (height,unfoldStatus,foldStatus) => {
+        this.setState({
+            height,
+            unfoldStatus,
+            foldStatus
+        })
+    }
 
     render() {
+        let {cartList,unfoldList,height,unfoldStatus,foldStatus,totalPrice} = this.state
+
         return (
             <div className='orders-wrap'>
-                <div className='orders-navbar-wrap'>
+                <div className='orders-navbar-wrap navbar'>
                     <NavBar
                         className='orders-navbar'
                         mode="light"
@@ -64,7 +95,7 @@ class CartOrders extends Component {
                     <div className='orders-detail'>
                         <div className='cart-content'>
                             {
-                                this.state.cartList.map((ele,index)=>{
+                                cartList.map((ele,index)=>{
                                     return(
                                         <div key={index}>
                                             <div className="cart-list">
@@ -84,6 +115,47 @@ class CartOrders extends Component {
                                     )
                                 })
                             }
+                            <div className={classNames({'packup':!unfoldList.length,'packup-unfold':true})}  style={{height:height}}>
+                                {
+                                    unfoldStatus ?
+                                        <div onClick={()=>{this.onChangeHeight(96*unfoldList.length+42,false,true)}}>
+                                            <div className='packup-title'>展开全部商品</div>
+                                            <div>∨</div>
+                                        </div>
+                                        :''
+                                }
+                                {
+                                    foldStatus ?
+                                        <div onClick={()=>{this.onChangeHeight('100%',true,false)}}>
+
+                                                {
+                                                    unfoldList.map((ele,index)=>{
+                                                        return(
+                                                            <div key={index}>
+                                                                <div className="cart-list">
+                                                                    <div className="cart-list-image">
+                                                                        <img src={ele.product_id.img} alt=""/>
+                                                                    </div>
+                                                                    <div className="cart-orders-intro">
+                                                                        <div>{ele.product_id.name}</div>
+                                                                        <div>颜色尺码等</div>
+                                                                        <div>¥ {ele.product_id.price}</div>
+                                                                    </div>
+                                                                    <div className="cart-orders-count">
+                                                                        x {ele.count}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+
+                                            <div className='packup-title'>收起</div>
+                                            <div>∧</div>
+                                        </div>:''
+                                }
+
+                            </div>
                         </div>
                     </div>
                     <div className='orders-delivery'>
@@ -100,22 +172,25 @@ class CartOrders extends Component {
                         <div className="orders-message">
                             <div className='orders-message-title'>买家留言</div>
                             <div className='orders-message-textarea'>
-                                 {/*<textarea rows="1"  cols="50" maxlength="50" placeholder="建议留言前先与商家沟通确认" className="message-textarea" >*/}
-                                 {/*</textarea>*/}
+                                 <textarea rows="1"  cols="50" maxLength="50" placeholder="输入留言内容(50字以内)" className="message-textarea" >
+                                 </textarea>
                             </div>
                         </div>
                     </div>
                     <div className='orders-price'>
-                        <div>商品金额</div>
-                        <div>运费</div>
-                        <div>合计</div>
+                        <div>商品金额
+                            <span>¥ {totalPrice}</span>
+                        </div>
+                        <div>运费
+                            <span>¥ 0.00</span>
+                        </div>
                     </div>
                 </div>
                 <div className="orders-footer">
                     <div className="jiesuan">
                         <div className='jiesuan-total'>
                             <span>合计：</span>
-                            <span className="jiesuan-total_price">¥ 100.00</span>
+                            <span className="jiesuan-total_price">¥ {totalPrice}</span>
                         </div>
                         <button className="jiesuan-button" onClick={()=>{}}>
                             <span>提交订单</span>

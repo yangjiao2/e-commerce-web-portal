@@ -1,3 +1,14 @@
+.orders-navbar-wrap {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+}
+
+.orders-content-wrap {
+    padding-top: 45px;
+    padding-bottom: 50px;
+}
+
 .orders-content-wrap > div {
     margin-bottom: 10px;
     background: white;
@@ -34,11 +45,29 @@
 
 .cart-orders-intro {
     width: 55%;
+    position: relative;
+    text-align: left;
+}
+
+.cart-orders-intro :first-child {
+    color: black;
+}
+
+.cart-orders-intro :nth-child(2) {
+    font-size: 12px;
+}
+
+.cart-orders-intro :last-child {
+    color: #f44;
+    position: absolute;
+    bottom:0;
+    font-weight: 500;
 }
 
 .cart-orders-count {
     text-align: right;
     padding-right: 10px;
+    color: #323233;
 }
 
 .am-list-content, .am-list-extra{
@@ -84,3 +113,27 @@
     box-sizing: border-box;
     background-color: transparent;
 }
+
+.orders-price {
+    font-weight: 600;
+    color: #323233;
+}
+
+.orders-price span {
+    float: right;
+}
+
+.packup {
+    display: none;
+}
+
+.packup-unfold {
+    background: #f5f5f9;
+    text-align: center;
+}
+
+.packup-title {
+    padding-top: 5px;
+}
+
+

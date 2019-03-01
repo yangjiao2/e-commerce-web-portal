@@ -41,6 +41,7 @@
     padding: 10px 0;
     display: flex;
     justify-content: space-around;
+    border-bottom: 1px solid #f5f5f9;
 }
 
 .cart-list-checkbox {
@@ -94,7 +95,8 @@
     display: flex;
     font-size: 14px;
     align-items: center;
-    background-color: #fff;
+    background-color: #fdfbfb;
+    border-top: 1px solid #f5f5f9;
 }
 
 .jiesuan-disabled {
