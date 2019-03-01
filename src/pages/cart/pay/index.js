@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {NavBar, Icon, Checkbox} from 'antd-mobile'
+import {NavBar, Icon, Checkbox, Toast} from 'antd-mobile'
 import classNames from 'classnames'
 
 import './index.css'
@@ -10,13 +10,20 @@ class Pay extends Component {
         super(props)
         this.state = {
             checked:true,
-            totalPrice:JSON.parse(window.localStorage.getItem('totalPrice')),
+            totalPrice:JSON.parse(localStorage.getItem('totalPrice')),
         }
     }
 
     changeCheckedStatus = (e) => {
         this.setState({
             checked:e.target.checked
+        })
+    }
+
+    pay = () => {
+        Toast.info('支付成功', 2);
+        this.props.history.push({
+            pathname:'/my'
         })
     }
 
@@ -56,9 +63,7 @@ class Pay extends Component {
                             })}
                             onClick={()=>{
                                 if(checked){
-                                    this.props.history.push({
-                                        pathname:'/my'
-                                    })
+                                   this.pay()
                                 }
                             }}>
                         <span>确认支付</span>

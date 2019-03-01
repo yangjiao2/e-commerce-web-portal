@@ -56,6 +56,15 @@ const cart_by_userid = `
     }
 `
 
+const delete_userCart_by_id = `
+    mutation($id: [String]) {
+        delete_userCart(where: {
+            id: {
+                _in: $id
+            }
+        }) 
+    }
+`
 const userAddressbyprops = `
     query userAddressbyprops($address: String, $updatedAt: String, $telephone: String, $default: Int, $city: String, $username: String, $postcode: String, $createdAt: String, $deletedAt: String, $user_id: ID, $area: String, $province: String) {
         userAddressbyprops: userAddress_by_props(address: $address updatedAt: $updatedAt telephone: $telephone
@@ -136,6 +145,7 @@ export {
     productbyprops,
     productbyid,
     cart_by_userid,
+    delete_userCart_by_id,
     userAddressbyprops,
     orderbyprops
 }

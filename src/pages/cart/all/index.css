@@ -70,6 +70,7 @@
 .cart-list-intro {
     width: 35%;
     position: relative;
+    text-align: left;
 }
 
 .cart-list-intro :first-child {

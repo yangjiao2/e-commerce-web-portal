@@ -45,14 +45,14 @@ class All extends Component {
         }))
     }
 
-    renderPage = (data) => {
+    renderPage = (data, refetch) => {
         let {page} = this.state
 
         switch (page) {
             case 'detail':
                 return <CartDetail cartList={data.cartList}/>
             case 'edit':
-                return <CartEdit cartList={data.cartList}/>
+                return <CartEdit cartList={data.cartList} refetch={refetch}/>
             default:
                 return <div>test</div>
         }
@@ -64,7 +64,7 @@ class All extends Component {
         return (
             <Query query={gql(cart_by_userid)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
                 {
-                    ({loading, error, data}) => {
+                    ({loading, error, data, refetch}) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
@@ -93,7 +93,7 @@ class All extends Component {
                                     </NavBar>
                                 </div>
                                 {data.cartList.length ?
-                                    this.renderPage(data) : <Empty/>
+                                    this.renderPage(data, refetch) : <Empty/>
                                 }
                             </div>
                         )

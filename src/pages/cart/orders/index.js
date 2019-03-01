@@ -140,7 +140,6 @@ class CartOrders extends Component {
                                         <div onClick={() => {
                                             this.onChangeHeight('100%', true, false)
                                         }}>
-
                                             {
                                                 unfoldList.map((ele, index) => {
                                                     return (
@@ -162,7 +161,6 @@ class CartOrders extends Component {
                                                     )
                                                 })
                                             }
-
                                             <div className='packup-title'>收起</div>
                                             <div>∧</div>
                                         </div> : ''
