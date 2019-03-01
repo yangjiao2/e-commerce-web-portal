@@ -18,7 +18,7 @@ class Empty extends Component {
                 <div>
                     <img src={cart_empty} alt="img" width={100}/>
                 </div>
-                <div>购物车空空如也</div>
+                <div>购物袋空空如也</div>
                 <div>
                     <button className="empty-button"
                             onClick={() => {

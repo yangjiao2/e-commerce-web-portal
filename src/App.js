@@ -123,12 +123,14 @@ class App extends Component {
                         </Col>
                     </Row>
                 </div>
-                <Switch>
-                    <Route exact path="/" component={Home}/>
-                    <Route path="/home" component={Home}/>
-                    <Route path="/cart" component={Cart}/>
-                    <Route path="/my" component={My}/>
-                </Switch>
+                <div className='tabbar-route-content'>
+                    <Switch>
+                        <Route exact path="/" component={Home}/>
+                        <Route path="/home" component={Home}/>
+                        <Route path="/cart" component={Cart}/>
+                        <Route path="/my" component={My}/>
+                    </Switch>
+                </div>
             </div>
 
         )
