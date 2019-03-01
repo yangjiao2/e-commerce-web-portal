@@ -1,0 +1,31 @@
+.order-my-content {
+    padding-top: 45px;
+}
+
+.order-card {
+    margin-top: 20px;
+    background-color: white;
+}
+
+.order-card-content {
+    height: 100px;
+    background-color: #ebedf0;
+}
+
+.order-card-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+}
+
+.order-card-pay {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+    margin-right: 10px;
+}
+
+.order-card-count {
+    display: inline-block;
+}

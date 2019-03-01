@@ -52,9 +52,6 @@ class Tools extends Component {
                             // this.props.history.push({pathname: '/my/all'})
                             this.props.history.go(-2)
                         }}
-                        rightContent={[
-                            <Icon key="1" type="ellipsis"/>,
-                        ]}
                     >{navTitle}</NavBar>
                 </div>
                 <div className="content-wrap">
