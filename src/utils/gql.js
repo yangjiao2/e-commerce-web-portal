@@ -57,7 +57,7 @@ const cart_by_userid = `
 `
 
 const delete_userCart_by_id = `
-    mutation($id: [String]) {
+    mutation delete_userCart($id: [String]) {
         delete_userCart(where: {
             id: {
                 _in: $id

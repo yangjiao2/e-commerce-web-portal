@@ -29,12 +29,12 @@ class CartDetail extends Component {
     //获取输入框的值
     getInputValue=(e,i)=>{
         this.setState({
-            cartList:this.state.cartList.map((ele,index)=>{
+            cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    ele.count=e.target.value 
-                    return ele
+                    item.count=e.target.value
+                    return item
                 }else {
-                    return ele
+                    return item
                 }
             })
         }) 
@@ -44,12 +44,12 @@ class CartDetail extends Component {
     // 增加
     augment=(e,i)=>{
         this.setState({
-            cartList:this.state.cartList.map((ele,index)=>{
+            cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    ele.count=ele.count*1+1 
-                    return ele
+                    item.count=item.count*1+1
+                    return item
                 }else {
-                    return ele
+                    return item
                 }
             })
         }) 
@@ -59,12 +59,12 @@ class CartDetail extends Component {
     // 减少
     reduce=(e,i)=> {
         this.setState({
-            cartList:this.state.cartList.map((ele,index)=>{
+            cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    ele.count=ele.count*1-1 
-                    return ele
+                    item.count=item.count*1-1
+                    return item
                 }else {
-                    return ele
+                    return item
                 }
             })
         }) 
@@ -74,7 +74,7 @@ class CartDetail extends Component {
     //删除
     del=(e,i)=> {
         this.setState({
-            cartList:this.state.cartList.filter((ele,index)=>{
+            cartList:this.state.cartList.filter((item,index)=>{
                 if(index!==i){
                     return true
                 }else {
@@ -90,16 +90,16 @@ class CartDetail extends Component {
     // 改变选择
     changeCheckedStatus=(e,i)=>{
         this.setState({
-            cartList:this.state.cartList.map((ele,index)=>{
+            cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    ele.checked=!ele.checked
+                    item.checked=!item.checked
                 }
-                return ele
+                return item
             })
         }) 
 
-        let flag = this.state.cartList.every((ele,index)=>{
-            if(ele.checked===false) {
+        let flag = this.state.cartList.every((item,index)=>{
+            if(item.checked===false) {
                 return false 
             }else {
                 return true 
@@ -107,7 +107,7 @@ class CartDetail extends Component {
         }) 
 
         if(flag===true){
-            this.setState({isSelectAll:true}) 
+            this.setState({isSelectAll:true})
         }else {
             this.setState({isSelectAll:false}) 
         }
@@ -120,17 +120,17 @@ class CartDetail extends Component {
 
         if(checked===true){
             this.setState({
-                cartList:this.state.cartList.map((ele,index)=>{
-                    ele.checked=true 
-                    return ele
+                cartList:this.state.cartList.map((item,index)=>{
+                    item.checked=true
+                    return item
                 }),
                 isSelectAll:true
             }) 
         }else  if(checked===false){
             this.setState({
-                cartList:this.state.cartList.map((ele,index)=>{
-                    ele.checked=false 
-                    return ele
+                cartList:this.state.cartList.map((item,index)=>{
+                    item.checked=false
+                    return item
                 }),
                 isSelectAll:false
             }) 
@@ -141,10 +141,10 @@ class CartDetail extends Component {
     //计算总合计
     sumPrice=()=>{
         let totalPrice=0,selectedCount=0 
-        this.state.cartList.forEach((ele,index)=>{
-            if(ele.checked===true){
-                totalPrice+=ele.count*ele.product_id.price 
-                selectedCount+=ele.count 
+        this.state.cartList.forEach((item,index)=>{
+            if(item.checked===true){
+                totalPrice+=item.count*item.product_id.price
+                selectedCount+=item.count
             }
         })
         this.setState({
@@ -156,9 +156,9 @@ class CartDetail extends Component {
     //结算传值
     settleAccounts=()=>{
         let shopping=[] 
-        this.state.cartList.forEach((ele,index)=>{
-            if(ele.checked===true){
-                shopping.push(ele)
+        this.state.cartList.forEach((item,index)=>{
+            if(item.checked===true){
+                shopping.push(item)
             }
         }) 
         console.log('shopping',shopping) 
@@ -176,36 +176,36 @@ class CartDetail extends Component {
             <div className="cart-content-wrap">
                 <div className='cart-content'>
                     {
-                        cartList.map((ele,index)=>{
+                        cartList.map((item,index)=>{
                             return(
                                 <div key={index}>
                                     <div className="cart-list">
                                         <div className="cart-list-checkbox">
                                             <Checkbox
                                                 style={{marginLeft:15}}
-                                                checked={ele.checked}
+                                                checked={item.checked}
                                                 onChange={(e)=>{this.changeCheckedStatus(e,index)}}
                                             />
                                         </div>
                                         <div className="cart-list-image">
-                                            <img src={ele.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
+                                            <img src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
                                         </div>
                                         <div className="cart-list-intro">
-                                            <div>{ele.product_id.name}</div>
+                                            <div>{item.product_id.name}</div>
                                             <div>颜色尺码等</div>
-                                            <div>¥ {ele.product_id.price}</div>
+                                            <div>¥ {item.product_id.price}</div>
                                         </div>
                                         <div className="cart-list-count">
                                             <div className="selected">
                                                 <button
                                                     className={classNames({
                                                         'selected_button': true,
-                                                        'selected_button-disabled': ele.count <= 1
+                                                        'selected_button-disabled': item.count <= 1
                                                     })}
-                                                    disabled={ele.count <= 1}
+                                                    disabled={item.count <= 1}
                                                     onClick={(e)=>{this.reduce(e,index)}}
                                                 >-</button>
-                                                <input className="selected_input" type="text" value={ele.count} onChange={(e)=>{this.getInputValue(e,index)}}/>
+                                                <input className="selected_input" type="text" value={item.count} onChange={(e)=>{this.getInputValue(e,index)}}/>
                                                 <button className="selected_button" onClick={(e)=>{this.augment(e,index)}}>+</button>
                                             </div>
                                         </div>
