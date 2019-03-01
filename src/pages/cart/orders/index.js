@@ -1,48 +1,49 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {NavBar, Icon,List,Picker} from 'antd-mobile'
+import {NavBar, Icon, List, Picker} from 'antd-mobile'
 import classNames from 'classnames'
 
 import './index.css'
-const Item = List.Item;
-const Brief = Item.Brief;
+
+const Item = List.Item
+const Brief = Item.Brief
 
 const delivery = [
     {
-        label:"快递配送",
+        label: "快递配送",
         value: "快递配送",
     },
     {
-        label:"门店自提",
+        label: "门店自提",
         value: "门店自提",
     }
-];
+]
 
 class CartOrders extends Component {
     constructor(props) {
         super(props)
-        console.log('shopping',JSON.parse(window.localStorage.getItem("shopping")))
+        console.log('shopping', JSON.parse(window.localStorage.getItem("shopping")))
         this.state = {
             cartList: [],
             unfoldList: [],
-            totalPrice:JSON.parse(window.localStorage.getItem('totalPrice')),
+            totalPrice: JSON.parse(window.localStorage.getItem('totalPrice')),
             delivery: ["快递配送"],
-            height:'100%',
-            unfoldStatus:true,
-            foldStatus:false,
+            height: '100%',
+            unfoldStatus: true,
+            foldStatus: false,
         }
     }
 
     componentWillMount() {
         let cartList = JSON.parse(window.localStorage.getItem("shopping"))
-        if(cartList.length > 3){
-            let cartList1 = cartList.slice(0,3)
+        if (cartList.length > 3) {
+            let cartList1 = cartList.slice(0, 3)
             let unfoldList = cartList.slice(3)
             this.setState({
-                cartList:cartList1,
+                cartList: cartList1,
                 unfoldList
             })
-        }else {
+        } else {
             this.setState({
                 cartList
             })
@@ -55,7 +56,7 @@ class CartOrders extends Component {
         })
     }
 
-    onChangeHeight = (height,unfoldStatus,foldStatus) => {
+    onChangeHeight = (height, unfoldStatus, foldStatus) => {
         this.setState({
             height,
             unfoldStatus,
@@ -64,7 +65,7 @@ class CartOrders extends Component {
     }
 
     render() {
-        let {cartList,unfoldList,height,unfoldStatus,foldStatus,totalPrice} = this.state
+        let {cartList, unfoldList, height, unfoldStatus, foldStatus, totalPrice} = this.state
 
         return (
             <div className='orders-wrap'>
@@ -73,7 +74,9 @@ class CartOrders extends Component {
                         className='orders-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => {this.props.history.goBack()}}
+                        onLeftClick={() => {
+                            this.props.history.goBack()
+                        }}
                     >订单确认</NavBar>
                 </div>
                 <div className='orders-content-wrap content-wrap'>
@@ -82,28 +85,32 @@ class CartOrders extends Component {
                             <Item
                                 arrow="horizontal"
                                 multipleLine
-                                onClick={() => {this.props.history.push({
-                                    pathname:'/my/tools',
-                                    state:{page:'address'}
-                                })}}
+                                onClick={() => {
+                                    this.props.history.push({
+                                        pathname: '/my/tools',
+                                        state: {page: 'address'}
+                                    })
+                                }}
                             >
                                 <div>
                                     <span>承叶子</span>&nbsp;&nbsp;
                                     <span>18726202125</span>
                                 </div>
-                                <Brief style={{fontSize:13}}>安徽省合肥市蜀山区青阳路彩虹家园1栋1601</Brief>
+                                <Brief style={{fontSize: 13}}>安徽省合肥市蜀山区青阳路彩虹家园1栋1601</Brief>
                             </Item>
                         </List>
                     </div>
                     <div className='orders-detail'>
                         <div className='cart-content'>
                             {
-                                cartList.map((ele,index)=>{
-                                    return(
+                                cartList.map((ele, index) => {
+                                    return (
                                         <div key={index}>
                                             <div className="cart-list">
                                                 <div className="cart-list-image">
-                                                    <img src={ele.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
+                                                    <img
+                                                        src={ele.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"}
+                                                        alt=""/>
                                                 </div>
                                                 <div className="cart-orders-intro">
                                                     <div>{ele.product_id.name}</div>
@@ -118,44 +125,49 @@ class CartOrders extends Component {
                                     )
                                 })
                             }
-                            <div className={classNames({'packup':!unfoldList.length,'packup-unfold':true})}  style={{height:height}}>
+                            <div className={classNames({'packup': !unfoldList.length, 'packup-unfold': true})}
+                                 style={{height: height}}>
                                 {
                                     unfoldStatus ?
-                                        <div onClick={()=>{this.onChangeHeight(96*unfoldList.length+42,false,true)}}>
+                                        <div onClick={() => {
+                                            this.onChangeHeight(96 * unfoldList.length + 42, false, true)
+                                        }}>
                                             <div className='packup-title'>展开全部商品</div>
                                             <div>∨</div>
                                         </div>
-                                        :''
+                                        : ''
                                 }
                                 {
                                     foldStatus ?
-                                        <div onClick={()=>{this.onChangeHeight('100%',true,false)}}>
+                                        <div onClick={() => {
+                                            this.onChangeHeight('100%', true, false)
+                                        }}>
 
-                                                {
-                                                    unfoldList.map((ele,index)=>{
-                                                        return(
-                                                            <div key={index}>
-                                                                <div className="cart-list">
-                                                                    <div className="cart-list-image">
-                                                                        <img src={ele.product_id.img} alt=""/>
-                                                                    </div>
-                                                                    <div className="cart-orders-intro">
-                                                                        <div>{ele.product_id.name}</div>
-                                                                        <div>颜色尺码等</div>
-                                                                        <div>¥ {ele.product_id.price}</div>
-                                                                    </div>
-                                                                    <div className="cart-orders-count">
-                                                                        x {ele.count}
-                                                                    </div>
+                                            {
+                                                unfoldList.map((ele, index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            <div className="cart-list">
+                                                                <div className="cart-list-image">
+                                                                    <img src={ele.product_id.img} alt=""/>
+                                                                </div>
+                                                                <div className="cart-orders-intro">
+                                                                    <div>{ele.product_id.name}</div>
+                                                                    <div>颜色尺码等</div>
+                                                                    <div>¥ {ele.product_id.price}</div>
+                                                                </div>
+                                                                <div className="cart-orders-count">
+                                                                    x {ele.count}
                                                                 </div>
                                                             </div>
-                                                        )
-                                                    })
-                                                }
+                                                        </div>
+                                                    )
+                                                })
+                                            }
 
                                             <div className='packup-title'>收起</div>
                                             <div>∧</div>
-                                        </div>:''
+                                        </div> : ''
                                 }
 
                             </div>
@@ -175,7 +187,8 @@ class CartOrders extends Component {
                         <div className="orders-message">
                             <div className='orders-message-title'>买家留言</div>
                             <div className='orders-message-textarea'>
-                                 <textarea rows="1"  cols="50" maxLength="50" placeholder="输入留言内容(50字以内)" className="message-textarea" >
+                                 <textarea rows="1" cols="50" maxLength="50" placeholder="输入留言内容(50字以内)"
+                                           className="message-textarea">
                                  </textarea>
                             </div>
                         </div>
@@ -195,7 +208,8 @@ class CartOrders extends Component {
                             <span>合计：</span>
                             <span className="jiesuan-total_price">¥ {totalPrice}</span>
                         </div>
-                        <button className="jiesuan-button" onClick={()=>{}}>
+                        <button className="jiesuan-button" onClick={() => {
+                        }}>
                             <span>提交订单</span>
                         </button>
                     </div>
