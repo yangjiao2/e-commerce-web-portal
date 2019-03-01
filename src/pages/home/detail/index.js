@@ -25,8 +25,9 @@ class Detail extends Component {
 
     render() {
         let {id} = this.state
+        let contentHeight = window.innerHeight
         return (
-            <div className='detail-wrap'>
+            <div className='detail-wrap' style={{height: contentHeight}}>
                 <div className='detail-navbar-wrap'>
                     <NavBar
                         className='detail-navbar'

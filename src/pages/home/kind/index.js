@@ -28,8 +28,9 @@ class Kind extends Component {
 
     render() {
         let {id} = this.state
+        let contentHeight = window.innerHeight
         return (
-            <div className='kind-wrap'>
+            <div className='kind-wrap'  style={{height: contentHeight}}>
                 <div className='kind-navbar-wrap'>
                     <NavBar
                         className='kind-navbar'
