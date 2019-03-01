@@ -68,7 +68,8 @@ class All extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator size="large" />
+                                    <span>正在加载...</span>
                                 </div>
                             )
                         }
@@ -84,7 +85,7 @@ class All extends Component {
                                         mode="light"
                                         rightContent={[
                                             data.cartList.length ?
-                                                <span key={"1"} onClick={this.changeCartPage}>
+                                                <span className='navbar-button' key={"1"} onClick={this.changeCartPage}>
                                                 {page === 'detail' ? "编辑" : "完成"}
                                             </span> : ''
                                         ]}

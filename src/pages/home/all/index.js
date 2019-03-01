@@ -62,6 +62,7 @@ class All extends Component {
                 <Carousel
                     autoplay={true}
                     infinite
+                    style={{minHeight:200}}
                 >
                     {this.state.data.map(val => (
                         <a

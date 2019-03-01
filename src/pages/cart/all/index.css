@@ -3,6 +3,10 @@
     background: #f44;
 }
 
+.navbar-button {
+    color: #ff6d6d;
+}
+
 .selected {
     width: 50%;
     min-width: 100px;

@@ -21,7 +21,7 @@ const delivery = [
 class CartOrders extends Component {
     constructor(props) {
         super(props)
-        console.log('shopping',JSON.parse(window.localStorage.getItem("shopping")))
+        // console.log('shopping',JSON.parse(window.localStorage.getItem("shopping")))
         this.state = {
             cartList: [],
             unfoldList: [],
@@ -82,11 +82,11 @@ class CartOrders extends Component {
                             <Item
                                 arrow="horizontal"
                                 multipleLine
-                                onClick={() => {this.props.history.push({
-                                    pathname:'/my/tools',
-                                    state:{page:'address'}
-                                })}}
-                            >
+                                onClick={() => {
+                                    this.props.history.push({
+                                        pathname:'/my/tools',
+                                        state:{page:'address'}})
+                                }}>
                                 <div>
                                     <span>承叶子</span>&nbsp;&nbsp;
                                     <span>18726202125</span>
@@ -195,7 +195,13 @@ class CartOrders extends Component {
                             <span>合计：</span>
                             <span className="jiesuan-total_price">¥ {totalPrice}</span>
                         </div>
-                        <button className="jiesuan-button" onClick={()=>{}}>
+                        <button className="jiesuan-button"
+                                onClick={()=>{
+                                    this.props.history.push({
+                                        pathname:'/cart/pay',
+                                        state:{}
+                                      })
+                                }}>
                             <span>提交订单</span>
                         </button>
                     </div>

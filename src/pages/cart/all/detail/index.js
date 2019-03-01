@@ -171,11 +171,12 @@ class CartDetail extends Component {
     } 
 
     render() {
+        let {cartList,isSelectAll,selectedCount,totalPrice} = this.state
         return (
             <div className="cart-content-wrap">
                 <div className='cart-content'>
                     {
-                        this.state.cartList.map((ele,index)=>{
+                        cartList.map((ele,index)=>{
                             return(
                                 <div key={index}>
                                     <div className="cart-list">
@@ -219,7 +220,7 @@ class CartDetail extends Component {
                     <div className="jiesuan">
                         <div className="jiesuan-checkbox">
                             <Checkbox
-                                checked={this.state.isSelectAll}
+                                checked={isSelectAll}
                                 onChange={(e)=>{this.checkedAll(e,'')}}
                                 style={{marginLeft:15}}
                             />,
@@ -227,19 +228,23 @@ class CartDetail extends Component {
                         </div>
                         <div className={classNames({
                             'jiesuan-total': true,
-                            'jiesuan-disabled': !this.state.selectedCount
+                            'jiesuan-disabled': !selectedCount
                         })}>
                             <span>合计：</span>
-                            <span className="jiesuan-total_price">¥ {this.state.totalPrice}</span>
+                            <span className="jiesuan-total_price">¥ {totalPrice}</span>
                         </div>
                         <button
                             className={classNames({
                                 'jiesuan-button': true,
-                                'jiesuan-disabled': !this.state.selectedCount
+                                'jiesuan-disabled': !selectedCount
                             })}
-                            onClick={()=>{this.settleAccounts()}}
+                            onClick={()=>{
+                                if(selectedCount){
+                                    this.settleAccounts()
+                                }
+                            }}
                         >
-                            <span>下单({this.state.selectedCount})</span>
+                            <span>下单({selectedCount})</span>
                         </button>
                     </div>
                 </div>
