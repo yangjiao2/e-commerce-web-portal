@@ -104,11 +104,21 @@ class OrderRender extends Component {
         return (
             <div>
                 {
-                    data.map(order=>(
-                        <div key={order.id}>
-                            {order.productTotalPay}
+                    data.length === 0 ?
+                        <div>
+                            还没有这种订单呢
                         </div>
-                    ))
+                        :
+                        data.map(order => (
+                            <div key={order.id} className='order-card'>
+                                <div className='order-card-top'>JD</div>
+                                <div className='order-card-content'></div>
+                                <div className='order-card-bottom'>
+                                    <div className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:</div>
+                                    <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                                    </div>
+                            </div>
+                        ))
                 }
             </div>
         )
