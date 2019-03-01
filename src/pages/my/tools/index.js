@@ -43,13 +43,14 @@ class Tools extends Component {
 
         return (
             <div className='tools-wrap'>
-                <div className='tools-navbar-wrap'>
+                <div className='tools-navbar-wrap navbar'>
                     <NavBar
                         className='tools-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {
-                            this.props.history.push({pathname: '/my/all'})
+                            // this.props.history.push({pathname: '/my/all'})
+                            this.props.history.go(-2)
                         }}
                         rightContent={[
                             <Icon key="1" type="ellipsis"/>,
