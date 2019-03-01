@@ -57,7 +57,6 @@ class Order extends Component {
             <div className='order-wrap'>
                 <div className='order-navbar-wrap navbar'>
                     <NavBar
-                        className='order-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {

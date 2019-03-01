@@ -43,6 +43,7 @@ a {
 .navbar {
     border-bottom: 1px solid #f5f5f9;
     position: fixed;
+    top: 0;
     width: 100%;
     z-index: 2;
 }
