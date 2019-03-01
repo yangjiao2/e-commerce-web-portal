@@ -2,13 +2,13 @@
 }
 
 .kind-search-wrap {
-    height: 8%;
+    height: 60px;
     position: relative;
-    z-index: 100;
+    z-index: -1;
 }
 
 .kind-search {
-    height: 65%;
+    height: 40px;
     width: 90%;
     position: absolute;
     left: 50%;
@@ -20,16 +20,18 @@
     height: 100%;
     background-color: white;
     position: relative;
+    z-index: -1;
 }
 
 .kind-navbar-wrap {
     width: 100%;
-    /*height: 5%*/
+    height: 45px;
+    z-index: 1
 }
 
 .kind-navbar {
-    /*position: fixed;*/
-    /*top: 0;*/
+    position: fixed;
+    top: 0;
     width: 100%;
 }
 
