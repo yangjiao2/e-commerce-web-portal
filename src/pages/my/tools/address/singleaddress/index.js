@@ -1,7 +1,7 @@
 import {Component} from "react"
 import React from "react"
 import {NavBar, Icon, InputItem, PickerView, TextareaItem} from 'antd-mobile'
-import { Button } from 'antd';
+import {Button} from 'antd'
 import './index.css'
 
 const provinceAll = [
@@ -81,7 +81,7 @@ const provinceAll = [
     },
 ]
 
-class AddAddress extends Component {
+class SingleAddress extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -95,8 +95,10 @@ class AddAddress extends Component {
     }
 
     render() {
-        let {changePage} = this.props
+        let {changePage, addressID, addressChoosed} = this.props
         let {username, telephone, province, city, area, address} = this.state
+        console.log('id', addressID)
+        console.log('address', addressChoosed)
         return (
             <div>
                 <div className='tools-addressadd-navbar-wrap'>
@@ -127,7 +129,7 @@ class AddAddress extends Component {
                     />
                     <PickerView
                         data={provinceAll}
-                        value={[province, city, area ? area : '']}
+                        value={[province, city ? city : '', area ? area : '']}
                         onChange={(area) => {
                             this.setState({province: area[0], city: area[1], area: area[2]})
                         }}
@@ -143,7 +145,7 @@ class AddAddress extends Component {
                 </div>
 
                 <AddAddressButton
-                    data = {{
+                    data={{
                         username,
                         telephone,
                         province,
@@ -157,14 +159,12 @@ class AddAddress extends Component {
     }
 }
 
-export default AddAddress
+export default SingleAddress
 
 class AddAddressButton extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     render() {

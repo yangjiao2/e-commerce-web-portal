@@ -34,7 +34,7 @@ class All extends Component {
             {
                 icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/skirts.png',
                 text: '半身裙',
-                id: 'skirts'
+                id: 'skirt'
             },
             {
                 icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/sweater.png',

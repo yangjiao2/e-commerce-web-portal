@@ -46,7 +46,7 @@ class Kind extends Component {
                         onSearch={value => console.log(value)}
                     />
                 </div>
-                <Query query={gql(productbyprops)} variables={{intro: id}}>
+                <Query query={gql(productbyprops)} variables={{category: id}}>
                     {
                         ({loading, error, data}) => {
                             if (loading) {
@@ -93,7 +93,6 @@ class KindRender extends Component {
                               columnNum={2}
                               hasLine={false}
                               onClick={(product) => {
-                                  console.log(1)
                                   this.props.history.push({
                                       pathname: '/home/detail',
                                       state: {
