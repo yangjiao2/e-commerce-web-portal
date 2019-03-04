@@ -72,7 +72,7 @@ class CartEdit extends Component {
         this.sumCount()
     }
 
-    //结算传值
+    // 删除
     delete=(delete_userCart_by_id)=>{
         let {cartList} = this.state
 
@@ -85,21 +85,26 @@ class CartEdit extends Component {
                     let cartList1 = cartList.filter((item)=> item.checked === false)
 
                     let deleteIdList = deleteList.map(item => item.id)
+                    // console.log('delete list',deleteIdList)
 
-                    delete_userCart_by_id({variables:{id:deleteIdList}},()=>{
-                        Toast.info('删除成功', 1)
+                    delete_userCart_by_id({variables:{id:deleteIdList}}).then((data)=>{
+                        // console.log('delete data',data)
+                        let num = data.data.delete_userCart.replace(/[^0-9]/ig,"")
+                        if(num){
+                            Toast.info('删除成功', 1)
 
-                        this.setState({
-                            cartList:cartList1,
-                            selectedCount:0
-                        })
+                            this.setState({
+                                cartList:cartList1,
+                                selectedCount:0
+                            })
+                        }
                     });
                 }
             },
         ])
     }
 
-    //删除
+    //删除单个备用
     del=(e,i)=> {
         this.setState({
             cartList:this.state.cartList.filter((item,index)=>{
