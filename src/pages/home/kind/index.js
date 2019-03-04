@@ -37,9 +37,6 @@ class Kind extends Component {
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {this.props.history.push({pathname: '/'})}}
-                        rightContent={[
-                            <Icon key="1" type="ellipsis"/>,
-                        ]}
                     >商品分类</NavBar>
                 </div>
                 <div className='kind-search-wrap'>
@@ -96,12 +93,14 @@ class KindRender extends Component {
                               columnNum={2}
                               hasLine={false}
                               onClick={(product) => {
+                                  console.log(1)
                                   this.props.history.push({
                                       pathname: '/home/detail',
                                       state: {
                                           id: product.id
                                       }
                                   })
+
                               }}
                               renderItem={dataItem => (
                                   <div key={dataItem.id} className='kind-item'>

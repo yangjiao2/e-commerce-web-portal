@@ -27,7 +27,7 @@ class All extends Component {
     }
 
     getHash = () => {
-        // console.log('location',window.location.hash)
+        // console.log('location', window.location.hash)
         let hash = window.location.hash || '#tab=cart&page=detail'
         let page = 'detail'
         if (window.location.hash && hash.indexOf("&") > 0) {
@@ -68,7 +68,7 @@ class All extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator size="large" />
+                                    <ActivityIndicator size="large"/>
                                     <span>正在加载...</span>
                                 </div>
                             )

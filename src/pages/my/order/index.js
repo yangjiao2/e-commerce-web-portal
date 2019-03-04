@@ -83,7 +83,6 @@ class Order extends Component {
                         }
                     }
                 </Query>
-
             </div>
         )
     }

@@ -2,7 +2,7 @@ import {Component} from "react"
 import React from "react"
 import {userAddressbyprops} from "../../../../utils/gql"
 import {ActivityIndicator} from 'antd-mobile'
-import {Button, Icon} from 'antd'
+import {Icon, Row, Col} from 'antd'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import './index.css'
@@ -22,6 +22,17 @@ class Address extends Component {
         })
     }
 
+    getDefaultAddress = (data) => (
+        data.find(data => data.default === '1')
+    )
+
+    getOtherAddress = (data) => {
+        let defaultAddressIndex = data.find(data => data.default === '1')
+        let dataCopy = [...data]
+        dataCopy.splice(defaultAddressIndex, 1)
+        return dataCopy
+    }
+
     render() {
         return (
             <div>
@@ -39,13 +50,15 @@ class Address extends Component {
                                 return 'error!'
                             }
 
+                            data = data.userAddressbyprops
+
                             return (
                                 <div>
                                     {
-                                        this.state.add?
+                                        this.state.add ?
                                             <AddAddress changePage={this.changePage}/>
                                             :
-                                            <AddressRender data={data.userAddressbyprops} changePage={this.changePage}/>
+                                            <AddressRender defaultAddress={this.getDefaultAddress(data)} otherAddress={this.getOtherAddress(data)} changePage={this.changePage}/>
                                     }
                                 </div>
                             )
@@ -53,7 +66,6 @@ class Address extends Component {
                     }
                 </Query>
             </div>
-
         )
     }
 }
@@ -67,29 +79,46 @@ class AddressRender extends Component {
     }
 
     render() {
-        let {data, changePage} = this.props
+        let {changePage, defaultAddress, otherAddress} = this.props
+        console.log(defaultAddress)
+        console.log(otherAddress)
         return (
             <div>
-                <div className='address-add' onClick={()=>{
+                <div className='address-add' onClick={() => {
                     changePage(true)
                 }}>
                     <Icon type="plus" style={{fontSize: 22, fontWeight: 800}}/>&nbsp;
                     添加新地址
                 </div>
-                <div>
-                    {data.map(address => {
+
+                <div className='default-address'>
+                    <div className='address-card'>
+                        <Row className='address-username-telephone'>
+                            <Col span={6} className='address-username ellipsis'>{defaultAddress.username}</Col>
+                            <Col span={14} className='address-phone ellipsis'>{defaultAddress.telephone}&nbsp;&nbsp;
+                                <span className='address-label'>默认</span></Col>
+                        </Row>
+                        <Row>
+                            <Col span={20}
+                                 className='address-address'>{defaultAddress.province + defaultAddress.city + defaultAddress.area + defaultAddress.address}</Col>
+                            <Col span={2} offset={2}><Icon type="edit" style={{fontSize: 14}}/></Col>
+                        </Row>
+                    </div>
+                </div>
+
+                <div className='other-address'>
+                    {otherAddress.map(address => {
                         return (
                             <div key={address.id} className='address-card'>
-                                <div className='address-username'>
-                                    <span className='address-card-title'>收件人：</span>{address.username}
-                                </div>
-                                <div className='address-telephone'>
-                                    <span className='address-card-title'>联系电话：</span>{address.telephone}
-                                </div>
-                                <div className='address-address'>
-                                    <span className='address-card-title'>联系地址：</span>{address.province + address.city + address.area + address.address}
-                                </div>
-                                <Button type='danger' className='address-delete'>删除</Button>
+                                <Row className='address-username-telephone'>
+                                    <Col span={6} className='address-username ellipsis'>{address.username}</Col>
+                                    <Col span={14} className='address-phone ellipsis'>{address.telephone}</Col>
+                                </Row>
+                                <Row>
+                                    <Col span={20}
+                                         className='address-address'>{address.province + address.city + address.area + address.address}</Col>
+                                    <Col span={2} offset={2}><Icon type="edit" style={{fontSize: 14}}/></Col>
+                                </Row>
                             </div>
                         )
                     })}

@@ -4,7 +4,7 @@
 .kind-search-wrap {
     height: 60px;
     position: relative;
-    z-index: -1;
+    z-index: 0;
 }
 
 .kind-search {
@@ -20,7 +20,7 @@
     height: 100%;
     background-color: white;
     position: relative;
-    z-index: -1;
+    z-index: 0;
 }
 
 .kind-navbar-wrap {

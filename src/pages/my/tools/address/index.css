@@ -3,18 +3,7 @@
     padding: 10px;
     font-size: 16px;
     color: black;
-    margin-bottom: 20px;
-}
-
-.address-card-title {
-    width: 85px;
-    display: inline-block;
-}
-
-.address-address {
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap
+    border: 1px solid #F3F3F3;
 }
 
 .address-add {
@@ -29,4 +18,26 @@
     box-shadow: 3px -1px 1px #ebedf0;
     background-color: #f44;
     color: white;
+}
+
+.address-username {
+    font-weight: 500;
+}
+
+.ellipsis {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
+
+.address-address {
+    font-size: 14px;
+}
+
+.address-label {
+    font-size: 12px;
+    padding: 0 10px;
+    background-color: #ff6d6d;
+    color: white;
+    border-radius: 5px;
 }
