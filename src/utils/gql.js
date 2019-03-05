@@ -141,11 +141,66 @@ const orderbyprops = `
         }
     }
 `
+const orderProduct_by_props = `
+    query orderProductbyprops($remark: String, $updatedAt: String, $product_id: ID, $orderPay: Float, $createdAt: String, $order_id: ID, $count: Int, $productPay: Float, $user_id: ID) {
+        orderProductbyprops: orderProduct_by_props(remark: $remark updatedAt: $updatedAt product_id: $product_id orderPay: $orderPay createdAt: $createdAt order_id: $order_id count: $count productPay: $productPay user_id: $user_id) {
+            remark
+            updatedAt
+            unit
+            product_id {
+                category
+                updatedAt
+                unit
+                name
+                createdAt
+                status
+                id
+                intro
+                price
+                img
+                stock
+            }
+            orderPay
+            createdAt
+            order_id {
+                deliveryTime
+                updatedAt
+    
+                payTime
+                orderTotalPay
+                createdAt
+                orderStatus
+    
+                id
+                orderShipFee
+                count
+    
+                productTotalPay
+            }
+            id
+            count
+            productPay
+            user_id {
+                email
+                updatedAt
+                password
+                telephone
+                username
+                createdAt
+                openid
+                id
+            }
+        }
+    }
+`
+
+
 export {
     productbyprops,
     productbyid,
     cart_by_userid,
     delete_userCart_by_id,
     userAddressbyprops,
-    orderbyprops
+    orderbyprops,
+    orderProduct_by_props
 }

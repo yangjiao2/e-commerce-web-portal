@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import './index.css'
 import {NavBar, Icon, ActivityIndicator} from 'antd-mobile'
 import {withRouter} from 'react-router-dom'
-import {orderbyprops} from "../../../utils/gql"
+import {orderbyprops, orderProduct_by_props} from "../../../utils/gql"
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 
@@ -98,7 +98,6 @@ class OrderRender extends Component {
 
     render() {
         let {data} = this.props
-        console.log(data)
         return (
             <div className='order-my-content'>
                 {
@@ -109,12 +108,33 @@ class OrderRender extends Component {
                         :
                         data.map(order => (
                             <div key={order.id} className='order-card'>
-                                <div className='order-card-top'>JD</div>
-                                <div className='order-card-content'></div>
-                                <div className='order-card-bottom'>
-                                    <div className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:</div>
-                                    <div className='order-card-pay'>￥{order.productTotalPay}</div>
-                                    </div>
+                                <Query query={gql(orderProduct_by_props)} variables={{order_id: order.id}}>
+                                    {
+                                        ({loading, error, data}) => {
+                                            if (loading) {
+                                                return (
+                                                    <div className="loading-center">
+                                                        <ActivityIndicator text="Loading..." size="large"/>
+                                                    </div>
+                                                )
+                                            }
+                                            if (error) {
+                                                return 'error!'
+                                            }
+                                            console.log(data)
+                                            return (
+                                                <div>
+                                                    <div className='order-card-top'>JD</div>
+                                                    <div className='order-card-content'></div>
+                                                    <div className='order-card-bottom'>
+                                                        <div className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:</div>
+                                                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    }
+                                </Query>
                             </div>
                         ))
                 }
