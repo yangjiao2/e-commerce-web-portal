@@ -64,7 +64,7 @@ class Order extends Component {
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(orderbyprops)} variables={{user_id: "obR_j5ILjLjFSuBjj_UymjQjMNZc", orderStatus}}>
+                <Query query={gql(orderbyprops)} variables={{user_id: "test", orderStatus}}>
                     {
                         ({loading, error, data}) => {
                             if (loading) {
