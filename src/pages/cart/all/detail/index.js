@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import { Checkbox, WhiteSpace  } from 'antd-mobile' 
+import {Checkbox, WhiteSpace} from 'antd-mobile'
 import classNames from 'classnames' 
 
 import '../index.css'
@@ -11,17 +11,24 @@ class CartDetail extends Component {
         this.state={
             cartList:[],
             totalPrice:0,
-            isSelectAll:true,
+            isSelectAll:false,
             selectedCount:0
         } 
     }
 
     //获取数据
     componentWillMount(){
+        let cartList =  JSON.parse(sessionStorage.getItem("cartList"))
+        let cartListLength = cartList ? cartList.length : 0
+
         this.setState({
-            cartList:this.props.cartList
+            cartList: cartList || this.props.cartList
         },()=>{
-            this.checkedAll('',true) 
+            if(cartListLength){
+                this.sumPrice()
+            }else {
+                this.checkedAll('',true)
+            }
         }) 
 
     }
@@ -161,11 +168,13 @@ class CartDetail extends Component {
                 shopping.push(item)
             }
         }) 
-        console.log('shopping',shopping) 
-        window.localStorage.setItem("shopping",JSON.stringify(shopping)) 
-        window.localStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
+        // console.log('cartList',this.state.cartList)
+        console.log('shopping',shopping)
+        sessionStorage.setItem("cartList",JSON.stringify(this.state.cartList))
+        sessionStorage.setItem("shopping",JSON.stringify(shopping))
+        sessionStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
         this.props.history.push({
-            pathname: '/cart/order',
+            pathname: '/cart/orders',
             state:{}
         })
     } 
@@ -188,11 +197,11 @@ class CartDetail extends Component {
                                             />
                                         </div>
                                         <div className="cart-list-image">
-                                            <img src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
+                                            <img src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt="商品图片"/>
                                         </div>
                                         <div className="cart-list-intro">
                                             <div>{item.product_id.name}</div>
-                                            <div>颜色尺码等</div>
+                                            <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
                                             <div>¥ {item.product_id.price}</div>
                                         </div>
                                         <div className="cart-list-count">

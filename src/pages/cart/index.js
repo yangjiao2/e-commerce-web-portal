@@ -11,7 +11,7 @@ const Cart = () => (
         <Switch>
             <Route exact path="/cart" component={All}/>
             <Route exact path="/cart/all" component={All}/>
-            <Route path="/cart/order" component={CartOrders}/>
+            <Route path="/cart/orders" component={CartOrders}/>
             <Route path="/cart/pay" component={Pay}/>
         </Switch>
     </div>

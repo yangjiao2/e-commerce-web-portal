@@ -45,6 +45,7 @@
 
 .cart-list {
     width: 100%;
+    line-height: 22px;
     background-color: #fff;
     padding: 10px 0;
     display: flex;

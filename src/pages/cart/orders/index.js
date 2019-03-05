@@ -2,6 +2,10 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {NavBar, Icon, List, Picker} from 'antd-mobile'
 import classNames from 'classnames'
+import {Mutation} from "react-apollo"
+import gql from "graphql-tag"
+
+import {create_order} from "../../../utils/gql"
 
 import './index.css'
 
@@ -22,11 +26,10 @@ const delivery = [
 class CartOrders extends Component {
     constructor(props) {
         super(props)
-        // console.log('shopping',JSON.parse(window.localStorage.getItem("shopping")))
         this.state = {
             cartList: [],
             unfoldList: [],
-            totalPrice: JSON.parse(window.localStorage.getItem('totalPrice')),
+            totalPrice: JSON.parse(sessionStorage.getItem('totalPrice')),
             delivery: ["快递配送"],
             height: '100%',
             unfoldStatus: true,
@@ -35,7 +38,7 @@ class CartOrders extends Component {
     }
 
     componentWillMount() {
-        let cartList = JSON.parse(window.localStorage.getItem("shopping"))
+        let cartList = JSON.parse(sessionStorage.getItem("shopping"))
         if (cartList.length > 3) {
             let cartList1 = cartList.slice(0, 3)
             let unfoldList = cartList.slice(3)
@@ -61,6 +64,21 @@ class CartOrders extends Component {
             height,
             unfoldStatus,
             foldStatus
+        })
+    }
+
+    onSubmitOrder = (create_order) => {
+        const orderContent = {
+
+        }
+
+        create_order({variables:orderContent}).then((data)=>{
+            // console.log('delete data',data)
+
+            this.props.history.push({
+                pathname:'/cart/pay',
+                state:{}
+            })
         })
     }
 
@@ -101,22 +119,22 @@ class CartOrders extends Component {
                     <div className='orders-detail'>
                         <div className='cart-content'>
                             {
-                                cartList.map((ele, index) => {
+                                cartList.map((item, index) => {
                                     return (
                                         <div key={index}>
                                             <div className="cart-list">
                                                 <div className="cart-list-image">
                                                     <img
-                                                        src={ele.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"}
+                                                        src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"}
                                                         alt=""/>
                                                 </div>
                                                 <div className="cart-orders-intro">
-                                                    <div>{ele.product_id.name}</div>
-                                                    <div>颜色尺码等</div>
-                                                    <div>¥ {ele.product_id.price}</div>
+                                                    <div>{item.product_id.name}</div>
+                                                    <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
+                                                    <div>¥ {item.product_id.price}</div>
                                                 </div>
                                                 <div className="cart-orders-count">
-                                                    x {ele.count}
+                                                    x {item.count}
                                                 </div>
                                             </div>
                                         </div>
@@ -141,20 +159,20 @@ class CartOrders extends Component {
                                             this.onChangeHeight('100%', true, false)
                                         }}>
                                             {
-                                                unfoldList.map((ele, index) => {
+                                                unfoldList.map((item, index) => {
                                                     return (
                                                         <div key={index}>
                                                             <div className="cart-list">
                                                                 <div className="cart-list-image">
-                                                                    <img src={ele.product_id.img} alt=""/>
+                                                                    <img src={item.product_id.img} alt=""/>
                                                                 </div>
                                                                 <div className="cart-orders-intro">
-                                                                    <div>{ele.product_id.name}</div>
-                                                                    <div>颜色尺码等</div>
-                                                                    <div>¥ {ele.product_id.price}</div>
+                                                                    <div>{item.product_id.name}</div>
+                                                                    <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
+                                                                    <div>¥ {item.product_id.price}</div>
                                                                 </div>
                                                                 <div className="cart-orders-count">
-                                                                    x {ele.count}
+                                                                    x {item.count}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -198,23 +216,26 @@ class CartOrders extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="orders-footer">
-                    <div className="jiesuan">
-                        <div className='jiesuan-total'>
-                            <span>合计：</span>
-                            <span className="jiesuan-total_price">¥ {totalPrice}</span>
+                <Mutation mutation={gql(create_order)}
+                          onError={error=>console.log('create_order error',error)}
+                >
+                    {(create_order,{ loading, error }) => (
+                        <div className="orders-footer">
+                            <div className="jiesuan">
+                                <div className='jiesuan-total'>
+                                    <span>合计：</span>
+                                    <span className="jiesuan-total_price">¥ {totalPrice}</span>
+                                </div>
+                                <button className="jiesuan-button"
+                                        onClick={()=>{
+                                            this.onSubmitOrder(create_order)
+                                        }}>
+                                    <span>提交订单</span>
+                                </button>
+                            </div>
                         </div>
-                        <button className="jiesuan-button"
-                                onClick={()=>{
-                                    this.props.history.push({
-                                        pathname:'/cart/pay',
-                                        state:{}
-                                      })
-                                }}>
-                            <span>提交订单</span>
-                        </button>
-                    </div>
-                </div>
+                    )}
+                </Mutation>
             </div>
         )
     }

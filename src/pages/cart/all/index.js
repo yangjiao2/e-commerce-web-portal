@@ -69,7 +69,7 @@ class All extends Component {
                             return (
                                 <div className="loading-center">
                                     <ActivityIndicator size="large"/>
-                                    <span>正在加载...</span>
+                                    <span>加载中...</span>
                                 </div>
                             )
                         }
