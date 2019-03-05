@@ -1,7 +1,7 @@
 import {Component} from "react"
 import React from "react"
 import {NavBar, Icon, InputItem, PickerView, TextareaItem} from 'antd-mobile'
-import { Button } from 'antd';
+import {Button} from 'antd'
 import './index.css'
 
 const provinceAll = [
@@ -18,17 +18,9 @@ const provinceAll = [
         value: '安徽省',
         children: [
             {
-                label: '合肥',
-                value: '合肥',
+                label: '合肥市',
+                value: '合肥市',
                 children: [
-                    {
-                        label: '包河区',
-                        value: '包河区',
-                    },
-                    {
-                        label: '庐阳区',
-                        value: '庐阳区',
-                    },
                     {
                         label: '蜀山区',
                         value: '蜀山区',
@@ -37,11 +29,19 @@ const provinceAll = [
                         label: '瑶海区',
                         value: '瑶海区',
                     },
+                    {
+                        label: '包河区',
+                        value: '包河区',
+                    },
+                    {
+                        label: '庐阳区',
+                        value: '庐阳区',
+                    }
                 ],
             },
             {
-                label: '芜湖',
-                value: '芜湖',
+                label: '芜湖市',
+                value: '芜湖市',
                 children: [
                     {
                         label: '镜湖区',
@@ -54,20 +54,20 @@ const provinceAll = [
                 ],
             },
             {
-                label: '六安',
-                value: '六安',
+                label: '六安市',
+                value: '六安市',
             },
             {
-                label: '淮南',
-                value: '淮南',
+                label: '淮南市',
+                value: '淮南市',
             },
             {
-                label: '马鞍山',
-                value: '马鞍山',
+                label: '马鞍山市',
+                value: '马鞍山市',
             },
             {
-                label: '黄山',
-                value: '黄山',
+                label: '黄山市',
+                value: '黄山市',
             }
         ]
     },
@@ -81,22 +81,29 @@ const provinceAll = [
     },
 ]
 
-class AddAddress extends Component {
+class SingleAddress extends Component {
     constructor(props) {
         super(props)
-        this.state = {
+        let state = {
             username: '',
             telephone: '',
             province: '安徽省',
             city: '合肥市',
-            area: '包河区',
-            address: ''
+            area: '蜀山区',
+            address: '',
+            id: ''
+        }
+        if (props.addressID === 'add') {
+            this.state = {...state}
+        } else {
+            let {province, city, area, address, telephone, username, id} = props.addressChoosed
+            this.state = {...state, province, city, area, address, telephone, username, id}
         }
     }
 
     render() {
         let {changePage} = this.props
-        let {username, telephone, province, city, area, address} = this.state
+        let {username, telephone, province, city, area, address, id} = this.state
         return (
             <div>
                 <div className='tools-addressadd-navbar-wrap'>
@@ -111,12 +118,12 @@ class AddAddress extends Component {
                 </div>
 
                 <div>
-                    <InputItem placeholder="输入姓名" labelNumber={5} onChange={(username) => {
+                    <InputItem placeholder="输入姓名" value={username} labelNumber={5} onChange={(username) => {
                         this.setState({username})
                     }}>
                         <div>联系人姓名</div>
                     </InputItem>
-                    <InputItem placeholder="输入号码" onChange={(telephone) => {
+                    <InputItem placeholder="输入号码" value={telephone} onChange={(telephone) => {
                         this.setState({telephone})
                     }}>
                         <div>手机号码</div>
@@ -127,50 +134,82 @@ class AddAddress extends Component {
                     />
                     <PickerView
                         data={provinceAll}
-                        value={[province, city, area ? area : '']}
-                        onChange={(area) => {
-                            this.setState({province: area[0], city: area[1], area: area[2]})
+                        value={[province, city ? city : '', area ? area : '']}
+                        onChange={(address) => {
+                            this.setState({province: address[0], city: address[1], area: address[2]})
                         }}
                     />
                     <TextareaItem
                         title="详细地址"
                         autoHeight
                         labelNumber={4}
+                        value={address}
                         onChange={(address) => {
                             this.setState({address})
                         }}
                     />
                 </div>
 
-                <AddAddressButton
-                    data = {{
-                        username,
-                        telephone,
-                        province,
-                        city,
-                        area,
-                        address
-                    }}
-                />
+                <div className='address-button-group'>
+                    <DefaultAndSaveButton
+                        data={{
+                            username,
+                            telephone,
+                            province,
+                            city,
+                            area,
+                            address,
+                            id
+                        }}
+                    />
+
+                    <SaveAddressButton
+                        data={{
+                            username,
+                            telephone,
+                            province,
+                            city,
+                            area,
+                            address,
+                            id
+                        }}
+                    />
+                </div>
+
             </div>
         )
     }
 }
 
-export default AddAddress
+export default SingleAddress
 
-class AddAddressButton extends Component {
+class DefaultAndSaveButton extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     render() {
         // let {data} = this.props
         return (
-            <div className='add-address-button'>
+            <div className='address-button'>
+                <Button block size='large'>设为默认并保存</Button>
+            </div>
+        )
+    }
+}
+
+
+class SaveAddressButton extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        // let {data} = this.props
+        return (
+            <div className='address-button'>
                 <Button type='primary' block size='large'>保存并使用</Button>
             </div>
         )

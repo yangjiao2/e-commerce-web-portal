@@ -62,6 +62,24 @@ const memberIcon = [
     }
 ]
 
+const shopIcon = [
+    {
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/shop.png',
+        text: '店铺展示',
+        id: 'shop'
+    },
+    {
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/goods.png',
+        text: '商品管理',
+        id: 'goods'
+    },
+    {
+        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/order.png',
+        text: '订单管理',
+        id: 'order'
+    }
+]
+
 class All extends Component {
     constructor(props) {
         super(props)
@@ -69,9 +87,8 @@ class All extends Component {
     }
 
     render() {
-        let contentHeight = window.innerHeight - 95
         return (
-            <div className='my-wrap all' style={{height: contentHeight}}>
+            <div className='my-wrap all'>
                 <div className='avatar-area'>
                     <div className='avatar'/>
                     <div className='nickname'>110</div>
@@ -135,6 +152,26 @@ class All extends Component {
                                       pathname: '/my/member',
                                       state: {
                                           page: member.id
+                                      }
+                                  })
+                              }}
+                        />
+                    </div>
+                </div>
+
+                <div className='my-card member-card'>
+                    <div className='card-title'>
+                        商家入口
+                    </div>
+                    <div className='card-icons'>
+                        <Grid data={shopIcon}
+                              columnNum={4}
+                              hasLine={false}
+                              onClick={(shop) => {
+                                  this.props.history.push({
+                                      pathname: '/my/shop',
+                                      state: {
+                                          page: shop.id
                                       }
                                   })
                               }}
