@@ -13,8 +13,8 @@ class Address extends Component {
         super(props)
         this.state = {
             single: false,
-            addressID: 'add',
-            addressChoosed: {id: 'add'}
+            addressID: '',
+            addressChoosed: {}
         }
     }
 
@@ -32,11 +32,11 @@ class Address extends Component {
     }
 
     getDefaultAddress = (data) => (
-        data.find(data => data.default === '1')
+        data.find(data => data.default === 1)
     )
 
     getOtherAddress = (data) => {
-        let defaultAddressIndex = data.find(data => data.default === '1')
+        let defaultAddressIndex = data.find(data => data.default === 1)
         let dataCopy = [...data]
         dataCopy.splice(defaultAddressIndex, 1)
         return dataCopy
@@ -99,6 +99,7 @@ class AddressRender extends Component {
             <div>
                 <div className='address-add' onClick={() => {
                     changePage(true)
+                    changeAddress({id: 'add'})
                 }}>
                     <Icon type="plus" style={{fontSize: 22, fontWeight: 800}}/>&nbsp;
                     添加新地址
