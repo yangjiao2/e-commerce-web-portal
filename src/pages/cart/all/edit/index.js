@@ -213,7 +213,7 @@ class CartEdit extends Component {
                                                 </div>
                                                 <div className="cart-list-intro">
                                                     <div>{item.product_id.name}</div>
-                                                    <div>颜色尺码等</div>
+                                                    <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
                                                     <div>¥ {item.product_id.price}</div>
                                                 </div>
                                                 <div className="cart-list-count">

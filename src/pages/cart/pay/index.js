@@ -10,7 +10,7 @@ class Pay extends Component {
         super(props)
         this.state = {
             checked:true,
-            totalPrice:JSON.parse(localStorage.getItem('totalPrice')),
+            totalPrice:JSON.parse(sessionStorage.getItem('totalPrice')),
         }
     }
 

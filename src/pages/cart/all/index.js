@@ -69,14 +69,14 @@ class All extends Component {
                             return (
                                 <div className="loading-center">
                                     <ActivityIndicator size="large"/>
-                                    <span>正在加载...</span>
+                                    <span>加载中...</span>
                                 </div>
                             )
                         }
                         if (error) {
                             return 'error!'
                         }
-                        // console.log('cart data',data)
+                        console.log('cart data',data)
 
                         return (
                             <div className='cart-wrap'>

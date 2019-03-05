@@ -42,7 +42,6 @@ const cart_by_userid = `
             id
             product_id{
                 category
-                createdAt
                 img
                 intro
                 name
@@ -50,7 +49,12 @@ const cart_by_userid = `
                 status
                 stock
                 unit
-                updatedAt
+            }
+            specificationStock_id{
+                color
+                size
+                stock
+                status
             }
         }
     }
