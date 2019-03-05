@@ -98,9 +98,9 @@ class CartEdit extends Component {
                                 selectedCount:0
                             })
                         }
-                    });
+                    })
                 }
-            },
+            }
         ])
     }
 

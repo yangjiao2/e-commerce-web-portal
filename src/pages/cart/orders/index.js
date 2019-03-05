@@ -2,6 +2,10 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {NavBar, Icon, List, Picker} from 'antd-mobile'
 import classNames from 'classnames'
+import {Mutation} from "react-apollo"
+import gql from "graphql-tag"
+
+import {create_order} from "../../../utils/gql"
 
 import './index.css'
 
@@ -60,6 +64,21 @@ class CartOrders extends Component {
             height,
             unfoldStatus,
             foldStatus
+        })
+    }
+
+    onSubmitOrder = (create_order) => {
+        const orderContent = {
+
+        }
+
+        create_order({variables:orderContent}).then((data)=>{
+            // console.log('delete data',data)
+
+            this.props.history.push({
+                pathname:'/cart/pay',
+                state:{}
+            })
         })
     }
 
@@ -197,23 +216,26 @@ class CartOrders extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="orders-footer">
-                    <div className="jiesuan">
-                        <div className='jiesuan-total'>
-                            <span>合计：</span>
-                            <span className="jiesuan-total_price">¥ {totalPrice}</span>
+                <Mutation mutation={gql(create_order)}
+                          onError={error=>console.log('create_order error',error)}
+                >
+                    {(create_order,{ loading, error }) => (
+                        <div className="orders-footer">
+                            <div className="jiesuan">
+                                <div className='jiesuan-total'>
+                                    <span>合计：</span>
+                                    <span className="jiesuan-total_price">¥ {totalPrice}</span>
+                                </div>
+                                <button className="jiesuan-button"
+                                        onClick={()=>{
+                                            this.onSubmitOrder(create_order)
+                                        }}>
+                                    <span>提交订单</span>
+                                </button>
+                            </div>
                         </div>
-                        <button className="jiesuan-button"
-                                onClick={()=>{
-                                    this.props.history.push({
-                                        pathname:'/cart/pay',
-                                        state:{}
-                                      })
-                                }}>
-                            <span>提交订单</span>
-                        </button>
-                    </div>
-                </div>
+                    )}
+                </Mutation>
             </div>
         )
     }
