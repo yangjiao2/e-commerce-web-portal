@@ -1,5 +1,6 @@
 import {Component} from "react"
 import React from "react"
+import {NavBar, Icon} from 'antd-mobile'
 
 class Message extends Component {
     constructor(props) {
@@ -12,7 +13,15 @@ class Message extends Component {
     render() {
         return (
             <div>
-                Message
+                <div className='navbar'>
+                    <NavBar
+                        mode="light"
+                        icon={<Icon type="left"/>}
+                        onLeftClick={() => {
+                            this.props.history.go(-2)
+                        }}
+                    >系统消息</NavBar>
+                </div>
             </div>
         )
     }

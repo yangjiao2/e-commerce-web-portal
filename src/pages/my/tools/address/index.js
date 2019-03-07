@@ -1,7 +1,7 @@
 import {Component} from "react"
 import React from "react"
 import {userAddressbyprops} from "../../../../utils/gql"
-import {ActivityIndicator} from 'antd-mobile'
+import {ActivityIndicator, NavBar} from 'antd-mobile'
 import {Icon, Row, Col} from 'antd'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
@@ -46,40 +46,51 @@ class Address extends Component {
         let {addressChoosed, addressID} = this.state
         return (
             <div>
-                <Query query={gql(userAddressbyprops)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
-                    {
-                        ({loading, error, data}) => {
-                            if (loading) {
+                <div className='navbar'>
+                    <NavBar
+                        mode="light"
+                        icon={<Icon type="left"/>}
+                        onLeftClick={() => {
+                            this.props.history.go(-2)
+                        }}
+                    >地址管理</NavBar>
+                </div>
+                <div className='content-wrap'>
+                    <Query query={gql(userAddressbyprops)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
+                        {
+                            ({loading, error, data}) => {
+                                if (loading) {
+                                    return (
+                                        <div className="loading-center">
+                                            <ActivityIndicator text="Loading..." size="large"/>
+                                        </div>
+                                    )
+                                }
+                                if (error) {
+                                    return 'error!'
+                                }
+
+                                data = data.userAddressbyprops
+
                                 return (
-                                    <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                    <div>
+                                        {
+                                            this.state.single ?
+                                                <SingleAddress addressID={addressID} addressChoosed={addressChoosed} changePage={this.changePage}/>
+                                                :
+                                                <AddressRender
+                                                    defaultAddress={this.getDefaultAddress(data)}
+                                                    otherAddress={this.getOtherAddress(data)}
+                                                    changePage={this.changePage}
+                                                    changeAddress={this.changeAddress}
+                                                />
+                                        }
                                     </div>
                                 )
                             }
-                            if (error) {
-                                return 'error!'
-                            }
-
-                            data = data.userAddressbyprops
-
-                            return (
-                                <div>
-                                    {
-                                        this.state.single ?
-                                            <SingleAddress addressID={addressID} addressChoosed={addressChoosed} changePage={this.changePage}/>
-                                            :
-                                            <AddressRender
-                                                defaultAddress={this.getDefaultAddress(data)}
-                                                otherAddress={this.getOtherAddress(data)}
-                                                changePage={this.changePage}
-                                                changeAddress={this.changeAddress}
-                                            />
-                                    }
-                                </div>
-                            )
                         }
-                    }
-                </Query>
+                    </Query>
+                </div>
             </div>
         )
     }

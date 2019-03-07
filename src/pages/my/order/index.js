@@ -1,144 +1,44 @@
 import React, {Component} from 'react'
-import './index.css'
-import {NavBar, Icon, ActivityIndicator} from 'antd-mobile'
-import {withRouter} from 'react-router-dom'
-import {orderbyprops, orderProduct_by_props} from "../../../utils/gql"
-import {Query} from "react-apollo"
-import gql from "graphql-tag"
+import Display from './display'
+import Detail from "./detail"
+import {withRouter, Route, Switch} from 'react-router-dom'
 
 class Order extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            navTitle: '',
-            page: 'pay',
-            orderStatus: ''
-        }
+        this.state = {}
     }
 
     componentWillMount() {
         let {location} = this.props
         if (location && location.state) {
-            let navTitle = '',
-                orderStatus = '0'
-            let page = location.state.page
-            switch (page) {
-                case 'pay':
-                    navTitle = '待付款'
-                    orderStatus = '0'
-                    break
-                case 'ship':
-                    navTitle = '待发货'
-                    orderStatus = '1'
-                    break
-                case 'unbox':
-                    navTitle = '待收货'
-                    orderStatus = '2'
-                    break
-                case 'judge':
-                    navTitle = '待评价'
-                    orderStatus = '3'
-                    break
-                default:
-                    navTitle = '无效页面'
-                    break
+            if(['pay', 'ship', 'unbox', 'judge'].indexOf(location.state.kind)>-1) {
+                this.props.history.push({
+                    pathname: '/my/order/display',
+                    state: {
+                        kind: location.state.kind
+                    }
+                })
+            } else {
+                this.props.history.push({
+                    pathname: '/my/order/detail',
+                    state: {}
+                })
             }
-            this.setState({
-                navTitle,
-                page,
-                orderStatus
-            })
         }
     }
 
     render() {
-        let {navTitle, orderStatus} = this.state
         return (
             <div className='order-wrap'>
-                <div className='order-navbar-wrap navbar'>
-                    <NavBar
-                        mode="light"
-                        icon={<Icon type="left"/>}
-                        onLeftClick={() => {
-                            this.props.history.push({pathname: '/my/all'})
-                        }}
-                    >{navTitle}</NavBar>
-                </div>
-                <Query query={gql(orderbyprops)} variables={{user_id: "test", orderStatus}}>
-                    {
-                        ({loading, error, data}) => {
-                            if (loading) {
-                                return (
-                                    <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
-                                    </div>
-                                )
-                            }
-                            if (error) {
-                                return 'error!'
-                            }
-                            return (
-                                <OrderRender data={data.orderbyprops}/>
-                            )
-                        }
-                    }
-                </Query>
+                <Switch>
+                    <Route path="/my/order/display" component={Display}/>
+                    <Route path="/my/order/detail" component={Detail}/>
+                    <Route path="/my/order/*" component={Display}/>
+                </Switch>
             </div>
         )
     }
 }
 
 export default withRouter(Order)
-
-class OrderRender extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {}
-    }
-
-    render() {
-        let {data} = this.props
-        return (
-            <div className='order-my-content'>
-                {
-                    data.length === 0 ?
-                        <div>
-                            还没有这种订单呢
-                        </div>
-                        :
-                        data.map(order => (
-                            <div key={order.id} className='order-card'>
-                                <Query query={gql(orderProduct_by_props)} variables={{order_id: order.id}}>
-                                    {
-                                        ({loading, error, data}) => {
-                                            if (loading) {
-                                                return (
-                                                    <div className="loading-center">
-                                                        <ActivityIndicator text="Loading..." size="large"/>
-                                                    </div>
-                                                )
-                                            }
-                                            if (error) {
-                                                return 'error!'
-                                            }
-                                            console.log(data)
-                                            return (
-                                                <div>
-                                                    <div className='order-card-top'>JD</div>
-                                                    <div className='order-card-content'></div>
-                                                    <div className='order-card-bottom'>
-                                                        <div className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:</div>
-                                                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
-                                    }
-                                </Query>
-                            </div>
-                        ))
-                }
-            </div>
-        )
-    }
-}

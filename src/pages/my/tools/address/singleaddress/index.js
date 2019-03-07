@@ -193,7 +193,7 @@ class DefaultAndSaveButton extends Component {
         // let {data} = this.props
         return (
             <div className='address-button'>
-                <Button block size='large'>设为默认并保存</Button>
+                <Button block size='large' style={{outline: 'none'}}>设为默认并保存</Button>
             </div>
         )
     }
@@ -210,7 +210,7 @@ class SaveAddressButton extends Component {
         // let {data} = this.props
         return (
             <div className='address-button'>
-                <Button type='primary' block size='large'>保存并使用</Button>
+                <Button type='primary' block size='large' style={{outline: 'none'}}>保存并使用</Button>
             </div>
         )
     }

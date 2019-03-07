@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import Card from './card'
-import Coupon from './coupon'
-import Credit from './credit'
+import Shop from './shop'
+import Goods from './goods'
+import Orders from './orders'
 import {withRouter, Route, Switch} from 'react-router-dom'
 
-class Member extends Component {
+class Manage extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -16,7 +16,7 @@ class Member extends Component {
         let {location} = this.props
         if (location && location.state) {
             this.props.history.push({
-                pathname: '/my/member/' + location.state.page,
+                pathname: '/my/manage/' + location.state.page,
                 state: {}
             })
         }
@@ -26,14 +26,14 @@ class Member extends Component {
         return (
             <div className='manage-wrap'>
                 <Switch>
-                    <Route path="/my/member/card" component={Card}/>
-                    <Route path="/my/member/coupon" component={Coupon}/>
-                    <Route path="/my/member/credit" component={Credit}/>
-                    <Route path="/my/member/*" component={Card}/>
+                    <Route path="/my/manage/shop" component={Shop}/>
+                    <Route path="/my/manage/goods" component={Goods}/>
+                    <Route path="/my/manage/orders" component={Orders}/>
+                    <Route path="/my/manage/*" component={Shop}/>
                 </Switch>
             </div>
         )
     }
 }
 
-export default withRouter(Member)
+export default withRouter(Manage)
