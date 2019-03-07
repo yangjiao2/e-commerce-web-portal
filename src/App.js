@@ -47,11 +47,12 @@ class App extends Component {
             pathname = location.pathname,
             state = location.state
 
-        // 有 state 的话，就隐藏 tabbar, （进入子界面）
+        // 有 state 的话，根据tabHidden显示或隐藏 tabbar, （进入子界面）
         // 无 state 的话，就显示 tabbar （返回到主界面）
         if (location && state) {
+            let tabHidden = state.tabHidden
             this.setState({
-                tabHidden: true
+                tabHidden
             })
         } else {
             this.setState({

@@ -17,7 +17,9 @@ class Manage extends Component {
         if (location && location.state) {
             this.props.history.push({
                 pathname: '/my/manage/' + location.state.page,
-                state: {}
+                state: {
+                    tabHidden:true
+                }
             })
         }
     }

@@ -105,7 +105,8 @@ class All extends Component {
                                   this.props.history.push({
                                       pathname: '/my/order',
                                       state: {
-                                          kind: order.id
+                                          kind: order.id,
+                                          tabHidden:true
                                       }
                                   })
                               }}
@@ -130,7 +131,8 @@ class All extends Component {
                                       this.props.history.push({
                                           pathname: '/my/tools',
                                           state: {
-                                              page: tools.id
+                                              page: tools.id,
+                                              tabHidden:true
                                           }
                                       })
                                   }
@@ -151,7 +153,8 @@ class All extends Component {
                                   this.props.history.push({
                                       pathname: '/my/member',
                                       state: {
-                                          page: member.id
+                                          page: member.id,
+                                          tabHidden:true
                                       }
                                   })
                               }}
@@ -171,7 +174,8 @@ class All extends Component {
                                   this.props.history.push({
                                       pathname: '/my/manage',
                                       state: {
-                                          page: shop.id
+                                          page: shop.id,
+                                          tabHidden:true
                                       }
                                   })
                               }}

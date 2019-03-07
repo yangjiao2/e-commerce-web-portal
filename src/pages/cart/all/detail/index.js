@@ -189,7 +189,9 @@ class CartDetail extends Component {
         sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))
         this.props.history.push({
             pathname: '/cart/orders',
-            state:{}
+            state:{
+                tabHidden:true
+            }
         })
     } 
 

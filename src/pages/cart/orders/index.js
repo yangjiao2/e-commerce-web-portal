@@ -103,7 +103,9 @@ class CartOrders extends Component {
 
             this.props.history.push({
                 pathname:'/cart/pay',
-                state:{}
+                state:{
+                    tabHidden:true
+                }
             })
         })
     }
@@ -123,7 +125,8 @@ class CartOrders extends Component {
                             this.props.history.push({
                                 pathname:'/cart',
                                 state:{
-                                    updateData:true
+                                    updateData:true,
+                                    tabHidden:false
                                 }
                             })
                         }}
@@ -138,7 +141,10 @@ class CartOrders extends Component {
                                 onClick={() => {
                                     this.props.history.push({
                                         pathname:'/my/tools',
-                                        state: {page: 'address'}})
+                                        state: {
+                                            page: 'address',
+                                            tabHidden:true
+                                        }})
                                 }}>
                                 <div>
                                     <span>承叶子</span>&nbsp;&nbsp;
