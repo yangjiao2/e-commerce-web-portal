@@ -199,7 +199,7 @@ class CartEdit extends Component {
                             {
                                 this.state.cartList.map((item,index)=>{
                                     return(
-                                        <div key={index}>
+                                        <div key={item.id+'edit'}>
                                             <div className="cart-list">
                                                 <div className="cart-list-checkbox">
                                                     <Checkbox
@@ -246,7 +246,7 @@ class CartEdit extends Component {
                                                 checked={this.state.isSelectAll}
                                                 onChange={(e)=>{this.checkedAll(e,'')}}
                                                 style={{marginLeft:15}}
-                                            />,
+                                            />
                                             <span className="jiesuan-checkbox_label">全选</span>
                                         </div>
                                         <div className="jiesuan-total">

@@ -14,16 +14,25 @@ class All extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            page: 'detail'
+            page: 'detail',
+            updateData:false
         }
     }
 
     componentWillMount() {
+        // console.log('cartAll componentWillMount',this.props)
         this.getHash()
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        this.getHash()
+    componentDidMount() {
+        // console.log('cartAll componentDidMount',this.props)
+        let state = this.props.history.location.state
+        let updateData = state ? state.updateData : false
+        if(updateData){
+            this.setState({
+                updateData
+            })
+        }
     }
 
     getHash = () => {
@@ -46,11 +55,11 @@ class All extends Component {
     }
 
     renderPage = (data, refetch) => {
-        let {page} = this.state
+        let {page,updateData} = this.state
 
         switch (page) {
             case 'detail':
-                return <CartDetail cartList={data.cartList}/>
+                return <CartDetail cartList={data.cartList} refetch={refetch} updateData={updateData}/>
             case 'edit':
                 return <CartEdit cartList={data.cartList} refetch={refetch}/>
             default:
@@ -60,6 +69,7 @@ class All extends Component {
 
     render() {
         let {page} = this.state
+        // console.log('render',page,this.props)
 
         return (
             <Query query={gql(cart_by_userid)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
@@ -76,7 +86,7 @@ class All extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        // console.log('cart data',data)
+                        // console.log('cart all data',data)
 
                         return (
                             <div className='cart-wrap'>
@@ -85,7 +95,7 @@ class All extends Component {
                                         mode="light"
                                         rightContent={[
                                             data.cartList.length ?
-                                                <span className='navbar-button' key={"1"} onClick={this.changeCartPage}>
+                                                <span className='navbar-button' key={"cart-navbar"} onClick={this.changeCartPage}>
                                                 {page === 'detail' ? "编辑" : "完成"}
                                             </span> : ''
                                         ]}

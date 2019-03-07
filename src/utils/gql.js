@@ -199,53 +199,61 @@ const orderProduct_by_props = `
 `
 
 const create_order = `
-    mutation createorder($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    mutation createorder($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, 
+                         $deleteId: [String]) {
         createorder: create_order(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
-            deliveryTime
-            updatedAt
-            orderLogistics_id {
+            result
+            order {
+                deliveryTime
                 updatedAt
-                logisticsFee
-                expressId
-                createdAt
-                consigneeTel
-                id
-                consignAddress
-                LogisticsStatus    
-                consigneeName
-            }
-            payTime
-            orderTotalPay
-            createdAt
-            orderStatus
-            userAddress_id {
-                address
-                updatedAt
-                telephone
-                default
-                city
-                username
-                postcode
-                createdAt
-                deletedAt
-                id    
-                area
-                province
-            }
-            id
-            orderShipFee
-            count
-            productTotalPay
-            orderPay_id {
-                id        
-                totalPay
-                transactionId
+                orderLogistics_id {
+                    updatedAt
+                    logisticsFee
+                    expressId
+                    createdAt
+                    consigneeTel
+                    id
+                    consignAddress
+                    LogisticsStatus    
+                    consigneeName
+                }
                 payTime
-            }
+                orderTotalPay
+                createdAt
+                orderStatus
+                userAddress_id {
+                    address
+                    updatedAt
+                    telephone
+                    default
+                    city
+                    username
+                    postcode
+                    createdAt
+                    deletedAt
+                    id    
+                    area
+                    province
+                }
+                id
+                orderShipFee
+                count
+                productTotalPay
+                orderPay_id {
+                    id        
+                    totalPay
+                    transactionId
+                    payTime
+                }
+            } 
         }
+        delete_userCart(where: {
+            id: {
+                _in: $deleteId
+            }
+        }) 
     }
 `
-
 
 export {
     productbyprops,

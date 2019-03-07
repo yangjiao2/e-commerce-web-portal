@@ -4,6 +4,7 @@ import {NavBar, Icon, List, Picker} from 'antd-mobile'
 import classNames from 'classnames'
 import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
+import moment from 'moment';
 
 import {create_order} from "../../../utils/gql"
 
@@ -30,6 +31,7 @@ class CartOrders extends Component {
             cartList: [],
             unfoldList: [],
             totalPrice: JSON.parse(sessionStorage.getItem('totalPrice')),
+            totalCount: JSON.parse(sessionStorage.getItem('totalCount')),
             delivery: ["快递配送"],
             height: '100%',
             unfoldStatus: true,
@@ -38,6 +40,7 @@ class CartOrders extends Component {
     }
 
     componentWillMount() {
+        // console.log('CartOrders componentWillMount',this.props)
         let cartList = JSON.parse(sessionStorage.getItem("shopping"))
         if (cartList.length > 3) {
             let cartList1 = cartList.slice(0, 3)
@@ -68,12 +71,35 @@ class CartOrders extends Component {
     }
 
     onSubmitOrder = (create_order) => {
-        const orderContent = {
+        let {totalCount, totalPrice} = this.state
+        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+        let tag = "18726202125".replace(/[^0-9]/ig, "").slice(-4);
+        let id = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag;
 
+        let shopping = JSON.parse(sessionStorage.getItem("shopping"))
+        let deleteIdList = shopping.map(item => item.id)
+
+        const orderContent = {
+             deliveryTime: "",
+             updatedAt: "",
+             orderLogistics_id: "",
+             payTime: "",
+             orderTotalPay: totalPrice,
+             createdAt,
+             orderStatus: "0",
+             userAddress_id: "",
+             id,
+             orderShipFee: 0,
+             count: totalCount,
+             user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA",
+             productTotalPay: totalPrice,
+             orderPay_id: "",
+             deleteId:deleteIdList
         }
 
         create_order({variables:orderContent}).then((data)=>{
-            // console.log('delete data',data)
+            // console.log('create_order data',data)
+            sessionStorage.removeItem("cartList");
 
             this.props.history.push({
                 pathname:'/cart/pay',
@@ -93,7 +119,13 @@ class CartOrders extends Component {
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {
-                            this.props.history.goBack()
+                            // this.props.history.goBack()
+                            this.props.history.push({
+                                pathname:'/cart',
+                                state:{
+                                    updateData:true
+                                }
+                            })
                         }}
                     >订单确认</NavBar>
                 </div>

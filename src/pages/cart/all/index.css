@@ -57,6 +57,7 @@
     width: 10%;
     display: flex;
     align-items: center;
+    z-index: 0;
 }
 
 .cart-list-image {
@@ -107,6 +108,7 @@
     align-items: center;
     background-color: #fdfbfb;
     border-top: 1px solid #f5f5f9;
+    z-index: 3;
 }
 
 .jiesuan-disabled {

@@ -19,6 +19,8 @@ class CartDetail extends Component {
     //获取数据
     componentWillMount(){
         let cartList =  JSON.parse(sessionStorage.getItem("cartList"))
+        // console.log('CartDetail componentWillMount cartList session',cartList)
+        // console.log('CartDetail componentWillMount cartList props',this.props.cartList)
         let cartListLength = cartList ? cartList.length : 0
 
         this.setState({
@@ -29,8 +31,18 @@ class CartDetail extends Component {
             }else {
                 this.checkedAll('',true)
             }
-        }) 
+        })
+    }
 
+    componentWillReceiveProps(nextProps) {
+        // console.log("CartDetail componentWillReceiveProps",nextProps)
+        if(nextProps.updateData){
+            this.props.refetch().then(()=>{
+                this.setState({
+                    cartList:nextProps.cartList
+                })
+            })
+        }
     }
 
     //获取输入框的值
@@ -123,6 +135,7 @@ class CartDetail extends Component {
 
     //全选或全不选,判断全选状态
     checkedAll=(e,check)=>{
+        if(e) e.stopPropagation()
         let checked = e.target ? e.target.checked : check 
 
         if(checked===true){
@@ -169,10 +182,11 @@ class CartDetail extends Component {
             }
         }) 
         // console.log('cartList',this.state.cartList)
-        console.log('shopping',shopping)
+        // console.log('shopping',shopping)
         sessionStorage.setItem("cartList",JSON.stringify(this.state.cartList))
         sessionStorage.setItem("shopping",JSON.stringify(shopping))
         sessionStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
+        sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))
         this.props.history.push({
             pathname: '/cart/orders',
             state:{}
@@ -187,7 +201,7 @@ class CartDetail extends Component {
                     {
                         cartList.map((item,index)=>{
                             return(
-                                <div key={index}>
+                                <div key={item.id+'detail'}>
                                     <div className="cart-list">
                                         <div className="cart-list-checkbox">
                                             <Checkbox
@@ -232,7 +246,7 @@ class CartDetail extends Component {
                                 checked={isSelectAll}
                                 onChange={(e)=>{this.checkedAll(e,'')}}
                                 style={{marginLeft:15}}
-                            />,
+                            />
                             <span className="jiesuan-checkbox_label">全选</span>
                         </div>
                         <div className={classNames({
