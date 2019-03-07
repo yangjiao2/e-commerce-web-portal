@@ -241,8 +241,7 @@ class DisplayRender extends Component {
                                                         this.props.history.push({
                                                             pathname: '/my/order/detail',
                                                             state: {
-                                                                data: order,
-                                                                tabHidden:true
+                                                                data: order
                                                             }
                                                         })
                                                     }}>

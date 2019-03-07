@@ -16,16 +16,13 @@ class Order extends Component {
                 this.props.history.push({
                     pathname: '/my/order/display',
                     state: {
-                        kind: location.state.kind,
-                        tabHidden:true
+                        kind: location.state.kind
                     }
                 })
             } else {
                 this.props.history.push({
                     pathname: '/my/order/detail',
-                    state: {
-                        tabHidden:true
-                    }
+                    state: {}
                 })
             }
         }

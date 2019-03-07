@@ -50,7 +50,7 @@ class App extends Component {
         // 有 state 的话，根据tabHidden显示或隐藏 tabbar, （进入子界面）
         // 无 state 的话，就显示 tabbar （返回到主界面）
         if (location && state) {
-            let tabHidden = state.tabHidden
+            let tabHidden = state.tabHidden !== undefined ? state.tabHidden : true
             this.setState({
                 tabHidden
             })

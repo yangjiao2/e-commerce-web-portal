@@ -103,9 +103,7 @@ class CartOrders extends Component {
 
             this.props.history.push({
                 pathname:'/cart/pay',
-                state:{
-                    tabHidden:true
-                }
+                state:{}
             })
         })
     }
@@ -142,8 +140,7 @@ class CartOrders extends Component {
                                     this.props.history.push({
                                         pathname:'/my/tools',
                                         state: {
-                                            page: 'address',
-                                            tabHidden:true
+                                            page: 'address'
                                         }})
                                 }}>
                                 <div>

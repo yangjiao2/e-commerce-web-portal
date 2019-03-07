@@ -96,8 +96,7 @@ class KindRender extends Component {
                                   this.props.history.push({
                                       pathname: '/home/detail',
                                       state: {
-                                          id: product.id,
-                                          tabHidden:true
+                                          id: product.id
                                       }
                                   })
 

@@ -71,8 +71,7 @@ class Detail extends Component {
                     this.props.history.push({
                         pathname: '/home/detail',
                         state: {
-                            id: data.id,
-                            tabHidden:true
+                            id: data.id
                         }
                     })
                 }}>

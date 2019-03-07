@@ -38,8 +38,15 @@ class CartDetail extends Component {
         // console.log("CartDetail componentWillReceiveProps",nextProps)
         if(nextProps.updateData){
             this.props.refetch().then(()=>{
+                let cartListLength = nextProps.cartList ? nextProps.cartList.length : 0
                 this.setState({
                     cartList:nextProps.cartList
+                },()=>{
+                    if(cartListLength){
+                        this.sumPrice()
+                    }else {
+                        this.checkedAll('',true)
+                    }
                 })
             })
         }
@@ -189,9 +196,7 @@ class CartDetail extends Component {
         sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))
         this.props.history.push({
             pathname: '/cart/orders',
-            state:{
-                tabHidden:true
-            }
+            state:{}
         })
     } 
 

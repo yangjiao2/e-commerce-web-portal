@@ -91,8 +91,7 @@ class All extends Component {
                         this.props.history.push({
                             pathname: '/home/kind',
                             state: {
-                                id: kind.id,
-                                tabHidden:true
+                                id: kind.id
                             }
                         })
                     }}/>
@@ -141,8 +140,7 @@ class Like extends Component {
                           this.props.history.push({
                               pathname: '/home/detail',
                               state: {
-                                  id: guess.id,
-                                  tabHidden:true
+                                  id: guess.id
                               }
                           })
                       }}
