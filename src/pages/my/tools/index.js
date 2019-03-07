@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import './index.css'
-import {NavBar, Icon} from 'antd-mobile'
 import Message from './message'
 import Address from './address'
 import {withRouter, Route, Switch} from 'react-router-dom'
@@ -20,46 +18,17 @@ class Tools extends Component {
                 pathname: '/my/tools/' + location.state.page,
                 state: {}
             })
-            let navTitle = ''
-            switch (location.state.page) {
-                case 'address':
-                    navTitle = '地址管理'
-                    break
-                case 'message':
-                    navTitle = '系统通知'
-                    break
-                default:
-                    navTitle = '无效页面'
-                    break
-            }
-            this.setState({
-                navTitle
-            })
         }
     }
 
     render() {
-        let {navTitle} = this.state
-
         return (
             <div className='tools-wrap'>
-                <div className='tools-navbar-wrap navbar'>
-                    <NavBar
-                        className='tools-navbar'
-                        mode="light"
-                        icon={<Icon type="left"/>}
-                        onLeftClick={() => {
-                            // this.props.history.push({pathname: '/my/all'})
-                            this.props.history.go(-2)
-                        }}
-                    >{navTitle}</NavBar>
-                </div>
-                <div className="content-wrap">
-                    <Switch>
-                        <Route exact path="/my/tools/address" component={Address}/>
-                        <Route path="/my/tools/message" component={Message}/>
-                    </Switch>
-                </div>
+                <Switch>
+                    <Route path="/my/tools/address" component={Address}/>
+                    <Route path="/my/tools/message" component={Message}/>
+                    <Route path="/my/tools/*" component={Address}/>
+                </Switch>
             </div>
         )
     }

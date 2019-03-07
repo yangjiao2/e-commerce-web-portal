@@ -76,7 +76,7 @@ const shopIcon = [
     {
         icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/order.png',
         text: '订单管理',
-        id: 'order'
+        id: 'orders'
     }
 ]
 
@@ -105,7 +105,7 @@ class All extends Component {
                                   this.props.history.push({
                                       pathname: '/my/order',
                                       state: {
-                                          page: order.id
+                                          kind: order.id
                                       }
                                   })
                               }}
@@ -169,7 +169,7 @@ class All extends Component {
                               hasLine={false}
                               onClick={(shop) => {
                                   this.props.history.push({
-                                      pathname: '/my/shop',
+                                      pathname: '/my/manage',
                                       state: {
                                           page: shop.id
                                       }

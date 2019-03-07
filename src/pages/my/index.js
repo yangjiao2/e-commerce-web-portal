@@ -4,7 +4,7 @@ import All from './all'
 import Order from './order'
 import Tools from './tools'
 import Member from './member'
-import Shop from './shop'
+import Manage from './manage'
 import {Switch, Route} from 'react-router-dom'
 
 const My = () => (
@@ -15,7 +15,7 @@ const My = () => (
             <Route path="/my/order" component={Order}/>
             <Route path="/my/tools" component={Tools}/>
             <Route path="/my/member" component={Member}/>
-            <Route path="/my/shop" component={Shop}/>
+            <Route path="/my/manage" component={Manage}/>
         </Switch>
     </div>
 )
