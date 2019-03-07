@@ -139,7 +139,7 @@ class All extends Component {
                     </div>
                 </div>
 
-                <div className='my-card member-card'>
+                <div className='my-card member-card' style={{display: 'none'}}>
                     <div className='card-title'>
                         会员中心
                     </div>

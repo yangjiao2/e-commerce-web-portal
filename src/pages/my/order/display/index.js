@@ -7,7 +7,7 @@ import {orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 
-class Order extends Component {
+class Display extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -79,7 +79,8 @@ class Order extends Component {
                                 return 'error!'
                             }
                             return (
-                                <OrderRender data={data.orderbyprops} orderStatus={orderStatus}/>
+                                <DisplayRender data={data.orderbyprops} orderStatus={orderStatus}
+                                               history={this.props.history}/>
                             )
                         }
                     }
@@ -89,9 +90,9 @@ class Order extends Component {
     }
 }
 
-export default withRouter(Order)
+export default withRouter(Display)
 
-class OrderRender extends Component {
+class DisplayRender extends Component {
     constructor(props) {
         super(props)
         this.state = {}
@@ -102,7 +103,8 @@ class OrderRender extends Component {
             return (
                 <Row style={{width: '100%'}}>
                     <Col span={6} style={{height: '100%'}}>
-                        <div className='order-product-img' style={{backgroundImage: `url('${data[0].product_id.img}')`}}/>
+                        <div className='order-product-img'
+                             style={{backgroundImage: `url('${data[0].product_id.img}')`}}/>
                     </Col>
                     <Col span={16} offset={2}>
                         <div className='order-product-name'>{data[0].product_id.name}</div>
@@ -111,8 +113,55 @@ class OrderRender extends Component {
             )
         } else {
             return (data.map(data => (
-                <div className='order-product-img' style={{backgroundImage: `url('${data.product_id.img}')`}} key={data.id}/>
+                <div className='order-product-img' style={{backgroundImage: `url('${data.product_id.img}')`}}
+                     key={data.id}/>
             )))
+        }
+    }
+
+    orderCardBottomRender = (order) => {
+        let {orderStatus} = this.props
+        switch (orderStatus) {
+            case '0':
+                return (
+                    <div className='order-card-bottom'>
+                        <div
+                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;需付款:
+                        </div>
+                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                    </div>
+                )
+            case '1':
+                return (
+                    <div className='order-card-bottom'>
+                        <div
+                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
+                        </div>
+                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                    </div>
+                )
+            case '2':
+                return (
+                    <div className='order-card-bottom'>
+                        <div
+                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
+                        </div>
+                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                    </div>
+                )
+            case '3':
+                return (
+                    <div className='order-card-bottom'>
+                        <div
+                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
+                        </div>
+                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                    </div>
+                )
+            default:
+                return (
+                    <div>1</div>
+                )
         }
     }
 
@@ -170,6 +219,8 @@ class OrderRender extends Component {
                         :
                         data.map(order => (
                             <div key={order.id} className='order-card'>
+                                <div className='order-card-top'>JD</div>
+
                                 <Query query={gql(orderProduct_by_props)} variables={{order_id: order.id}}>
                                     {
                                         ({loading, error, data}) => {
@@ -186,26 +237,27 @@ class OrderRender extends Component {
                                             data = data.orderProductbyprops
                                             return (
                                                 <div>
-                                                    <div className='order-card-top'>JD</div>
-                                                    <div className='order-card-content'>
+                                                    <div className='order-card-content' onClick={() => {
+                                                        this.props.history.push({
+                                                            pathname: '/my/order/detail',
+                                                            state: {
+                                                                data: order
+                                                            }
+                                                        })
+                                                    }}>
                                                         {
                                                             this.orderCardContentRender(data)
                                                         }
                                                     </div>
-                                                    <div className='order-card-bottom'>
-                                                        <div
-                                                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
-                                                        </div>
-                                                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
-                                                    </div>
-
-                                                    {this.orderCardButtonGroupRender()}
-
                                                 </div>
                                             )
                                         }
                                     }
                                 </Query>
+
+                                {this.orderCardBottomRender(order)}
+
+                                {this.orderCardButtonGroupRender()}
                             </div>
                         ))
                 }
