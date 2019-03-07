@@ -166,34 +166,9 @@ const orderProduct_by_props = `
             }
             orderPay
             createdAt
-            order_id {
-                deliveryTime
-                updatedAt
-    
-                payTime
-                orderTotalPay
-                createdAt
-                orderStatus
-    
-                id
-                orderShipFee
-                count
-    
-                productTotalPay
-            }
             id
             count
             productPay
-            user_id {
-                email
-                updatedAt
-                password
-                telephone
-                username
-                createdAt
-                openid
-                id
-            }
         }
     }
 `

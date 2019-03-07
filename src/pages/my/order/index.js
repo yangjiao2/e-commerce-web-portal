@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import './index.css'
-import {NavBar, Icon, ActivityIndicator} from 'antd-mobile'
+import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
+import {Row, Col} from 'antd'
 import {withRouter} from 'react-router-dom'
 import {orderbyprops, orderProduct_by_props} from "../../../utils/gql"
 import {Query} from "react-apollo"
@@ -78,7 +79,7 @@ class Order extends Component {
                                 return 'error!'
                             }
                             return (
-                                <OrderRender data={data.orderbyprops}/>
+                                <OrderRender data={data.orderbyprops} orderStatus={orderStatus}/>
                             )
                         }
                     }
@@ -94,6 +95,67 @@ class OrderRender extends Component {
     constructor(props) {
         super(props)
         this.state = {}
+    }
+
+    orderCardContentRender = (data) => {
+        if (data.length === 1) {
+            return (
+                <Row style={{width: '100%'}}>
+                    <Col span={6} style={{height: '100%'}}>
+                        <div className='order-product-img' style={{backgroundImage: `url('${data[0].product_id.img}')`}}/>
+                    </Col>
+                    <Col span={16} offset={2}>
+                        <div className='order-product-name'>{data[0].product_id.name}</div>
+                    </Col>
+                </Row>
+            )
+        } else {
+            return (data.map(data => (
+                <div className='order-product-img' style={{backgroundImage: `url('${data.product_id.img}')`}}/>
+            )))
+        }
+    }
+
+    orderCardButtonGroupRender = () => {
+        let {orderStatus} = this.props
+        switch (orderStatus) {
+            case '0':
+                return (
+                    <div className='order-card-button-group'>
+                        <Button size="small" className='pay-button order-button'>去支付</Button>
+                    </div>
+                )
+            case '1':
+                return (
+                    <div className='order-card-button-group'>
+                        <Button size="small" className='ship-button order-button'>催发货</Button>
+                        &nbsp;&nbsp;
+                        <Button size="small" className='cancel-button order-button'>取消订单</Button>
+                    </div>
+                )
+            case '2':
+                return (
+                    <div className='order-card-button-group'>
+                        <Button size="small" className='unbox-button order-button'>查看物流</Button>
+                        &nbsp;&nbsp;
+                        <Button size="small" className='cancel-button order-button'>取消订单</Button>
+                    </div>
+                )
+            case '3':
+                return (
+                    <div className='order-card-button-group'>
+                        <Button size="small" className='judge-button order-button'>去评价</Button>
+                        &nbsp;&nbsp;
+                        <Button size="small" className='more-button order-button'>售后</Button>
+                    </div>
+                )
+            default:
+                return (
+                    <div>
+                        ok
+                    </div>
+                )
+        }
     }
 
     render() {
@@ -121,15 +183,24 @@ class OrderRender extends Component {
                                             if (error) {
                                                 return 'error!'
                                             }
-                                            console.log(data)
+                                            data = data.orderProductbyprops
                                             return (
                                                 <div>
                                                     <div className='order-card-top'>JD</div>
-                                                    <div className='order-card-content'></div>
+                                                    <div className='order-card-content'>
+                                                        {
+                                                            this.orderCardContentRender(data)
+                                                        }
+                                                    </div>
                                                     <div className='order-card-bottom'>
-                                                        <div className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:</div>
+                                                        <div
+                                                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
+                                                        </div>
                                                         <div className='order-card-pay'>￥{order.productTotalPay}</div>
                                                     </div>
+
+                                                    {this.orderCardButtonGroupRender()}
+
                                                 </div>
                                             )
                                         }
