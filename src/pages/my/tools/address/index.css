@@ -13,8 +13,8 @@
     text-align: center;
     font-size: 20px;
     border-top: 1px solid #F3F3F3;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     box-shadow: 3px -1px 1px #ebedf0;
     background-color: #f44;
     color: white;
@@ -39,5 +39,5 @@
     padding: 0 10px;
     background-color: #ff6d6d;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
 }

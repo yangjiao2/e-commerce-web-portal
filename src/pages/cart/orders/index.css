@@ -3,6 +3,11 @@
     background: white;
 }
 
+.orders-address-label {
+    width: 16%;
+    float: left;
+}
+
 .orders-address:after {
     left: 0;
     right: 0;

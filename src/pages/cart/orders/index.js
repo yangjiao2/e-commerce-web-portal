@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {NavBar, Icon, List, Picker} from 'antd-mobile'
+import {NavBar, Icon, List, Picker, ActivityIndicator} from 'antd-mobile'
 import classNames from 'classnames'
-import {Mutation} from "react-apollo"
+import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment';
 
-import {create_order} from "../../../utils/gql"
+import {user_default_address, create_order} from "../../../utils/gql"
 
 import './index.css'
 
@@ -36,6 +36,7 @@ class CartOrders extends Component {
             height: '100%',
             unfoldStatus: true,
             foldStatus: false,
+            selectAddress: JSON.parse(sessionStorage.getItem('ordersAddress')),
         }
     }
 
@@ -72,12 +73,13 @@ class CartOrders extends Component {
 
     onSubmitOrder = (create_order) => {
         let {totalCount, totalPrice} = this.state
-        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-        let tag = "18726202125".replace(/[^0-9]/ig, "").slice(-4);
-        let id = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag;
+        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+        let tag = "18726202125".replace(/[^0-9]/ig, "").slice(-4)
+        let id = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
 
         let shopping = JSON.parse(sessionStorage.getItem("shopping"))
         let deleteIdList = shopping.map(item => item.id)
+        let userAddress_id = JSON.parse(sessionStorage.getItem('ordersAddress')).id
 
         const orderContent = {
              deliveryTime: "",
@@ -87,7 +89,7 @@ class CartOrders extends Component {
              orderTotalPay: totalPrice,
              createdAt,
              orderStatus: "0",
-             userAddress_id: "",
+             userAddress_id,
              id,
              orderShipFee: 0,
              count: totalCount,
@@ -99,7 +101,7 @@ class CartOrders extends Component {
 
         create_order({variables:orderContent}).then((data)=>{
             // console.log('create_order data',data)
-            sessionStorage.removeItem("cartList");
+            sessionStorage.removeItem("cartList")
 
             this.props.history.push({
                 pathname:'/cart/pay',
@@ -109,7 +111,7 @@ class CartOrders extends Component {
     }
 
     render() {
-        let {cartList, unfoldList, height, unfoldStatus, foldStatus, totalPrice} = this.state
+        let {cartList, unfoldList, height, unfoldStatus, foldStatus, totalPrice, selectAddress} = this.state
 
         return (
             <div className='orders-wrap'>
@@ -132,24 +134,32 @@ class CartOrders extends Component {
                 </div>
                 <div className='orders-content-wrap content-wrap'>
                     <div className='orders-address'>
-                        <List>
-                            <Item
-                                arrow="horizontal"
-                                multipleLine
-                                onClick={() => {
-                                    this.props.history.push({
-                                        pathname:'/my/tools',
-                                        state: {
-                                            page: 'address'
-                                        }})
-                                }}>
-                                <div>
-                                    <span>承叶子</span>&nbsp;&nbsp;
-                                    <span>18726202125</span>
-                                </div>
-                                <Brief style={{fontSize: 13}}>安徽省合肥市蜀山区青阳路彩虹家园1栋1601</Brief>
-                            </Item>
-                        </List>
+                        {
+                            selectAddress ?
+                                <OrdersAddress props={this.props} selectAddress={selectAddress} />:
+                                <Query query={gql(user_default_address)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA", default:1}}>
+                                    {
+                                        ({loading, error, data}) => {
+                                            if (loading) {
+                                                return (
+                                                    <div className="loading-center">
+                                                        <ActivityIndicator size="large"/>
+                                                        <span>加载中...</span>
+                                                    </div>
+                                                )
+                                            }
+                                            if (error) {
+                                                return 'error!'
+                                            }
+                                            let defaultAddress = data.defaultAddress[0]
+
+                                            return (
+                                                <OrdersAddress props={this.props} selectAddress={defaultAddress} />
+                                            )
+                                        }
+                                    }
+                                </Query>
+                        }
                     </div>
                     <div className='orders-detail'>
                         <div className='cart-content'>
@@ -277,3 +287,39 @@ class CartOrders extends Component {
 }
 
 export default withRouter(CartOrders)
+
+const OrdersAddress =({props,selectAddress}) => {
+    let {default:isDefault, username, telephone, province, area, city, address} = selectAddress
+
+    return (
+        <List>
+            <Item
+                arrow="horizontal"
+                multipleLine
+                onClick={() => {
+                    sessionStorage.setItem('ordersAddress',JSON.stringify(selectAddress))
+                    props.history.push({
+                        pathname:'/my/tools',
+                        state: {
+                            page: 'address'
+                        }})
+                }}>
+                <div>
+                    <span>{username}</span>&nbsp;&nbsp;
+                    <span>{telephone}</span>
+                </div>
+                <div>
+                    <div>
+                        {
+                            isDefault ?
+                                <div className="orders-address-label">
+                                    <span className='address-label'>默认</span>
+                                </div>:''
+                        }
+                        <Brief style={{fontSize: 13}}>{province}{area}{city}{address}</Brief>
+                    </div>
+                </div>
+            </Item>
+        </List>
+    )
+}

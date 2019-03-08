@@ -83,6 +83,7 @@ class Address extends Component {
                                                     otherAddress={this.getOtherAddress(data)}
                                                     changePage={this.changePage}
                                                     changeAddress={this.changeAddress}
+                                                    history={this.props.history}
                                                 />
                                         }
                                     </div>
@@ -104,8 +105,18 @@ class AddressRender extends Component {
         this.state = {}
     }
 
+    changeOrdersAddress =(address) => {
+        sessionStorage.setItem('ordersAddress',JSON.stringify(address))
+
+        this.props.history.push({
+            pathname:'/cart/orders',
+            state:{}
+        })
+    }
+
     render() {
         let {changePage, changeAddress, defaultAddress, otherAddress} = this.props
+
         return (
             <div>
                 <div className='address-add' onClick={() => {
@@ -117,7 +128,7 @@ class AddressRender extends Component {
                 </div>
 
                 <div className='default-address'>
-                    <div className='address-card'>
+                    <div className='address-card' onClick={() => this.changeOrdersAddress(defaultAddress)}>
                         <Row className='address-username-telephone'>
                             <Col span={6} className='address-username ellipsis'>{defaultAddress.username}</Col>
                             <Col span={14} className='address-phone ellipsis'>{defaultAddress.telephone}&nbsp;&nbsp;
@@ -143,7 +154,7 @@ class AddressRender extends Component {
                 <div className='other-address'>
                     {otherAddress.map(address => {
                         return (
-                            <div key={address.id} className='address-card'>
+                            <div key={address.id} className='address-card' onClick={() => this.changeOrdersAddress(address)}>
                                 <Row className='address-username-telephone'>
                                     <Col span={6} className='address-username ellipsis'>{address.username}</Col>
                                     <Col span={14} className='address-phone ellipsis'>{address.telephone}</Col>

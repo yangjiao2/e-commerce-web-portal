@@ -70,9 +70,8 @@ const delete_userCart_by_id = `
     }
 `
 const userAddressbyprops = `
-    query userAddressbyprops($address: String, $updatedAt: String, $telephone: String, $default: Int, $city: String, $username: String, $postcode: String, $createdAt: String, $deletedAt: String, $user_id: ID, $area: String, $province: String) {
-        userAddressbyprops: userAddress_by_props(address: $address updatedAt: $updatedAt telephone: $telephone
-default: $default city: $city username: $username postcode: $postcode createdAt: $createdAt deletedAt: $deletedAt user_id: $user_id area: $area province: $province) {
+    query userAddressbyprops($user_id: ID) {
+        userAddressbyprops: userAddress_by_props(user_id: $user_id) {
         address
         updatedAt
         telephone
@@ -85,11 +84,8 @@ default: $default city: $city username: $username postcode: $postcode createdAt:
         id
         user_id {
             email
-            updatedAt
-            password
             telephone
             username
-            createdAt
             openid
             id
         }
@@ -98,6 +94,25 @@ default: $default city: $city username: $username postcode: $postcode createdAt:
     }
 }
 `
+const user_default_address = `
+    query user_default_address($user_id: ID, $default: Int) {
+        defaultAddress: userAddress_by_props(user_id: $user_id default: $default) { 
+            id 
+            default
+            username        
+            telephone
+            province
+            area
+            city
+            address
+            user_id {
+                openid
+                id
+            }                       
+        }
+    }
+`
+
 const orderbyprops = `
     query orderbyprops($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
         orderbyprops: order_by_props(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
@@ -236,6 +251,7 @@ export {
     cart_by_userid,
     delete_userCart_by_id,
     userAddressbyprops,
+    user_default_address,
     orderbyprops,
     orderProduct_by_props,
     create_order
