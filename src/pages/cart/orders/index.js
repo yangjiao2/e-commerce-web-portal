@@ -74,12 +74,12 @@ class CartOrders extends Component {
     onSubmitOrder = (create_order) => {
         let {totalCount, totalPrice} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-        let tag = "18726202125".replace(/[^0-9]/ig, "").slice(-4)
+        let {id:userAddress_id,telephone} = JSON.parse(sessionStorage.getItem('ordersAddress'))
+        let tag = telephone ? telephone.replace(/[^0-9]/ig, "").slice(-4) : Math.random().toString(10).substr(2,4)
         let id = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
 
         let shopping = JSON.parse(sessionStorage.getItem("shopping"))
         let deleteIdList = shopping.map(item => item.id)
-        let userAddress_id = JSON.parse(sessionStorage.getItem('ordersAddress')).id
 
         const orderContent = {
              deliveryTime: "",
@@ -290,6 +290,7 @@ export default withRouter(CartOrders)
 
 const OrdersAddress =({props,selectAddress}) => {
     let {default:isDefault, username, telephone, province, area, city, address} = selectAddress
+    sessionStorage.setItem('ordersAddress',JSON.stringify(selectAddress))
 
     return (
         <List>
@@ -297,7 +298,6 @@ const OrdersAddress =({props,selectAddress}) => {
                 arrow="horizontal"
                 multipleLine
                 onClick={() => {
-                    sessionStorage.setItem('ordersAddress',JSON.stringify(selectAddress))
                     props.history.push({
                         pathname:'/my/tools',
                         state: {
