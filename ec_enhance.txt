@@ -78,6 +78,7 @@ query orderPaybyprops($where: orderPay_filter, $sort_by: orderPay_sort_by, $limi
         }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -239,6 +240,7 @@ query orderLogisticsbyid($id: ID) {
         createdAt
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -270,8 +272,8 @@ query orderLogisticsbyid($id: ID) {
     }
 }
 
-query orderProductsearch($remark: String, $updatedAt: String, $limit: Int, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $order_by: OrderBy, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $filter: Filter, $order_id: ID, $productPrice: Float, $count: Int, $productPay: Float, $breakout: Field, $user_id: ID, $aggregate: Aggregation, $orderPay_id: ID, $skip: Int) {
-    orderProductsearch: orderProduct_search(remark: $remark updatedAt: $updatedAt limit: $limit productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize order_by: $order_by orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName filter: $filter order_id: $order_id productPrice: $productPrice count: $count productPay: $productPay breakout: $breakout user_id: $user_id aggregate: $aggregate orderPay_id: $orderPay_id skip: $skip)
+query orderProductsearch($updatedAt: String, $limit: Int, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $order_by: OrderBy, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $filter: Filter, $order_id: ID, $productPrice: Float, $count: Int, $productPay: Float, $breakout: Field, $user_id: ID, $aggregate: Aggregation, $orderPay_id: ID, $skip: Int) {
+    orderProductsearch: orderProduct_search(updatedAt: $updatedAt limit: $limit productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize order_by: $order_by orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id filter: $filter order_id: $order_id productPrice: $productPrice count: $count productPay: $productPay breakout: $breakout user_id: $user_id aggregate: $aggregate orderPay_id: $orderPay_id skip: $skip)
 }
 
 query specificationStockbyprops($updatedAt: String, $where: specificationStock_filter, $color: String, $sort_by: specificationStock_sort_by, $limit: Int, $product_id: ID, $order_by: OrderBy, $createdAt: String, $size: String, $filter: Filter, $status: String, $stock: Int, $skip: Int) {
@@ -301,7 +303,6 @@ query specificationStockbyprops($updatedAt: String, $where: specificationStock_f
 
 query orderProductbyid($id: ID) {
     orderProductbyid: orderProduct_by_id(id: $id) {
-        remark
         updatedAt
         productColor
         unit
@@ -323,8 +324,19 @@ query orderProductbyid($id: ID) {
         createdAt
         productImg
         productName
+        specificationStock_id {
+            id
+
+            color
+            size
+            stock
+            status
+            createdAt
+            updatedAt
+        }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -437,6 +449,7 @@ query orderPaybyid($id: ID) {
         }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -491,6 +504,7 @@ query orderLogisticsbyprops($updatedAt: String, $where: orderLogistics_filter, $
         createdAt
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -533,6 +547,7 @@ query orderPaysearch($limit: Int, $payTime: String, $order_by: OrderBy, $transac
 query orderbyid($id: ID) {
     orderbyid: order_by_id(id: $id) {
         deliveryTime
+        remark
         updatedAt
         orderLogistics_id {
             updatedAt
@@ -595,9 +610,8 @@ query orderLogisticssearch($updatedAt: String, $logisticsFee: Float, $limit: Int
     orderLogisticssearch: orderLogistics_search(updatedAt: $updatedAt logisticsFee: $logisticsFee limit: $limit expressId: $expressId order_by: $order_by createdAt: $createdAt filter: $filter order_id: $order_id consigneeTel: $consigneeTel breakout: $breakout consignAddress: $consignAddress LogisticsStatus: $LogisticsStatus user_id: $user_id aggregate: $aggregate consigneeName: $consigneeName skip: $skip)
 }
 
-query orderProductbyprops($remark: String, $updatedAt: String, $where: orderProduct_filter, $sort_by: orderProduct_sort_by, $limit: Int, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $order_by: OrderBy, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $filter: Filter, $order_id: ID, $productPrice: Float, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID, $skip: Int) {
-    orderProductbyprops: orderProduct_by_props(remark: $remark updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize order_by: $order_by orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName filter: $filter order_id: $order_id productPrice: $productPrice count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id skip: $skip) {
-        remark
+query orderProductbyprops($updatedAt: String, $where: orderProduct_filter, $sort_by: orderProduct_sort_by, $limit: Int, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $order_by: OrderBy, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $filter: Filter, $order_id: ID, $productPrice: Float, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID, $skip: Int) {
+    orderProductbyprops: orderProduct_by_props(updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize order_by: $order_by orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id filter: $filter order_id: $order_id productPrice: $productPrice count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id skip: $skip) {
         updatedAt
         productColor
         unit
@@ -619,8 +633,19 @@ query orderProductbyprops($remark: String, $updatedAt: String, $where: orderProd
         createdAt
         productImg
         productName
+        specificationStock_id {
+            id
+
+            color
+            size
+            stock
+            status
+            createdAt
+            updatedAt
+        }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -770,8 +795,8 @@ query userDatasearch($updatedAt: String, $userPoint: Int, $limit: Int, $order_by
     userDatasearch: userData_search(updatedAt: $updatedAt userPoint: $userPoint limit: $limit order_by: $order_by nickname: $nickname createdAt: $createdAt filter: $filter avatar: $avatar breakout: $breakout vipCode: $vipCode aggregate: $aggregate isVip: $isVip skip: $skip)
 }
 
-query ordersearch($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $limit: Int, $payTime: String, $order_by: OrderBy, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $filter: Filter, $orderShipFee: Float, $count: Int, $breakout: Field, $user_id: ID, $productTotalPay: Float, $aggregate: Aggregation, $orderPay_id: ID, $skip: Int) {
-    ordersearch: order_search(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id limit: $limit payTime: $payTime order_by: $order_by orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id filter: $filter orderShipFee: $orderShipFee count: $count breakout: $breakout user_id: $user_id productTotalPay: $productTotalPay aggregate: $aggregate orderPay_id: $orderPay_id skip: $skip)
+query ordersearch($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $limit: Int, $payTime: String, $order_by: OrderBy, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $filter: Filter, $orderShipFee: Float, $count: Int, $breakout: Field, $user_id: ID, $productTotalPay: Float, $aggregate: Aggregation, $orderPay_id: ID, $skip: Int) {
+    ordersearch: order_search(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id limit: $limit payTime: $payTime order_by: $order_by orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id filter: $filter orderShipFee: $orderShipFee count: $count breakout: $breakout user_id: $user_id productTotalPay: $productTotalPay aggregate: $aggregate orderPay_id: $orderPay_id skip: $skip)
 }
 
 query productsearch($category: String, $updatedAt: String, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $breakout: Field, $intro: String, $aggregate: Aggregation, $price: Float, $img: String, $stock: Int, $skip: Int) {
@@ -805,9 +830,10 @@ query userbyprops($email: String, $updatedAt: String, $where: user_filter, $sort
     }
 }
 
-query orderbyprops($deliveryTime: String, $updatedAt: String, $where: order_filter, $orderLogistics_id: ID, $sort_by: order_sort_by, $limit: Int, $payTime: String, $order_by: OrderBy, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $filter: Filter, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, $skip: Int) {
-    orderbyprops: order_by_props(deliveryTime: $deliveryTime updatedAt: $updatedAt where: $where orderLogistics_id: $orderLogistics_id sort_by: $sort_by limit: $limit payTime: $payTime order_by: $order_by orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id filter: $filter orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id skip: $skip) {
+query orderbyprops($deliveryTime: String, $remark: String, $updatedAt: String, $where: order_filter, $orderLogistics_id: ID, $sort_by: order_sort_by, $limit: Int, $payTime: String, $order_by: OrderBy, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $filter: Filter, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, $skip: Int) {
+    orderbyprops: order_by_props(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt where: $where orderLogistics_id: $orderLogistics_id sort_by: $sort_by limit: $limit payTime: $payTime order_by: $order_by orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id filter: $filter orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id skip: $skip) {
         deliveryTime
+        remark
         updatedAt
         orderLogistics_id {
             updatedAt
@@ -1080,8 +1106,8 @@ mutation createspecificationStock($id: ID!, $product_id: ID, $color: String, $si
     }
 }
 
-mutation deleteorderProduct($remark: String, $updatedAt: String, $where: orderProduct_filter, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    deleteorderProduct: delete_orderProduct(remark: $remark updatedAt: $updatedAt where: $where productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id)
+mutation deleteorderProduct($updatedAt: String, $where: orderProduct_filter, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    deleteorderProduct: delete_orderProduct(updatedAt: $updatedAt where: $where productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id)
 }
 
 mutation deleteuserCollect($id: ID, $user_id: ID, $createdAt: String, $updatedAt: String, $where: userCollect_filter) {
@@ -1101,8 +1127,8 @@ mutation updateuserCollect($id: ID, $product_id: ID, $user_id: ID, $createdAt: S
     }
 }
 
-mutation deleteorder($deliveryTime: String, $updatedAt: String, $where: order_filter, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    deleteorder: delete_order(deliveryTime: $deliveryTime updatedAt: $updatedAt where: $where orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id)
+mutation deleteorder($deliveryTime: String, $remark: String, $updatedAt: String, $where: order_filter, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    deleteorder: delete_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt where: $where orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id)
 }
 
 mutation deleteadmin($email: String, $updatedAt: String, $where: admin_filter, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID) {
@@ -1180,11 +1206,12 @@ mutation createuserData($id: ID!, $nickname: String, $avatar: String, $isVip: Bo
     }
 }
 
-mutation createorder($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    createorder: create_order(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+mutation createorder($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    createorder: create_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
         result
         order {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1240,11 +1267,12 @@ mutation updateuserSearch($id: ID, $keyword: Int, $user_id: ID, $createdAt: Stri
     }
 }
 
-mutation updateorder($deliveryTime: String, $updatedAt: String, $where: order_filter, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    updateorder: update_order(deliveryTime: $deliveryTime updatedAt: $updatedAt where: $where orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+mutation updateorder($deliveryTime: String, $remark: String, $updatedAt: String, $where: order_filter, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    updateorder: update_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt where: $where orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
         result
         order {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1299,11 +1327,10 @@ mutation updateorderLogistics($updatedAt: String, $where: orderLogistics_filter,
     }
 }
 
-mutation createorderProduct($remark: String, $updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $id: ID!, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    createorderProduct: create_orderProduct(remark: $remark updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
+mutation createorderProduct($updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID!, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    createorderProduct: create_orderProduct(updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
         result
         orderProduct {
-            remark
             updatedAt
             productColor
             unit
@@ -1313,6 +1340,7 @@ mutation createorderProduct($remark: String, $updatedAt: String, $productColor: 
             createdAt
             productImg
             productName
+
 
             productPrice
             id
@@ -1327,11 +1355,10 @@ mutation deleteproduct($category: String, $updatedAt: String, $where: product_fi
     deleteproduct: delete_product(category: $category updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price img: $img stock: $stock)
 }
 
-mutation updateorderProduct($remark: String, $updatedAt: String, $where: orderProduct_filter, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    updateorderProduct: update_orderProduct(remark: $remark updatedAt: $updatedAt where: $where productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
+mutation updateorderProduct($updatedAt: String, $where: orderProduct_filter, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    updateorderProduct: update_orderProduct(updatedAt: $updatedAt where: $where productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
         result
         orderProduct {
-            remark
             updatedAt
             productColor
             unit
@@ -1341,6 +1368,7 @@ mutation updateorderProduct($remark: String, $updatedAt: String, $where: orderPr
             createdAt
             productImg
             productName
+
 
             productPrice
             id

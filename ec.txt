@@ -74,6 +74,7 @@ query orderPaybyprops($user_id: ID, $order_id: ID, $totalPay: Float, $transactio
         }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -235,6 +236,7 @@ query orderLogisticsbyid($id: ID) {
         createdAt
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -293,7 +295,6 @@ query specificationStockbyprops($product_id: ID, $color: String, $size: String, 
 
 query orderProductbyid($id: ID) {
     orderProductbyid: orderProduct_by_id(id: $id) {
-        remark
         updatedAt
         productColor
         unit
@@ -315,8 +316,19 @@ query orderProductbyid($id: ID) {
         createdAt
         productImg
         productName
+        specificationStock_id {
+            id
+
+            color
+            size
+            stock
+            status
+            createdAt
+            updatedAt
+        }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -429,6 +441,7 @@ query orderPaybyid($id: ID) {
         }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -483,6 +496,7 @@ query orderLogisticsbyprops($updatedAt: String, $logisticsFee: Float, $expressId
         createdAt
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -517,6 +531,7 @@ query orderLogisticsbyprops($updatedAt: String, $logisticsFee: Float, $expressId
 query orderbyid($id: ID) {
     orderbyid: order_by_id(id: $id) {
         deliveryTime
+        remark
         updatedAt
         orderLogistics_id {
             updatedAt
@@ -575,9 +590,8 @@ query orderbyid($id: ID) {
     }
 }
 
-query orderProductbyprops($remark: String, $updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    orderProductbyprops: orderProduct_by_props(remark: $remark updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
-        remark
+query orderProductbyprops($updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    orderProductbyprops: orderProduct_by_props(updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
         updatedAt
         productColor
         unit
@@ -599,8 +613,19 @@ query orderProductbyprops($remark: String, $updatedAt: String, $productColor: St
         createdAt
         productImg
         productName
+        specificationStock_id {
+            id
+
+            color
+            size
+            stock
+            status
+            createdAt
+            updatedAt
+        }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -752,9 +777,10 @@ query userbyprops($openid: String, $username: String, $password: String, $teleph
     }
 }
 
-query orderbyprops($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    orderbyprops: order_by_props(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+query orderbyprops($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    orderbyprops: order_by_props(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
         deliveryTime
+        remark
         updatedAt
         orderLogistics_id {
             updatedAt
@@ -828,6 +854,7 @@ mutation createorderPay($id: ID!, $user_id: ID, $order_id: ID, $totalPay: Float,
         }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1094,8 +1121,8 @@ mutation createspecificationStock($id: ID!, $product_id: ID, $color: String, $si
     }
 }
 
-mutation deleteorderProduct($remark: String, $updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    deleteorderProduct: delete_orderProduct(remark: $remark updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id)
+mutation deleteorderProduct($updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    deleteorderProduct: delete_orderProduct(updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id)
 }
 
 mutation deleteuserCollect($id: ID, $user_id: ID, $createdAt: String, $updatedAt: String) {
@@ -1133,8 +1160,8 @@ mutation updateuserCollect($id: ID, $product_id: ID, $user_id: ID, $createdAt: S
     }
 }
 
-mutation deleteorder($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    deleteorder: delete_order(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id)
+mutation deleteorder($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    deleteorder: delete_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id)
 }
 
 mutation deleteadmin($id: ID, $openid: String, $username: String, $password: String, $telephone: String, $email: String, $createdAt: String, $updatedAt: String) {
@@ -1272,9 +1299,10 @@ mutation createuserData($id: ID!, $nickname: String, $avatar: String, $isVip: Bo
     }
 }
 
-mutation createorder($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    createorder: create_order(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+mutation createorder($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    createorder: create_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
         deliveryTime
+        remark
         updatedAt
         orderLogistics_id {
             updatedAt
@@ -1356,6 +1384,7 @@ mutation updateorderPay($id: ID, $user_id: ID, $order_id: ID, $totalPay: Float, 
         }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1398,9 +1427,10 @@ mutation updateuserSearch($id: ID, $keyword: Int, $user_id: ID, $createdAt: Stri
     }
 }
 
-mutation updateorder($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-    updateorder: update_order(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+mutation updateorder($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+    updateorder: update_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
         deliveryTime
+        remark
         updatedAt
         orderLogistics_id {
             updatedAt
@@ -1467,6 +1497,7 @@ mutation createorderLogistics($updatedAt: String, $logisticsFee: Float, $express
         createdAt
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1506,6 +1537,7 @@ mutation updateorderLogistics($updatedAt: String, $logisticsFee: Float, $express
         createdAt
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1537,9 +1569,8 @@ mutation updateorderLogistics($updatedAt: String, $logisticsFee: Float, $express
     }
 }
 
-mutation createorderProduct($remark: String, $updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $id: ID!, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    createorderProduct: create_orderProduct(remark: $remark updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
-        remark
+mutation createorderProduct($updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID!, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    createorderProduct: create_orderProduct(updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
         updatedAt
         productColor
         unit
@@ -1561,8 +1592,19 @@ mutation createorderProduct($remark: String, $updatedAt: String, $productColor: 
         createdAt
         productImg
         productName
+        specificationStock_id {
+            id
+
+            color
+            size
+            stock
+            status
+            createdAt
+            updatedAt
+        }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
@@ -1605,9 +1647,8 @@ mutation deleteproduct($category: String, $updatedAt: String, $unit: String, $na
     deleteproduct: delete_product(category: $category updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price img: $img stock: $stock)
 }
 
-mutation updateorderProduct($remark: String, $updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
-    updateorderProduct: update_orderProduct(remark: $remark updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
-        remark
+mutation updateorderProduct($updatedAt: String, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
+    updateorderProduct: update_orderProduct(updatedAt: $updatedAt productColor: $productColor unit: $unit product_id: $product_id productSize: $productSize orderPay: $orderPay createdAt: $createdAt productImg: $productImg productName: $productName specificationStock_id: $specificationStock_id order_id: $order_id productPrice: $productPrice id: $id count: $count productPay: $productPay user_id: $user_id orderPay_id: $orderPay_id) {
         updatedAt
         productColor
         unit
@@ -1629,8 +1670,19 @@ mutation updateorderProduct($remark: String, $updatedAt: String, $productColor: 
         createdAt
         productImg
         productName
+        specificationStock_id {
+            id
+
+            color
+            size
+            stock
+            status
+            createdAt
+            updatedAt
+        }
         order_id {
             deliveryTime
+            remark
             updatedAt
 
             payTime
