@@ -33,10 +33,7 @@ class Detail extends Component {
                         className='detail-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => {this.props.history.push({pathname: '/'})}}
-                        rightContent={[
-                            <Icon key="1" type="ellipsis"/>,
-                        ]}
+                        onLeftClick={() => {this.props.history.go(-1)}}
                     >商品详情</NavBar>
                 </div>
 
@@ -53,7 +50,6 @@ class Detail extends Component {
                             if (error) {
                                 return 'error!'
                             }
-
                             return (
                                 <DetailRender data={data.productbyid} history={this.props.history}/>
                             )

@@ -161,9 +161,8 @@ const orderbyprops = `
     }
 `
 const orderProduct_by_props = `
-    query orderProductbyprops($remark: String, $updatedAt: String, $product_id: ID, $orderPay: Float, $createdAt: String, $order_id: ID, $count: Int, $productPay: Float, $user_id: ID) {
-        orderProductbyprops: orderProduct_by_props(remark: $remark updatedAt: $updatedAt product_id: $product_id orderPay: $orderPay createdAt: $createdAt order_id: $order_id count: $count productPay: $productPay user_id: $user_id) {
-            remark
+    query orderProductbyprops($updatedAt: String, $product_id: ID, $orderPay: Float, $createdAt: String, $order_id: ID, $count: Int, $productPay: Float, $user_id: ID) {
+        orderProductbyprops: orderProduct_by_props(updatedAt: $updatedAt product_id: $product_id orderPay: $orderPay createdAt: $createdAt order_id: $order_id count: $count productPay: $productPay user_id: $user_id) {
             updatedAt
             unit
             product_id {

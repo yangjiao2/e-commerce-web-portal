@@ -36,7 +36,7 @@ class Kind extends Component {
                         className='kind-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
-                        onLeftClick={() => {this.props.history.push({pathname: '/'})}}
+                        onLeftClick={() => {this.props.history.go(-1)}}
                     >商品分类</NavBar>
                 </div>
                 <div className='kind-search-wrap'>
