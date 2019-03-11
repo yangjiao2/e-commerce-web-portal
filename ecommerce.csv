@@ -148,8 +148,8 @@ shop,collection,
 id,ID,key
 name,string,non-null
 telephone,string,
-img,list,
-slideshow,list,
+img,string,list
+slideshow,string,list
 address,string,
 intro,string,
 description,string,
