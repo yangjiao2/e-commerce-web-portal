@@ -164,30 +164,35 @@ const orderbyprops = `
     }
 `
 const orderProduct_by_props = `
-    query orderProductbyprops($updatedAt: String, $product_id: ID, $orderPay: Float, $createdAt: String, $order_id: ID, $count: Int, $productPay: Float, $user_id: ID) {
-        orderProductbyprops: orderProduct_by_props(updatedAt: $updatedAt product_id: $product_id orderPay: $orderPay createdAt: $createdAt order_id: $order_id count: $count productPay: $productPay user_id: $user_id) {
+    query orderProductbyprops($order_id: ID) {
+    orderProductbyprops: orderProduct_by_props(order_id: $order_id) {
+        updatedAt
+        productColor
+        unit
+        product_id {
+            category
             updatedAt
             unit
-            product_id {
-                category
-                updatedAt
-                unit
-                name
-                createdAt
-                status
-                id
-                intro
-                price
-                img
-                stock
-            }
-            orderPay
+            name
             createdAt
+            status
             id
-            count
-            productPay
+            intro
+            price
+            img
+            stock
         }
+        productSize
+        orderPay
+        createdAt
+        productImg
+        productName
+        productPrice
+        id
+        count
+        productPay
     }
+}
 `
 
 const create_order = `

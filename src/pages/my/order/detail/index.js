@@ -69,14 +69,8 @@ class Detail extends Component {
             data.map(data => (
                 <div
                     key={data.id}
-                    onClick={() => {
-                        this.props.history.push({
-                            pathname: '/home/detail',
-                            state: {
-                                id: data.product_id.id
-                            }
-                        })
-                    }}>
+                    className='detail-good-wrap'
+                >
                     <Row style={{width: '100%'}}>
                         <Col span={6} style={{height: '100px'}}>
                             <div className='order-product-img'
@@ -84,7 +78,14 @@ class Detail extends Component {
                         </Col>
                         <Col span={16} offset={2}>
                             <div className='order-product-name'>{data.product_id.name}</div>
-                            <div className='order-product-others'>数量：{data.count}&nbsp;规格：{data.productColor}</div>
+                            <div className='order-product-others'>
+                                <div>
+                                    数量：{data.count}&nbsp;规格：{data.productColor}
+                                </div>
+                                <div>
+                                    尺寸：{data.productSize}
+                                </div>
+                            </div>
                         </Col>
                     </Row>
                 </div>
@@ -146,6 +147,7 @@ class Detail extends Component {
                                     }
                                 }
                             </Query>
+                            <div className='detail-contact'>联系客服</div>
                         </div>
                     </div>
                 </div>
