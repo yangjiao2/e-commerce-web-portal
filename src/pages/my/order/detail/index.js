@@ -1,7 +1,7 @@
 import {Component} from "react"
 import React from "react"
 import './index.css'
-import {NavBar, Icon as Iconm} from 'antd-mobile'
+import {NavBar} from 'antd-mobile'
 import {Row, Col, Icon} from 'antd'
 import {orderProduct_by_props} from "../../../../utils/gql"
 import {Query} from "react-apollo"
@@ -101,7 +101,7 @@ class Detail extends Component {
                     <div className='navbar'>
                         <NavBar
                             mode="light"
-                            icon={<Iconm type="left"/>}
+                            icon={<Icon type="left"/>}
                             onLeftClick={() => {
                                 this.props.history.go(-1)
                             }}

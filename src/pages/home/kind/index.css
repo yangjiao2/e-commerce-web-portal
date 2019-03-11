@@ -1,14 +1,10 @@
-.kind-wrap {
-}
-
 .kind-search-wrap {
-    height: 60px;
+    height: 50px;
     position: relative;
     z-index: 0;
 }
 
 .kind-search {
-    height: 40px;
     width: 90%;
     position: absolute;
     left: 50%;
@@ -21,6 +17,18 @@
     background-color: white;
     position: relative;
     z-index: 0;
+}
+
+.kind-empty {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.kind-empty > div {
+    padding: 5px;
 }
 
 .kind-navbar-wrap {
@@ -43,44 +51,4 @@
     padding: 20px 0;
     width: 120px;
     text-align: center;
-}
-
-.kind-item {
-    width: 100%;
-    height: 100%;
-}
-
-.kind-item-img {
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 60%;
-    height: 80%;
-    display: block;
-    margin: 0 auto;
-}
-
-.kind-item-description {
-    margin-top: 10px;
-}
-
-.kind-item-name {
-    font-size: 18px;
-    font-weight: 500;
-    margin-left: 25px;
-    display: inline-block;
-    float: left;
-    color: grey;
-}
-
-.kind-item-price {
-    display: inline-block;
-    color: #f44;
-    font-size: 20px;
-    font-weight: 600;
-    float: right;
-    margin-right: 25px;
-}
-
-.kind-item-price::before {
-    content: '￥';
 }

@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-import {NavBar, Icon, ActivityIndicator, Grid} from 'antd-mobile'
-import {Input} from 'antd'
-import './index.css'
-import {productbyprops} from "../../../utils/gql"
+import {withRouter} from 'react-router-dom'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
-import {withRouter} from 'react-router-dom'
+import {Input} from 'antd'
+import {NavBar, Icon, ActivityIndicator, Grid} from 'antd-mobile'
+
+import {productbyprops} from "../../../utils/gql"
+import './index.css'
 
 const Search = Input.Search
 
@@ -13,22 +14,25 @@ class Kind extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            id: ''
+            id: '',
+            category:'商品列表'
         }
     }
 
     componentWillMount() {
         let {location} = this.props
         if(location && location.state) {
+            let {id, category} = location.state
             this.setState({
-                id: location.state.id
+                id,
+                category
             })
         }
     }
 
     render() {
-        let {id} = this.state
-        let contentHeight = window.innerHeight - 105
+        let {id, category} = this.state
+        let contentHeight = window.innerHeight - 95
         return (
             <div className='kind-wrap'  style={{height: contentHeight}}>
                 <div className='kind-navbar-wrap'>
@@ -37,7 +41,7 @@ class Kind extends Component {
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {this.props.history.go(-1)}}
-                    >商品分类</NavBar>
+                    >{category}</NavBar>
                 </div>
                 <div className='kind-search-wrap'>
                     <Search
@@ -46,7 +50,7 @@ class Kind extends Component {
                         onSearch={value => console.log(value)}
                     />
                 </div>
-                <Query query={gql(productbyprops)} variables={{category: id}}>
+                <Query query={gql(productbyprops)} variables={{category_id: id}}>
                     {
                         ({loading, error, data}) => {
                             if (loading) {
@@ -83,11 +87,25 @@ class KindRender extends Component {
 
     render() {
         let {data} = this.props
+
         return (
             <div className='kind-wrapper'>
                 {
                     data.length === 0?
-                        '这个分类还没有商品呢'
+                        <div className="kind-empty">
+                            <div>即将上新</div>
+                            <div>
+                                <button className="empty-button"
+                                        style={{width:130, padding:'5px 10px'}}
+                                        onClick={() => {
+                                            this.props.history.push({
+                                                pathname: `/`
+                                            })
+                                        }}>
+                                    先逛逛其他商品
+                                </button>
+                            </div>
+                        </div>
                         :
                         <Grid data={data}
                               columnNum={2}
@@ -102,12 +120,15 @@ class KindRender extends Component {
 
                               }}
                               renderItem={dataItem => (
-                                  <div key={dataItem.id} className='kind-item'>
-                                      <div className='kind-item-img'
+                                  <div key={dataItem.id} className='product-item'>
+                                      <div className='product-item-img'
                                            style={{backgroundImage: "url('" + dataItem.img + "')"}}/>
-                                      <div className='kind-item-description'>
-                                          <div className='kind-item-name'>{dataItem.name}</div>
-                                          <div className='kind-item-price'>{dataItem.price}</div>
+                                      <div className='product-item-description'>
+                                          <div className='product-item-name'>{dataItem.name}</div>
+                                          <div className='product-item-price'>
+                                              <span>￥{dataItem.price}</span>&nbsp;
+                                              <span>￥{dataItem.price}</span>
+                                          </div>
                                       </div>
                                   </div>
                               )}

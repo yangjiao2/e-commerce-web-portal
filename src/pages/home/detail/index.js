@@ -28,13 +28,13 @@ class Detail extends Component {
         let contentHeight = window.innerHeight
         return (
             <div className='detail-wrap' style={{height: contentHeight}}>
-                <div className='detail-navbar-wrap'>
+                <div className='detail-navbar-wrap navbar'>
                     <NavBar
-                        className='detail-navbar'
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {this.props.history.go(-1)}}
-                    >商品详情</NavBar>
+                    >商品详情
+                    </NavBar>
                 </div>
 
                 <Query query={gql(productbyid)} variables={{id}}>
@@ -74,21 +74,29 @@ class DetailRender extends Component {
     render() {
         let {data} = this.props;
         return (
-            <div className='detail-wrapper'>
+            <div className='detail-wrapper content-wrap'>
                 <div className='detail-simple-show'>
                     <div className='detail-img' style={{backgroundImage: "url('"+ data.img + "')"}}/>
-                    <div className='detail-below-img-in-simle-show-hahahahah'>
-                        <div className='detail-name'>{data.name}</div>
-                        <div className='detail-price'>{data.price}</div>
-                        <div className='detail-stock'>{data.stock}</div>
+                    <div className='detail-intro'>
+                        <div className='detail-name detail-padding'>{data.name}</div>
+                        <div className='detail-price detail-padding'>
+                            <span>￥{data.price}</span>&nbsp;&nbsp;
+                            <span>￥{data.price}</span>
+                            <span className='detail-stock'>库存 {data.stock}</span>
+                        </div>
                     </div>
                 </div>
-                <div className='detail-complicate-show'>详情详情</div>
-                <div className='detail-bottom'>
-                    <span className='detail-bottom-cart' onClick={()=>{this.props.history.push({pathname: '/cart'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-cart'/><div>购物袋</div></div></span>
-                    <span className='detail-bottom-home' onClick={()=>{this.props.history.push({pathname: '/home'})}}><div className='detail-icon-wrap'><div className='detail-icon detail-icon-shop'/><div>店铺</div></div></span>
-                    <span className='detail-bottom-add' onClick={()=>{}}>加入购物车</span>
-                    <span className='detail-bottom-buy' onClick={()=>{}}>立即购买</span>
+                <div className='detail-complicate-show'>
+                    <div className='detail-padding detail-complicate-title'>商品信息</div>
+                    <div>通过商品详情图片展示</div>
+                </div>
+                <div className='detail-footer'>
+                    <div className='detail-bottom'>
+                        <span className='detail-bottom-icon border-right' onClick={()=>{this.props.history.push({pathname: '/home'})}}><div className='detail-icon detail-icon-shop'/></span>
+                        <span className='detail-bottom-icon' onClick={()=>{this.props.history.push({pathname: '/cart'})}}><div className='detail-icon detail-icon-cart'/></span>
+                        <span className='detail-bottom-button add' onClick={()=>{}}>加入购物车</span>
+                        <span className='detail-bottom-button buy' onClick={()=>{}}>立即购买</span>
+                    </div>
                 </div>
             </div>
         )

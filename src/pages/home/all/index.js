@@ -80,7 +80,8 @@ class All extends Component {
                                         this.props.history.push({
                                             pathname: '/home/kind',
                                             state: {
-                                                id: kind.id
+                                                id: kind.id,
+                                                category:kind.text
                                             }
                                         })
                                     }}/>
@@ -138,11 +139,14 @@ class Like extends Component {
                           })
                       }}
                       renderItem={dataItem => (
-                          <div key={dataItem.id} className='guess-item'>
-                              <div className='guess-item-img' style={{backgroundImage: "url('" + dataItem.img + "')"}}/>
-                              <div className='guess-item-description'>
-                                  <div className='guess-item-name'>{dataItem.name}</div>
-                                  <div className='guess-item-price'>{dataItem.price}</div>
+                          <div key={dataItem.id} className='product-item'>
+                              <div className='product-item-img' style={{backgroundImage: "url('" + dataItem.img + "')"}}/>
+                              <div className='product-item-description'>
+                                  <div className='product-item-name'>{dataItem.name}</div>
+                                  <div className='product-item-price'>
+                                      <span>￥{dataItem.price}</span>&nbsp;
+                                      <span>￥{dataItem.price}</span>
+                                  </div>
                               </div>
                           </div>
                       )}
