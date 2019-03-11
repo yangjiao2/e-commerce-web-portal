@@ -42,7 +42,7 @@ query specificationStockbyid($id: ID) {
     specificationStockbyid: specificationStock_by_id(id: $id) {
         id
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -51,12 +51,25 @@ query specificationStockbyid($id: ID) {
             id
             intro
             price
+
             img
             stock
         }
         color
         size
         stock
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query categorybyprops($updatedAt: String, $where: category_filter, $sort_by: category_sort_by, $limit: Int, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $order: Int, $img: String, $skip: Int) {
+    categorybyprops: category_by_props(updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status order: $order img: $img skip: $skip) {
+        id
+        name
+        img
+        order
         status
         createdAt
         updatedAt
@@ -112,7 +125,7 @@ query userCartbyid($id: ID) {
             id
         }
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -121,6 +134,7 @@ query userCartbyid($id: ID) {
             id
             intro
             price
+
             img
             stock
         }
@@ -199,7 +213,7 @@ query userCollectbyprops($updatedAt: String, $where: userCollect_filter, $sort_b
             id
         }
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -208,6 +222,7 @@ query userCollectbyprops($updatedAt: String, $where: userCollect_filter, $sort_b
             id
             intro
             price
+
             img
             stock
         }
@@ -216,9 +231,9 @@ query userCollectbyprops($updatedAt: String, $where: userCollect_filter, $sort_b
     }
 }
 
-query productbyprops($category: String, $updatedAt: String, $where: product_filter, $sort_by: product_sort_by, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $intro: String, $price: Float, $img: String, $stock: Int, $skip: Int) {
-    productbyprops: product_by_props(category: $category updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit unit: $unit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status intro: $intro price: $price img: $img stock: $stock skip: $skip) {
-        category
+query productbyprops($recommend: Int, $updatedAt: String, $where: product_filter, $sort_by: product_sort_by, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int, $skip: Int) {
+    productbyprops: product_by_props(recommend: $recommend updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit unit: $unit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status intro: $intro price: $price category_id: $category_id img: $img stock: $stock skip: $skip) {
+        recommend
         updatedAt
         unit
         name
@@ -227,6 +242,15 @@ query productbyprops($category: String, $updatedAt: String, $where: product_filt
         id
         intro
         price
+        category_id {
+            id
+            name
+            img
+            order
+            status
+            createdAt
+            updatedAt
+        }
         img
         stock
     }
@@ -280,7 +304,7 @@ query specificationStockbyprops($updatedAt: String, $where: specificationStock_f
     specificationStockbyprops: specificationStock_by_props(updatedAt: $updatedAt where: $where color: $color sort_by: $sort_by limit: $limit product_id: $product_id order_by: $order_by createdAt: $createdAt size: $size filter: $filter status: $status stock: $stock skip: $skip) {
         id
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -289,6 +313,7 @@ query specificationStockbyprops($updatedAt: String, $where: specificationStock_f
             id
             intro
             price
+
             img
             stock
         }
@@ -307,7 +332,7 @@ query orderProductbyid($id: ID) {
         productColor
         unit
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -316,6 +341,7 @@ query orderProductbyid($id: ID) {
             id
             intro
             price
+
             img
             stock
         }
@@ -389,7 +415,7 @@ query userCollectbyid($id: ID) {
             id
         }
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -398,6 +424,7 @@ query userCollectbyid($id: ID) {
             id
             intro
             price
+
             img
             stock
         }
@@ -496,6 +523,29 @@ query userAddressbyid($id: ID) {
     }
 }
 
+query slideshowsearch($updatedAt: String, $limit: Int, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: Int, $breakout: Field, $aggregate: Aggregation, $img: String, $skip: Int) {
+    slideshowsearch: slideshow_search(updatedAt: $updatedAt limit: $limit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status breakout: $breakout aggregate: $aggregate img: $img skip: $skip)
+}
+
+query slideshowbyid($id: ID) {
+    slideshowbyid: slideshow_by_id(id: $id) {
+        id
+        name
+        img
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query categorysearch($updatedAt: String, $limit: Int, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $breakout: Field, $order: Int, $aggregate: Aggregation, $img: String, $skip: Int) {
+    categorysearch: category_search(updatedAt: $updatedAt limit: $limit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status breakout: $breakout order: $order aggregate: $aggregate img: $img skip: $skip)
+}
+
+query shopsearch($description: String, $address: String, $updatedAt: String, $limit: Int, $order_by: OrderBy, $telephone: String, $name: String, $createdAt: String, $filter: Filter, $status: String, $breakout: Field, $notice: String, $intro: String, $aggregate: Aggregation, $skip: Int) {
+    shopsearch: shop_search(description: $description address: $address updatedAt: $updatedAt limit: $limit order_by: $order_by telephone: $telephone name: $name createdAt: $createdAt filter: $filter status: $status breakout: $breakout notice: $notice intro: $intro aggregate: $aggregate skip: $skip)
+}
+
 query orderLogisticsbyprops($updatedAt: String, $where: orderLogistics_filter, $logisticsFee: Float, $sort_by: orderLogistics_sort_by, $limit: Int, $expressId: String, $order_by: OrderBy, $createdAt: String, $filter: Filter, $order_id: ID, $consigneeTel: String, $consignAddress: String, $LogisticsStatus: String, $user_id: ID, $consigneeName: String, $skip: Int) {
     orderLogisticsbyprops: orderLogistics_by_props(updatedAt: $updatedAt where: $where logisticsFee: $logisticsFee sort_by: $sort_by limit: $limit expressId: $expressId order_by: $order_by createdAt: $createdAt filter: $filter order_id: $order_id consigneeTel: $consigneeTel consignAddress: $consignAddress LogisticsStatus: $LogisticsStatus user_id: $user_id consigneeName: $consigneeName skip: $skip) {
         updatedAt
@@ -533,6 +583,23 @@ query orderLogisticsbyprops($updatedAt: String, $where: orderLogistics_filter, $
             id
         }
         consigneeName
+    }
+}
+
+query shopbyprops($description: String, $address: String, $updatedAt: String, $where: shop_filter, $sort_by: shop_sort_by, $limit: Int, $order_by: OrderBy, $telephone: String, $name: String, $createdAt: String, $filter: Filter, $status: String, $notice: String, $intro: String, $skip: Int) {
+    shopbyprops: shop_by_props(description: $description address: $address updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit order_by: $order_by telephone: $telephone name: $name createdAt: $createdAt filter: $filter status: $status notice: $notice intro: $intro skip: $skip) {
+        description
+        address
+        updatedAt
+        telephone
+        name
+        createdAt
+        status
+        id
+        slideshow
+        notice
+        intro
+        img
     }
 }
 
@@ -616,7 +683,7 @@ query orderProductbyprops($updatedAt: String, $where: orderProduct_filter, $sort
         productColor
         unit
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -625,6 +692,7 @@ query orderProductbyprops($updatedAt: String, $where: orderProduct_filter, $sort
             id
             intro
             price
+
             img
             stock
         }
@@ -686,7 +754,7 @@ query orderProductbyprops($updatedAt: String, $where: orderProduct_filter, $sort
 
 query productbyid($id: ID) {
     productbyid: product_by_id(id: $id) {
-        category
+        recommend
         updatedAt
         unit
         name
@@ -695,6 +763,15 @@ query productbyid($id: ID) {
         id
         intro
         price
+        category_id {
+            id
+            name
+            img
+            order
+            status
+            createdAt
+            updatedAt
+        }
         img
         stock
     }
@@ -741,6 +818,18 @@ query specificationStocksearch($updatedAt: String, $color: String, $limit: Int, 
     specificationStocksearch: specificationStock_search(updatedAt: $updatedAt color: $color limit: $limit product_id: $product_id order_by: $order_by createdAt: $createdAt size: $size filter: $filter status: $status breakout: $breakout aggregate: $aggregate stock: $stock skip: $skip)
 }
 
+query categorybyid($id: ID) {
+    categorybyid: category_by_id(id: $id) {
+        id
+        name
+        img
+        order
+        status
+        createdAt
+        updatedAt
+    }
+}
+
 query userCartsearch($updatedAt: String, $limit: Int, $product_id: ID, $order_by: OrderBy, $createdAt: String, $specificationStock_id: ID, $filter: Filter, $count: Int, $breakout: Field, $user_id: ID, $aggregate: Aggregation, $skip: Int) {
     userCartsearch: userCart_search(updatedAt: $updatedAt limit: $limit product_id: $product_id order_by: $order_by createdAt: $createdAt specificationStock_id: $specificationStock_id filter: $filter count: $count breakout: $breakout user_id: $user_id aggregate: $aggregate skip: $skip)
 }
@@ -759,7 +848,7 @@ query userCartbyprops($updatedAt: String, $where: userCart_filter, $sort_by: use
             id
         }
         product_id {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -768,6 +857,7 @@ query userCartbyprops($updatedAt: String, $where: userCart_filter, $sort_by: use
             id
             intro
             price
+
             img
             stock
         }
@@ -799,8 +889,25 @@ query ordersearch($deliveryTime: String, $remark: String, $updatedAt: String, $o
     ordersearch: order_search(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id limit: $limit payTime: $payTime order_by: $order_by orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id filter: $filter orderShipFee: $orderShipFee count: $count breakout: $breakout user_id: $user_id productTotalPay: $productTotalPay aggregate: $aggregate orderPay_id: $orderPay_id skip: $skip)
 }
 
-query productsearch($category: String, $updatedAt: String, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $breakout: Field, $intro: String, $aggregate: Aggregation, $price: Float, $img: String, $stock: Int, $skip: Int) {
-    productsearch: product_search(category: $category updatedAt: $updatedAt limit: $limit unit: $unit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status breakout: $breakout intro: $intro aggregate: $aggregate price: $price img: $img stock: $stock skip: $skip)
+query shopbyid($id: ID) {
+    shopbyid: shop_by_id(id: $id) {
+        description
+        address
+        updatedAt
+        telephone
+        name
+        createdAt
+        status
+        id
+        slideshow
+        notice
+        intro
+        img
+    }
+}
+
+query productsearch($recommend: Int, $updatedAt: String, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: String, $breakout: Field, $intro: String, $aggregate: Aggregation, $price: Float, $category_id: ID, $img: String, $stock: Int, $skip: Int) {
+    productsearch: product_search(recommend: $recommend updatedAt: $updatedAt limit: $limit unit: $unit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status breakout: $breakout intro: $intro aggregate: $aggregate price: $price category_id: $category_id img: $img stock: $stock skip: $skip)
 }
 
 query userCollectsearch($updatedAt: String, $limit: Int, $order_by: OrderBy, $createdAt: String, $filter: Filter, $breakout: Field, $user_id: ID, $aggregate: Aggregation, $skip: Int) {
@@ -892,6 +999,17 @@ query orderbyprops($deliveryTime: String, $remark: String, $updatedAt: String, $
     }
 }
 
+query slideshowbyprops($updatedAt: String, $where: slideshow_filter, $sort_by: slideshow_sort_by, $limit: Int, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: Int, $img: String, $skip: Int) {
+    slideshowbyprops: slideshow_by_props(updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status img: $img skip: $skip) {
+        id
+        name
+        img
+        status
+        createdAt
+        updatedAt
+    }
+}
+
 mutation createorderPay($id: ID!, $user_id: ID, $order_id: ID, $totalPay: Float, $transactionId: String, $payTime: String) {
     createorderPay: create_orderPay(id: $id user_id: $user_id order_id: $order_id totalPay: $totalPay transactionId: $transactionId payTime: $payTime) {
         result
@@ -922,11 +1040,49 @@ mutation createuser($email: String, $updatedAt: String, $password: String, $tele
     }
 }
 
-mutation updateproduct($category: String, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $img: String, $stock: Int) {
-    updateproduct: update_product(category: $category updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price img: $img stock: $stock) {
+mutation updateslideshow($id: ID, $name: String, $img: String, $status: Int, $createdAt: String, $updatedAt: String, $where: slideshow_filter) {
+    updateslideshow: update_slideshow(id: $id name: $name img: $img status: $status createdAt: $createdAt updatedAt: $updatedAt where: $where) {
+        result
+        slideshow {
+            id
+            name
+            img
+            status
+            createdAt
+            updatedAt
+        }
+    }
+}
+
+mutation updateshop($description: String, $address: String, $updatedAt: String, $where: shop_filter, $telephone: String, $name: String, $createdAt: String, $status: String, $id: ID, $slideshow: String, $notice: String, $intro: String, $img: String) {
+    updateshop: update_shop(description: $description address: $address updatedAt: $updatedAt where: $where telephone: $telephone name: $name createdAt: $createdAt status: $status id: $id slideshow: $slideshow notice: $notice intro: $intro img: $img) {
+        result
+        shop {
+            description
+            address
+            updatedAt
+            telephone
+            name
+            createdAt
+            status
+            id
+            slideshow
+            notice
+            intro
+            img
+        }
+    }
+}
+
+mutation deletecategory($id: ID, $name: String, $img: String, $order: Int, $status: String, $createdAt: String, $updatedAt: String, $where: category_filter) {
+    deletecategory: delete_category(id: $id name: $name img: $img order: $order status: $status createdAt: $createdAt updatedAt: $updatedAt where: $where)
+}
+
+mutation updateproduct($recommend: Int, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+    updateproduct: update_product(recommend: $recommend updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
         result
         product {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -935,6 +1091,7 @@ mutation updateproduct($category: String, $updatedAt: String, $where: product_fi
             id
             intro
             price
+
             img
             stock
         }
@@ -955,6 +1112,30 @@ mutation updateuser($email: String, $updatedAt: String, $where: user_filter, $pa
             id
         }
     }
+}
+
+mutation createshop($description: String, $address: String, $updatedAt: String, $telephone: String, $name: String, $createdAt: String, $status: String, $id: ID!, $slideshow: String, $notice: String, $intro: String, $img: String) {
+    createshop: create_shop(description: $description address: $address updatedAt: $updatedAt telephone: $telephone name: $name createdAt: $createdAt status: $status id: $id slideshow: $slideshow notice: $notice intro: $intro img: $img) {
+        result
+        shop {
+            description
+            address
+            updatedAt
+            telephone
+            name
+            createdAt
+            status
+            id
+            slideshow
+            notice
+            intro
+            img
+        }
+    }
+}
+
+mutation deleteslideshow($id: ID, $name: String, $img: String, $status: Int, $createdAt: String, $updatedAt: String, $where: slideshow_filter) {
+    deleteslideshow: delete_slideshow(id: $id name: $name img: $img status: $status createdAt: $createdAt updatedAt: $updatedAt where: $where)
 }
 
 mutation updateuserData($updatedAt: String, $where: userData_filter, $userPoint: Int, $nickname: String, $createdAt: String, $id: ID, $avatar: String, $vipCode: String, $isVip: Boolean) {
@@ -1034,6 +1215,35 @@ mutation updateuserAddress($address: String, $updatedAt: String, $where: userAdd
     }
 }
 
+mutation updatecategory($id: ID, $name: String, $img: String, $order: Int, $status: String, $createdAt: String, $updatedAt: String, $where: category_filter) {
+    updatecategory: update_category(id: $id name: $name img: $img order: $order status: $status createdAt: $createdAt updatedAt: $updatedAt where: $where) {
+        result
+        category {
+            id
+            name
+            img
+            order
+            status
+            createdAt
+            updatedAt
+        }
+    }
+}
+
+mutation createslideshow($id: ID!, $name: String, $img: String, $status: Int, $createdAt: String, $updatedAt: String) {
+    createslideshow: create_slideshow(id: $id name: $name img: $img status: $status createdAt: $createdAt updatedAt: $updatedAt) {
+        result
+        slideshow {
+            id
+            name
+            img
+            status
+            createdAt
+            updatedAt
+        }
+    }
+}
+
 mutation updateadmin($email: String, $updatedAt: String, $where: admin_filter, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID) {
     updateadmin: update_admin(email: $email updatedAt: $updatedAt where: $where password: $password telephone: $telephone username: $username createdAt: $createdAt openid: $openid id: $id) {
         result
@@ -1067,11 +1277,11 @@ mutation createuserSearch($id: ID!, $keyword: Int, $user_id: ID, $createdAt: Str
     }
 }
 
-mutation createproduct($category: String, $updatedAt: String, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID!, $intro: String, $price: Float, $img: String, $stock: Int) {
-    createproduct: create_product(category: $category updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price img: $img stock: $stock) {
+mutation createproduct($recommend: Int, $updatedAt: String, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID!, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+    createproduct: create_product(recommend: $recommend updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
         result
         product {
-            category
+            recommend
             updatedAt
             unit
             name
@@ -1080,6 +1290,7 @@ mutation createproduct($category: String, $updatedAt: String, $unit: String, $na
             id
             intro
             price
+
             img
             stock
         }
@@ -1104,6 +1315,10 @@ mutation createspecificationStock($id: ID!, $product_id: ID, $color: String, $si
             updatedAt
         }
     }
+}
+
+mutation deleteshop($description: String, $address: String, $updatedAt: String, $where: shop_filter, $telephone: String, $name: String, $createdAt: String, $status: String, $id: ID, $notice: String, $intro: String) {
+    deleteshop: delete_shop(description: $description address: $address updatedAt: $updatedAt where: $where telephone: $telephone name: $name createdAt: $createdAt status: $status id: $id notice: $notice intro: $intro)
 }
 
 mutation deleteorderProduct($updatedAt: String, $where: orderProduct_filter, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
@@ -1351,8 +1566,23 @@ mutation createorderProduct($updatedAt: String, $productColor: String, $unit: St
     }
 }
 
-mutation deleteproduct($category: String, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $img: String, $stock: Int) {
-    deleteproduct: delete_product(category: $category updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price img: $img stock: $stock)
+mutation deleteproduct($recommend: Int, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+    deleteproduct: delete_product(recommend: $recommend updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price category_id: $category_id img: $img stock: $stock)
+}
+
+mutation createcategory($id: ID!, $name: String, $img: String, $order: Int, $status: String, $createdAt: String, $updatedAt: String) {
+    createcategory: create_category(id: $id name: $name img: $img order: $order status: $status createdAt: $createdAt updatedAt: $updatedAt) {
+        result
+        category {
+            id
+            name
+            img
+            order
+            status
+            createdAt
+            updatedAt
+        }
+    }
 }
 
 mutation updateorderProduct($updatedAt: String, $where: orderProduct_filter, $productColor: String, $unit: String, $product_id: ID, $productSize: String, $orderPay: Float, $createdAt: String, $productImg: String, $productName: String, $specificationStock_id: ID, $order_id: ID, $productPrice: Float, $id: ID, $count: Int, $productPay: Float, $user_id: ID, $orderPay_id: ID) {
