@@ -65,7 +65,7 @@ class Display extends Component {
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(orderbyprops)} variables={{user_id: "test", orderStatus}}>
+                <Query query={gql(orderbyprops)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA", orderStatus}}>
                     {
                         ({loading, error, data}) => {
                             if (loading) {
@@ -128,7 +128,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;需付款:
                         </div>
-                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
                     </div>
                 )
             case '1':
@@ -137,7 +137,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
                         </div>
-                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
                     </div>
                 )
             case '2':
@@ -146,7 +146,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
                         </div>
-                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
                     </div>
                 )
             case '3':
@@ -155,7 +155,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
                         </div>
-                        <div className='order-card-pay'>￥{order.productTotalPay}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
                     </div>
                 )
             default:
