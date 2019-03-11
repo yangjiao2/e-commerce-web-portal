@@ -75,3 +75,21 @@
     font-size: 15px;
     text-align: center;
 }
+
+.detail-order-wrap {
+    margin-top: 10px;
+    background-color: white;
+}
+
+.detail-order-wrapper {
+    padding: 10px 5px
+}
+
+.detail-order-item {
+    height: 25px;
+    line-height: 25px;
+}
+
+.detail-order-title {
+    font-weight: 600;
+}

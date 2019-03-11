@@ -170,7 +170,6 @@ const orderProduct_by_props = `
         productColor
         unit
         product_id {
-            category
             updatedAt
             unit
             name
