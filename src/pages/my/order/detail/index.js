@@ -66,21 +66,25 @@ class Detail extends Component {
 
     productsRender = (data) => {
         return (
-            data.map(data=> (
-                <div onClick={()=>{
-                    this.props.history.push({
-                        pathname: '/home/detail',
-                        state: {
-                            id: data.id
-                        }
-                    })
-                }}>
+            data.map(data => (
+                <div
+                    key={data.id}
+                    onClick={() => {
+                        this.props.history.push({
+                            pathname: '/home/detail',
+                            state: {
+                                id: data.product_id.id
+                            }
+                        })
+                    }}>
                     <Row style={{width: '100%'}}>
                         <Col span={6} style={{height: '100px'}}>
-                            <div className='order-product-img' style={{backgroundImage: `url('${data.product_id.img}')`}}/>
+                            <div className='order-product-img'
+                                 style={{backgroundImage: `url('${data.product_id.img}')`}}/>
                         </Col>
                         <Col span={16} offset={2}>
                             <div className='order-product-name'>{data.product_id.name}</div>
+                            <div className='order-product-others'>数量：{data.count}&nbsp;规格：{data.productColor}</div>
                         </Col>
                     </Row>
                 </div>
