@@ -29,10 +29,6 @@
     border-bottom: 1px solid #ebedf0;
 }
 
-.orders-delivery > div:nth-child(2) {
-    padding: 10px 15px;
-}
-
 .orders-price > div {
     padding: 10px 15px;
 }
@@ -69,21 +65,14 @@
     color: #323233!important;
 }
 
-.orders-message {
-    width: 100%;
-    display: flex;
-    padding: 10px 15px;
-    box-sizing: border-box;
-    line-height: 24px;
-    position: relative;
-    background-color: #fff;
-    color: #323233;
-    font-size: 14px;
+.orders-message input {
+    font-size: 14px!important;
 }
 
 .orders-message-title {
     width: 20%;
     max-width: 90px;
+    font-size: 14px;
 }
 
 .orders-message-textarea {
