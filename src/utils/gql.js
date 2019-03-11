@@ -1,7 +1,9 @@
 const productbyprops = `
-    query productbyprops($category: String, $updatedAt: String, $name: String, $createdAt: String, $status: String, $intro: String, $price: Float, $img: String, $stock: Int) {
-        productbyprops: product_by_props(category: $category updatedAt: $updatedAt name: $name createdAt: $createdAt status: $status intro: $intro price: $price img: $img stock: $stock) {
-            category
+    query productbyprops($category_id: ID, $updatedAt: String, $name: String, $createdAt: String, $status: String, $intro: String, $price: Float, $img: String, $stock: Int) {
+        productbyprops: product_by_props(category_id: $category_id updatedAt: $updatedAt name: $name createdAt: $createdAt status: $status intro: $intro price: $price img: $img stock: $stock) {
+            category_id{
+                id
+            }
             updatedAt
             unit
             name
@@ -19,7 +21,9 @@ const productbyprops = `
 const productbyid = `
     query productbyid($id: ID) {
         productbyid: product_by_id(id: $id) {
-            category
+            category_id{
+                id
+            }
             updatedAt
             unit
             name
@@ -42,7 +46,6 @@ const cart_by_userid = `
             id
             product_id{
                 id
-                category
                 img
                 intro
                 name
