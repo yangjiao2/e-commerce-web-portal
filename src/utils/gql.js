@@ -1,3 +1,13 @@
+const category_by_props = `
+    query categorybyprops($sort_by: category_sort_by, $limit: Int, $status: String) {
+        categorybyprops: category_by_props(sort_by: $sort_by limit: $limit status: $status) {
+            id
+            text:name
+            icon:img
+        }
+    }
+`
+
 const productbyprops = `
     query productbyprops($category_id: ID, $updatedAt: String, $name: String, $createdAt: String, $status: String, $intro: String, $price: Float, $img: String, $stock: Int) {
         productbyprops: product_by_props(category_id: $category_id updatedAt: $updatedAt name: $name createdAt: $createdAt status: $status intro: $intro price: $price img: $img stock: $stock) {
@@ -281,6 +291,7 @@ const create_order_product = `
 `
 
 export {
+    category_by_props,
     productbyprops,
     productbyid,
     cart_by_userid,

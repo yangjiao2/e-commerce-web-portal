@@ -1,10 +1,11 @@
 import React, {Component} from "react"
-import {productbyprops} from "../../../utils/gql"
+import {withRouter} from 'react-router-dom'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import {Grid, Carousel, WhiteSpace, ActivityIndicator} from 'antd-mobile'
+
+import {category_by_props, productbyprops} from "../../../utils/gql"
 import './index.css'
-import {withRouter} from 'react-router-dom'
 
 class All extends Component {
     constructor(props) {
@@ -15,48 +16,18 @@ class All extends Component {
     }
 
     render() {
-        const data = [
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/jacket.png',
-                text: '夹克',
-                id: 'jacket'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/coat.png',
-                text: '外套',
-                id: 'coat'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/shirt.png',
-                text: '衬衫',
-                id: 'shirt'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/skirts.png',
-                text: '半身裙',
-                id: 'skirt'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/sweater.png',
-                text: '针织衫',
-                id: 'sweater'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/windbreak.png',
-                text: '风衣',
-                id: 'windbreak'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/pants.png',
-                text: '裤子',
-                id: 'pants'
-            },
-            {
-                icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/more.png',
-                text: '更多',
-                id: 'more'
-            }
-        ]
+        const categoryFilter = {
+            "status": "1",
+            "limit": 7,
+            "sort_by": {"order": "asc"}
+        }
+
+        const more = {
+            icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/more.png',
+            text: '更多',
+            id: 'more'
+        }
+
         return (
             <div>
                 <Carousel
@@ -84,17 +55,39 @@ class All extends Component {
                         </a>
                     ))}
                 </Carousel>
-                <Grid
-                    data={data}
-                    hasLine={false}
-                    onClick={(kind)=>{
-                        this.props.history.push({
-                            pathname: '/home/kind',
-                            state: {
-                                id: kind.id
+                <Query query={gql(category_by_props)} variables={categoryFilter}>
+                    {
+                        ({loading, error, data}) => {
+                            if (loading) {
+                                return (
+                                    <div className="loading-center">
+                                        <ActivityIndicator text="Loading..." size="large"/>
+                                    </div>
+                                )
                             }
-                        })
-                    }}/>
+                            if (error) {
+                                return 'error!'
+                            }
+
+                            let categoryList = data.categorybyprops
+                            categoryList.push(more)
+
+                            return (
+                                <Grid
+                                    data={categoryList}
+                                    hasLine={false}
+                                    onClick={(kind)=>{
+                                        this.props.history.push({
+                                            pathname: '/home/kind',
+                                            state: {
+                                                id: kind.id
+                                            }
+                                        })
+                                    }}/>
+                            )
+                        }
+                    }
+                </Query>
                 <WhiteSpace/>
                 <div className='guess-wrap'>
                     <Query query={gql(productbyprops)} variables={{status: '1'}}>
