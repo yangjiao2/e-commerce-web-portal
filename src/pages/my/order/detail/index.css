@@ -82,7 +82,7 @@
 }
 
 .detail-order-wrapper {
-    padding: 10px 5px
+    padding: 10px;
 }
 
 .detail-order-item {
@@ -92,4 +92,12 @@
 
 .detail-order-title {
     font-weight: 600;
+}
+
+.detail-footer-wrap {
+    background-color: white;
+    border-top: 1px solid #f3f3f3;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }

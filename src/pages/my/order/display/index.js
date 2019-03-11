@@ -90,8 +90,6 @@ class Display extends Component {
     }
 }
 
-export default withRouter(Display)
-
 class DisplayRender extends Component {
     constructor(props) {
         super(props)
@@ -128,7 +126,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;需付款:
                         </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
                     </div>
                 )
             case '1':
@@ -137,7 +135,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
                         </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
                     </div>
                 )
             case '2':
@@ -146,7 +144,7 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
                         </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
                     </div>
                 )
             case '3':
@@ -155,54 +153,12 @@ class DisplayRender extends Component {
                         <div
                             className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
                         </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay*100)/100}</div>
+                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
                     </div>
                 )
             default:
                 return (
                     <div>1</div>
-                )
-        }
-    }
-
-    orderCardButtonGroupRender = () => {
-        let {orderStatus} = this.props
-        switch (orderStatus) {
-            case '0':
-                return (
-                    <div className='order-card-button-group'>
-                        <Button size="small" className='pay-button order-button'>去支付</Button>
-                    </div>
-                )
-            case '1':
-                return (
-                    <div className='order-card-button-group'>
-                        <Button size="small" className='ship-button order-button'>催发货</Button>
-                        &nbsp;&nbsp;
-                        <Button size="small" className='cancel-button order-button'>取消订单</Button>
-                    </div>
-                )
-            case '2':
-                return (
-                    <div className='order-card-button-group'>
-                        <Button size="small" className='unbox-button order-button'>查看物流</Button>
-                        &nbsp;&nbsp;
-                        <Button size="small" className='cancel-button order-button'>取消订单</Button>
-                    </div>
-                )
-            case '3':
-                return (
-                    <div className='order-card-button-group'>
-                        <Button size="small" className='judge-button order-button'>去评价</Button>
-                        &nbsp;&nbsp;
-                        <Button size="small" className='more-button order-button'>售后</Button>
-                    </div>
-                )
-            default:
-                return (
-                    <div>
-                        ok
-                    </div>
                 )
         }
     }
@@ -257,11 +213,59 @@ class DisplayRender extends Component {
 
                                 {this.orderCardBottomRender(order)}
 
-                                {this.orderCardButtonGroupRender()}
+                                <ButtonGroupRender orderStatus={this.props.orderStatus}/>
                             </div>
                         ))
                 }
             </div>
         )
     }
+}
+
+const ButtonGroupRender = (props) => {
+    let {orderStatus} = props
+    switch (orderStatus) {
+        case '0':
+            return (
+                <div className='order-card-button-group'>
+                    <Button size="small" className='pay-button order-button'>去支付</Button>
+                </div>
+            )
+        case '1':
+            return (
+                <div className='order-card-button-group'>
+                    <Button size="small" className='ship-button order-button'>催发货</Button>
+                    &nbsp;&nbsp;
+                    <Button size="small" className='cancel-button order-button'>取消订单</Button>
+                </div>
+            )
+        case '2':
+            return (
+                <div className='order-card-button-group'>
+                    <Button size="small" className='unbox-button order-button'>查看物流</Button>
+                    &nbsp;&nbsp;
+                    <Button size="small" className='cancel-button order-button'>取消订单</Button>
+                </div>
+            )
+        case '3':
+            return (
+                <div className='order-card-button-group'>
+                    <Button size="small" className='judge-button order-button'>去评价</Button>
+                    &nbsp;&nbsp;
+                    <Button size="small" className='more-button order-button'>售后</Button>
+                </div>
+            )
+        default:
+            return (
+                <div>
+                    ok
+                </div>
+            )
+    }
+}
+
+
+export default withRouter(Display)
+export {
+    ButtonGroupRender
 }

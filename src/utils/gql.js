@@ -290,6 +290,69 @@ const create_order_product = `
     }
 `
 
+const shop_by_props = `
+    query shopbyprops($limit: Int) {
+        shopbyprops: shop_by_props(limit: $limit) {
+            description
+            address
+            updatedAt
+            telephone
+            name
+            createdAt
+            status
+            id
+            slideshow
+            notice
+            intro
+            img
+        }
+    }
+`
+
+const update_shop = `
+    mutation updateshop($description: String, $address: String, $updatedAt: String, $where: shop_filter, $telephone: String, $name: String, $createdAt: String, $status: String, $id: ID, $slideshow: String, $notice: String, $intro: String, $img: String) {
+        updateshop: update_shop(id: $id description: $description address: $address updatedAt: $updatedAt where: $where telephone: $telephone name: $name createdAt: $createdAt status: $status slideshow: $slideshow notice: $notice intro: $intro img: $img) {
+            result
+            shop {
+                description
+                address
+                updatedAt
+                telephone
+                name
+                createdAt
+                status
+                id
+                slideshow
+                notice
+                intro
+                img
+            }
+        }
+    }
+`
+
+const create_shop = `
+    mutation createshop($description: String, $address: String, $updatedAt: String, $telephone: String, $name: String, $createdAt: String, $status: String, $id: ID!, $slideshow: String, $notice: String, $intro: String, $img: String) {
+        createshop: create_shop(description: $description address: $address updatedAt: $updatedAt telephone: $telephone name: $name createdAt: $createdAt status: $status id: $id slideshow: $slideshow notice: $notice intro: $intro img: $img) {
+            result
+            shop {
+                description
+                address
+                updatedAt
+                telephone
+                name
+                createdAt
+                status
+                id
+                slideshow
+                notice
+                intro
+                img
+            }
+        }
+    }
+`
+
 export {
     category_by_props,
     productbyprops,
@@ -301,5 +364,8 @@ export {
     orderbyprops,
     orderProduct_by_props,
     create_order,
-    create_order_product
+    create_order_product,
+    shop_by_props,
+    create_shop,
+    update_shop
 }

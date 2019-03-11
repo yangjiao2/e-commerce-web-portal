@@ -6,6 +6,7 @@ import {Row, Col, Icon} from 'antd'
 import {orderProduct_by_props} from "../../../../utils/gql"
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
+import {ButtonGroupRender} from '../display'
 
 class Detail extends Component {
     constructor(props) {
@@ -153,6 +154,9 @@ class Detail extends Component {
                         <div className='detail-order-wrap'>
                             <Order data={data}/>
                         </div>
+                    </div>
+                    <div className='detail-footer-wrap'>
+                        <ButtonGroupRender orderStatus={data.orderStatus}/>
                     </div>
                 </div>
             </div>
