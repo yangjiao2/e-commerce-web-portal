@@ -41,6 +41,7 @@ const cart_by_userid = `
             createdAt
             id
             product_id{
+                id
                 category
                 img
                 intro
@@ -51,6 +52,7 @@ const cart_by_userid = `
                 unit
             }
             specificationStock_id{
+                id
                 color
                 size
                 stock
@@ -69,6 +71,7 @@ const delete_userCart_by_id = `
         }) 
     }
 `
+
 const userAddressbyprops = `
     query userAddressbyprops($user_id: ID) {
         userAddressbyprops: userAddress_by_props(user_id: $user_id) {

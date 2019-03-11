@@ -86,7 +86,7 @@ class All extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        // console.log('cart all data',data)
+                        console.log('cart all data',data)
 
                         return (
                             <div className='cart-wrap'>

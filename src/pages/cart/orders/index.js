@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {NavBar, Icon, List, Picker, ActivityIndicator} from 'antd-mobile'
+import {NavBar, Icon, List, Picker, ActivityIndicator, InputItem} from 'antd-mobile'
 import classNames from 'classnames'
 import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
-import moment from 'moment';
+import moment from 'moment'
 
-import {user_default_address, create_order} from "../../../utils/gql"
+import {user_default_address, create_order, create_order_product} from "../../../utils/gql"
 
 import './index.css'
 
@@ -37,6 +37,7 @@ class CartOrders extends Component {
             unfoldStatus: true,
             foldStatus: false,
             selectAddress: JSON.parse(sessionStorage.getItem('ordersAddress')),
+            remark:''
         }
     }
 
@@ -71,17 +72,29 @@ class CartOrders extends Component {
         })
     }
 
-    onSubmitOrder = (create_order) => {
-        let {totalCount, totalPrice} = this.state
+    onSubmitOrderAndProduct1 = (create_order,create_order_product) => {
+        let ls = [{"id": "4"},{"id": "5"}]
+        ls.forEach((item,index)=>{
+            console.log('ls item',item)
+            create_order({variables:item}).then(()=>{
+                console.log('ls ok',index)
+            })
+        })
+    }
+
+    onSubmitOrderAndProduct = (create_order,create_order_product) => {
+        let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
+        let {totalCount, totalPrice, remark} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let {id:userAddress_id,telephone} = JSON.parse(sessionStorage.getItem('ordersAddress'))
         let tag = telephone ? telephone.replace(/[^0-9]/ig, "").slice(-4) : Math.random().toString(10).substr(2,4)
-        let id = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
+        const orderId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
 
         let shopping = JSON.parse(sessionStorage.getItem("shopping"))
         let deleteIdList = shopping.map(item => item.id)
 
         const orderContent = {
+             remark,
              deliveryTime: "",
              updatedAt: "",
              orderLogistics_id: "",
@@ -90,24 +103,64 @@ class CartOrders extends Component {
              createdAt,
              orderStatus: "0",
              userAddress_id,
-             id,
+             id:orderId,
              orderShipFee: 0,
              count: totalCount,
-             user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA",
+             user_id,
              productTotalPay: totalPrice,
              orderPay_id: "",
              deleteId:deleteIdList
         }
 
-        create_order({variables:orderContent}).then((data)=>{
-            // console.log('create_order data',data)
+        let createOrder = create_order({variables:orderContent})
+
+        let createOrderProduct = shopping.map((item,index) => {
+            let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+            let orderProductId =  createdAt.replace(/[^0-9]/ig, "").substr(2) + tag +index
+            let {count, id:productId, product_id:productData, specificationStock_id:specData} = item
+            let {img, name, price, unit} = productData
+            let {id:specId, color, size} = specData
+            console.log('product',index,item,productId)
+
+            const orderProduct = {
+                updatedAt: "",
+                productColor: color,
+                unit,
+                product_id:productId,
+                specificationStock_id:specId,
+                productSize:size,
+                orderPay: price,
+                createdAt,
+                productImg:img,
+                productName: name,
+                order_id: orderId,
+                productPrice:price,
+                id:orderProductId,
+                user_id,
+                count,
+                productPay: price,
+                orderPay_id: "",
+            }
+            console.log(`orderProduct${index}`,orderProduct)
+
+            return create_order_product({variables:orderProduct}).then((data)=>{
+                console.log('ok data',index,data)
+                return data.data
+            })
+        })
+
+        Promise.all([createOrder, createOrderProduct]).then((data)=> {
+            console.log('onSubmitOrderAndProduct data',data);
             sessionStorage.removeItem("cartList")
 
             this.props.history.push({
                 pathname:'/cart/pay',
                 state:{}
             })
+        }).catch((err)=>{
+            console.log('submit error',err)
         })
+
     }
 
     render() {
@@ -244,12 +297,19 @@ class CartOrders extends Component {
                             </Picker>
                         </div>
                         <div className="orders-message">
-                            <div className='orders-message-title'>买家留言</div>
-                            <div className='orders-message-textarea'>
-                                 <textarea rows="1" cols="50" maxLength="50" placeholder="输入留言内容(50字以内)"
-                                           className="message-textarea">
-                                 </textarea>
-                            </div>
+                            <InputItem
+                                labelNumber={4}
+                                placeholder="输入留言内容(50字以内)"
+                                maxLength={50}
+                                onBlur={(val) => {
+                                    // console.log('orders-remark val',val)
+                                    this.setState({
+                                        remark:val
+                                    })
+                                }}
+                            >
+                                <div className='orders-message-title'>买家留言</div>
+                            </InputItem>
                         </div>
                     </div>
                     <div className='orders-price'>
@@ -271,12 +331,18 @@ class CartOrders extends Component {
                                     <span>合计：</span>
                                     <span className="jiesuan-total_price">¥ {totalPrice}</span>
                                 </div>
-                                <button className="jiesuan-button"
-                                        onClick={()=>{
-                                            this.onSubmitOrder(create_order)
-                                        }}>
-                                    <span>提交订单</span>
-                                </button>
+                                <Mutation mutation={gql(create_order_product)}
+                                          onError={error=>console.log('create_order_product error',error)}
+                                >
+                                    {(create_order_product,{ loading, error }) => (
+                                        <button className="jiesuan-button"
+                                                onClick={()=>{
+                                                    this.onSubmitOrderAndProduct(create_order,create_order_product)
+                                                }}>
+                                            <span>提交订单</span>
+                                        </button>
+                                    )}
+                                </Mutation>
                             </div>
                         </div>
                     )}
