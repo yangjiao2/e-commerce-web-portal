@@ -59,3 +59,19 @@
     font-size: 15px;
     line-height: 40px;
 }
+
+.detail-good-wrap {
+    background-color: white;
+    padding: 10px 0;
+    border: 1px solid #f3f3f3;
+}
+
+.detail-contact {
+    height: 40px;
+    width: 100%;
+    background-color: white;
+    padding: 0 15px;
+    line-height: 40px;
+    font-size: 15px;
+    text-align: center;
+}
