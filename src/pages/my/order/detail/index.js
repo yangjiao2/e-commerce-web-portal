@@ -107,6 +107,7 @@ class Detail extends Component {
                             }}
                         >订单详情</NavBar>
                     </div>
+                    {/*内容*/}
                     <div className='content-wrap'>
                         <div className='detail-address-wrap'>
                             <div className='detail-address-backgroud-top'>
@@ -149,6 +150,9 @@ class Detail extends Component {
                             </Query>
                             <div className='detail-contact'>联系客服</div>
                         </div>
+                        <div className='detail-order-wrap'>
+                            <Order data={data}/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,3 +161,28 @@ class Detail extends Component {
 }
 
 export default Detail
+
+class Order extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+
+        }
+    }
+
+    render() {
+        let {data} = this.props
+        return (
+            <div className='detail-order-wrapper'>
+                <div className='detail-order-item'>
+                    <span className='detail-order-title'>订单编号：</span>
+                    <span>{data.id}</span>
+                </div>
+                <div className='detail-order-item'>
+                    <span className='detail-order-title'>下单时间：</span>
+                    <span>{data.createdAt}</span>
+                </div>
+            </div>
+        )
+    }
+}
