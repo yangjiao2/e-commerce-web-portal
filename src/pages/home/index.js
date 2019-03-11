@@ -1,9 +1,10 @@
 import React from 'react'
-import './index.css'
 import {Switch, Route} from 'react-router-dom'
+
 import All from './all'
 import Kind from './kind'
 import Detail from './detail'
+import './index.css'
 
 const Home = () => (
     <div style={{height: '100%'}}>
