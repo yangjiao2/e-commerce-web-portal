@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {NavBar, Icon, ActivityIndicator} from 'antd-mobile'
-import {productbyid} from "../../../utils/gql"
+import {withRouter} from 'react-router-dom'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
+import {NavBar, Icon, ActivityIndicator, Badge} from 'antd-mobile'
+
+import {productbyid} from "../../../utils/gql"
 import './index.css'
-import {withRouter} from 'react-router-dom'
 
 class Detail extends Component {
     constructor(props) {
@@ -67,12 +68,14 @@ class DetailRender extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            cartCount:sessionStorage.getItem('cartCount')
         }
     }
 
     render() {
-        let {data} = this.props;
+        let {data} = this.props
+        let {cartCount} = this.state
+
         return (
             <div className='detail-wrapper content-wrap'>
                 <div className='detail-simple-show'>
@@ -92,8 +95,15 @@ class DetailRender extends Component {
                 </div>
                 <div className='detail-footer'>
                     <div className='detail-bottom'>
-                        <span className='detail-bottom-icon border-right' onClick={()=>{this.props.history.push({pathname: '/home'})}}><div className='detail-icon detail-icon-shop'/></span>
-                        <span className='detail-bottom-icon' onClick={()=>{this.props.history.push({pathname: '/cart'})}}><div className='detail-icon detail-icon-cart'/></span>
+                        <span className='detail-bottom-icon border-right' onClick={()=>{this.props.history.push({pathname: '/home'})}}>
+                            <div className='detail-icon detail-icon-shop'/>
+                        </span>
+                        <span className='detail-bottom-icon' onClick={()=>{this.props.history.push({pathname: '/cart'})}}>
+                            <div className='detail-icon detail-icon-cart'/>
+                            <Badge text={cartCount} overflowCount={90} hot>
+                                 <span style={{display: 'inline-block' }} />
+                            </Badge>
+                        </span>
                         <span className='detail-bottom-button add' onClick={()=>{}}>加入购物车</span>
                         <span className='detail-bottom-button buy' onClick={()=>{}}>立即购买</span>
                     </div>

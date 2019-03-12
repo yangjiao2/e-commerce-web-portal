@@ -151,7 +151,7 @@ class CartOrders extends Component {
 
         Promise.all([createOrder, createOrderProduct]).then((data)=> {
             console.log('onSubmitOrderAndProduct data',data);
-            sessionStorage.removeItem("cartList")
+            localStorage.removeItem("cartList")
 
             this.props.history.push({
                 pathname:'/cart/pay',
