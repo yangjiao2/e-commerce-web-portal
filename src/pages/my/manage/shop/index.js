@@ -92,7 +92,8 @@ class ShopRender extends Component {
             description: props.description,
             address: props.address,
             notice: props.notice,
-            slideshow: props.slideshow
+            slideshow: props.slideshow,
+            shopID: props.shopID
         }
     }
 
@@ -100,21 +101,20 @@ class ShopRender extends Component {
         console.log("files", files, "operationType", operationType)
 
         let imgDatas = []
-        let {storeID} = this.state
+        let {shopID} = this.state
 
         files.forEach((file, index) => {
             let base64Cont = files[index].url.split(',')[1]
             let imgType = files[index].file.type.split('/')[1]
-            let imgNewName = `slideshow_${index}_storeID_${storeID}.${imgType}`
+            let imgNewName = `slideshow_${index}_shopID_${shopID}.${imgType}`
 
             const imgData = {
-                'file-name': `appointment/images/${imgNewName}`,
+                'file-name': `e-commerce/images/${imgNewName}`,
                 'bucket': 'case',
                 'cont': base64Cont,
                 'public': true,
                 'format': 'base64'
             }
-
             imgDatas.push(imgData)
         })
 
