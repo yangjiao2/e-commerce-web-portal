@@ -91,6 +91,7 @@ class CartOrders extends Component {
         const orderId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
 
         let shopping = JSON.parse(sessionStorage.getItem("shopping"))
+        let shoppingLength = shopping.length
         let deleteIdList = shopping.map(item => item.id)
 
         const orderContent = {
@@ -151,6 +152,8 @@ class CartOrders extends Component {
 
         Promise.all([createOrder, createOrderProduct]).then((data)=> {
             console.log('onSubmitOrderAndProduct data',data);
+            let cartCount = localStorage.getItem("cartCount") - shoppingLength
+            localStorage.setItem("cartCount",cartCount)
             localStorage.removeItem("cartList")
 
             this.props.history.push({

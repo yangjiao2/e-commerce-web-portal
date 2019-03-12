@@ -68,7 +68,7 @@ class DetailRender extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            cartCount:sessionStorage.getItem('cartCount')
+            cartCount: localStorage.getItem('cartCount')
         }
     }
 
@@ -104,7 +104,7 @@ class DetailRender extends Component {
                                  <span style={{display: 'inline-block' }} />
                             </Badge>
                         </span>
-                        <span className='detail-bottom-button add' onClick={()=>{}}>加入购物车</span>
+                        <span className='detail-bottom-button add' onClick={()=>{}}>加入购物袋</span>
                         <span className='detail-bottom-button buy' onClick={()=>{}}>立即购买</span>
                     </div>
                 </div>

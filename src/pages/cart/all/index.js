@@ -57,7 +57,7 @@ class All extends Component {
     renderPage = (data, refetch) => {
         let {page,updateData} = this.state
         let cartListLength = data.cartList.length
-        sessionStorage.setItem("cartCount",cartListLength)
+        localStorage.setItem("cartCount",cartListLength)
 
         switch (page) {
             case 'detail':
@@ -88,7 +88,7 @@ class All extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        console.log('cart all data',data)
+                        // console.log('cart all data',data)
 
                         return (
                             <div className='cart-wrap'>
