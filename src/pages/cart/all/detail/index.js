@@ -18,8 +18,8 @@ class CartDetail extends Component {
 
     //获取数据
     componentWillMount(){
-        let cartList =  JSON.parse(sessionStorage.getItem("cartList"))
-        // console.log('CartDetail componentWillMount cartList session',cartList)
+        let cartList =  JSON.parse(localStorage.getItem("cartList"))
+        // console.log('CartDetail componentWillMount cartList',cartList)
         // console.log('CartDetail componentWillMount cartList props',this.props.cartList)
         let cartListLength = cartList ? cartList.length : 0
 
@@ -27,7 +27,7 @@ class CartDetail extends Component {
             cartList: cartList || this.props.cartList
         },()=>{
             if(cartListLength){
-                this.sumPrice()
+                this.sumPrice(false)
             }else {
                 this.checkedAll('',true)
             }
@@ -40,10 +40,10 @@ class CartDetail extends Component {
             this.props.refetch().then(()=>{
                 let cartListLength = nextProps.cartList ? nextProps.cartList.length : 0
                 this.setState({
-                    cartList:nextProps.cartList
+                    cartList: nextProps.cartList
                 },()=>{
                     if(cartListLength){
-                        this.sumPrice()
+                        this.sumPrice(false)
                     }else {
                         this.checkedAll('',true)
                     }
@@ -64,7 +64,7 @@ class CartDetail extends Component {
                 }
             })
         }) 
-        this.sumPrice() 
+        this.sumPrice(true)
     } 
 
     // 增加
@@ -79,7 +79,7 @@ class CartDetail extends Component {
                 }
             })
         }) 
-        this.sumPrice()
+        this.sumPrice(true)
     } 
 
     // 减少
@@ -94,7 +94,7 @@ class CartDetail extends Component {
                 }
             })
         }) 
-        this.sumPrice() 
+        this.sumPrice(true)
     } 
 
     //删除
@@ -109,7 +109,7 @@ class CartDetail extends Component {
             })
         }) 
         setTimeout(()=>{
-            this.sumPrice()
+            this.sumPrice(true)
         },1)
     } 
 
@@ -137,7 +137,7 @@ class CartDetail extends Component {
         }else {
             this.setState({isSelectAll:false}) 
         }
-        this.sumPrice() 
+        this.sumPrice(true)
     } 
 
     //全选或全不选,判断全选状态
@@ -162,21 +162,28 @@ class CartDetail extends Component {
                 isSelectAll:false
             }) 
         }
-        this.sumPrice()
+        this.sumPrice(true)
     } 
 
     //计算总合计
-    sumPrice=()=>{
-        let totalPrice=0,selectedCount=0 
+    sumPrice=(update)=>{
+        if(update) localStorage.setItem("cartList",JSON.stringify(this.state.cartList))
+
+        let totalPrice=0,selectedCount=0,checkedCount=0
+        let cartListLength = this.state.cartList.length
         this.state.cartList.forEach((item,index)=>{
             if(item.checked===true){
                 totalPrice+=item.count*item.product_id.price
                 selectedCount+=item.count
+                checkedCount++
             }
         })
+        // console.log('isSelectAll',cartListLength,checkedCount)
+        let isSelectAll = cartListLength === checkedCount ? true : false
         this.setState({
             totalPrice,
-            selectedCount
+            selectedCount,
+            isSelectAll
         })
     } 
 
@@ -190,7 +197,6 @@ class CartDetail extends Component {
         }) 
         // console.log('cartList',this.state.cartList)
         // console.log('shopping',shopping)
-        sessionStorage.setItem("cartList",JSON.stringify(this.state.cartList))
         sessionStorage.setItem("shopping",JSON.stringify(shopping))
         sessionStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
         sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))

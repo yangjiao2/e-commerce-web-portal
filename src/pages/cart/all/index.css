@@ -76,7 +76,10 @@
 }
 
 .cart-list-intro :first-child {
-     color: black;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
  }
 
 .cart-list-intro :nth-child(2) {
