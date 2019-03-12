@@ -28,7 +28,7 @@ const productbyprops = `
     }
 `
 
-const productbyid = `
+const productAndSpec_by_id = `
     query productbyid($id: ID) {
         productbyid: product_by_id(id: $id) {
             category_id{
@@ -44,6 +44,14 @@ const productbyid = `
             price
             img
             stock
+        }
+        
+        spec: specificationStock_by_props(product_id: $id ) {
+            id
+            color
+            size
+            stock
+            status
         }
     }
 `
@@ -356,7 +364,7 @@ const create_shop = `
 export {
     category_by_props,
     productbyprops,
-    productbyid,
+    productAndSpec_by_id,
     cart_by_userid,
     delete_userCart_by_id,
     userAddressbyprops,

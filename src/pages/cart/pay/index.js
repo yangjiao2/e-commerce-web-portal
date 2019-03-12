@@ -55,10 +55,10 @@ class Pay extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="pay-footer">
+                <div className="confirm-footer">
                     <button
                             className={classNames({
-                                'pay-button': true,
+                                'confirm-button': true,
                                 'pay-disabled': !checked
                             })}
                             onClick={()=>{
