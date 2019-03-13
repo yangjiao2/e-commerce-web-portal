@@ -91,7 +91,7 @@ class All extends Component {
                 </Query>
                 <WhiteSpace/>
                 <div className='guess-wrap'>
-                    <Query query={gql(productbyprops)} variables={{status: '1'}}>
+                    <Query query={gql(productbyprops)} variables={{status: '1', recommend: 1}}>
                         {
                             ({loading, error, data}) => {
                                 if (loading) {
