@@ -4,6 +4,7 @@ const category_by_props = `
             id
             text:name
             icon:img
+            status
         }
     }
 `
@@ -13,6 +14,7 @@ const productbyprops = `
         productbyprops: product_by_props(category_id: $category_id updatedAt: $updatedAt name: $name createdAt: $createdAt status: $status intro: $intro price: $price img: $img stock: $stock) {
             category_id{
                 id
+                name
             }
             updatedAt
             unit
@@ -361,6 +363,49 @@ const create_shop = `
     }
 `
 
+const create_product = `
+    mutation createproduct($recommend: Int, $updatedAt: String, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID!, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+        createproduct: create_product(recommend: $recommend updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
+            result
+            product {
+                recommend
+                updatedAt
+                unit
+                name
+                createdAt
+                status
+                id
+                intro
+                price
+                img
+                stock
+            }
+        }
+    }
+`
+
+const update_product = `
+    mutation updateproduct($recommend: Int, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+        updateproduct: update_product(id: $id recommend: $recommend updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
+            result
+            product {
+                recommend
+                updatedAt
+                unit
+                name
+                createdAt
+                status
+                id
+                intro
+                price
+    
+                img
+                stock
+            }
+        }
+    }
+`
+
 export {
     category_by_props,
     productbyprops,
@@ -375,5 +420,7 @@ export {
     create_order_product,
     shop_by_props,
     create_shop,
-    update_shop
+    update_shop,
+    create_product,
+    update_product
 }
