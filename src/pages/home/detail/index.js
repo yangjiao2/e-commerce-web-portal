@@ -1,11 +1,14 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {Query} from "react-apollo"
+import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
+import {message} from 'antd'
 import {NavBar, Icon, ActivityIndicator, Badge, Modal} from 'antd-mobile'
 import classNames from 'classnames'
+import moment from 'moment'
 
-import {productAndSpec_by_id} from "../../../utils/gql"
+import {productAndSpec_by_id, create_userCart} from "../../../utils/gql"
+import {idGen} from '../../../utils/func'
 import './index.css'
 
 class Detail extends Component {
@@ -71,27 +74,36 @@ class DetailRender extends Component {
         super(props)
         this.state = {
             cartCount: localStorage.getItem('cartCount'),
-            openSelect: false
+            openSelect: false,
+            buttonType: 'add'
         }
     }
 
-    showModal = key => (e) => {
+    showModal = (e,key) => {
         e.preventDefault(); // 修复 Android 上点击穿透
         this.setState({
             [key]: true,
-        });
+        })
     }
 
-    onClose = key => () => {
+    changeModalState = (state,val) => {
         this.setState({
-            [key]: false,
-        });
+            [state]:val
+        })
+    }
+
+    changeBottomButtonType = (e,val) => {
+        this.setState({
+            buttonType:val
+        })
+        this.showModal(e,'openSelect')
     }
 
     render() {
         let {data} = this.props
         let {name, img, price, stock} = data.productbyid
-        let {cartCount, openSelect} = this.state
+        let {cartCount, openSelect, buttonType} = this.state
+        // console.log('DetailRender openSelect',openSelect)
 
         return (
             <div className='detail-wrapper content-wrap'>
@@ -121,9 +133,17 @@ class DetailRender extends Component {
                                  <span style={{display: 'inline-block' }} />
                             </Badge>
                         </span>
-                        <span className='detail-bottom-button add' onClick={this.showModal('openSelect')}>加入购物袋</span>
-                        <span className='detail-bottom-button buy' onClick={this.showModal('openSelect')}>立即购买</span>
-                        <SelectModal onClose={this.onClose} openSelect={openSelect} goods={data.spec} price={price} img={img}/>
+                        <span className='detail-bottom-button add' onClick={(e)=>{this.changeBottomButtonType(e,'add')}}>加入购物袋</span>
+                        <span className='detail-bottom-button buy' onClick={(e)=>{this.changeBottomButtonType(e,'buy')}}>立即购买</span>
+                        <SelectModal
+                            changeModalState={this.changeModalState}
+                            openSelect={openSelect}
+                            buttonType={buttonType}
+                            productData={data}
+                            price={price}
+                            img={img}
+                            history={this.props.history}
+                        />
                     </div>
                 </div>
             </div>
@@ -137,31 +157,31 @@ class SelectModal extends Component {
         this.state = {
             count: 1,
             selectColor: '',
+            selectSpec:{},
             specList: [],
-            colorList: [],
-            goods: []
+            colorList: []
         }
     }
 
     componentWillMount() {
-        let {goods} = this.props
-        this.handleData(goods)
+        let {productData} = this.props
+        this.handleData(productData.spec)
     }
 
-    handleData = (goods) => {
+    // 规格表处理
+    handleData = (specs) => {
         let flag = true, selectFlag = true
         let specObject = {}, i = 0, specList = []
         let colorObject = {}, j = 0, colorList = [], selectColor = ''
-        goods.forEach((item) => {
+        specs.forEach((item) => {
             let {id,color,size,stock,status} = item
             if(flag && status > 0) {
                 selectColor = color
                 flag = false
             }
-            specObject[color] ? specList[specObject[color] - 1].spec.push({size, stock, status}) : specObject[color] = ++i && specList.push({
-                id,
+            specObject[color] ? specList[specObject[color] - 1].spec.push({id, size, stock, status}) : specObject[color] = ++i && specList.push({
                 color,
-                spec: [{size, stock, status}],
+                spec: [{id, size, stock, status}],
             })
             if(!colorObject[color]) {
                 colorObject[color] = ++j
@@ -220,8 +240,84 @@ class SelectModal extends Component {
         })
     }
 
+    // 添加至购物袋
+    onCreateUserCart = (create_userCart) => {
+        console.log('add cart')
+        let id = idGen('cart')
+        let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
+        let {productData} = this.props
+        let product_id = productData.productbyid.id
+        let {count, selectColor, specList} = this.state
+        let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
+        let specificationStock_id =  specFilter.id
+        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+
+        const cartContent = {
+            id,
+            user_id,
+            product_id,
+            specificationStock_id,
+            count,
+            createdAt,
+            updatedAt: ""
+        }
+        console.log('cartContent',cartContent)
+
+        this.props.changeModalState('openSelect')
+        create_userCart({variables:cartContent}).then((data)=>{
+            console.log('create_userCart data',data)
+            let cartCount = localStorage.getItem("cartCount")*1 + count
+            console.log('cartCount',cartCount)
+            localStorage.setItem("cartCount",cartCount)
+        })
+    }
+
+    // 立即购买
+    buyNow = () => {
+        console.log('buyNow')
+        let {count, selectColor, specList} = this.state
+        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+        let id = idGen('cart')
+        let {productData} = this.props
+        let {id:product_id, img, intro, name, price, status, stock, unit} = productData.productbyid
+        let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
+        let {id:specificationStock_id, size, stock:specStock, status:specStatus} =  specFilter
+
+        let buyNowContent = [{
+            count,
+            createdAt,
+            id,
+            product_id:{
+                id:product_id,
+                img,
+                intro,
+                name,
+                price,
+                status,
+                stock,
+                unit
+            },
+            specificationStock_id:{
+                id:specificationStock_id,
+                color:selectColor,
+                size,
+                stock:specStock,
+                status:specStatus
+            }
+        }]
+        console.log('buyNowContent',buyNowContent)
+        sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
+        this.props.changeModalState('openSelect')
+        this.props.history.push({
+            pathname: '/cart/orders',
+            state:{
+                dataType: 'buyNowContent'
+            }
+        })
+    }
+
     render() {
-        let {price, img} = this.props
+        let {price, img, buttonType} = this.props
         let {count, selectColor, specList, colorList} = this.state
         let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
         let specStock =  specFilter.stock || 0
@@ -231,13 +327,13 @@ class SelectModal extends Component {
             <Modal
                 popup
                 visible={this.props.openSelect}
-                onClose={this.props.onClose('openSelect')}
+                onClose={()=>this.props.changeModalState('openSelect',false)}
                 animationType="slide-up"
                 afterClose={() => { console.log('close model')}}
             >
                 <div className="popup-box" >
                     <div className="main-goods-box">
-                        <div className="close-popup" onClick={this.props.onClose('openSelect')}>
+                        <div className="close-popup" onClick={()=>this.props.changeModalState('openSelect',false)}>
                             ×
                         </div>
                         <div className="goods-box">
@@ -284,27 +380,45 @@ class SelectModal extends Component {
                                     <div className="edit-product-count">
                                         <button
                                             className={classNames({
-                                                'selected_button': true,
+                                                'selected_button-red': true,
                                                 'selected_button-disabled': count <= 1
                                             })}
-                                            disabled={count <= 1}
-                                            onClick={this.reduce}
+                                            // disabled={count <= 1}
+                                            onClick={()=>{
+                                                if(count > 1){
+                                                    this.reduce()
+                                                }else {
+                                                    message.warning('数量不能小于1个')
+                                                }
+                                            }}
                                         >-</button>
                                         <input className="selected_input" type="text" value={count} onChange={(e)=>{this.getInputValue(e)}}/>
-                                        <button className="selected_button" onClick={this.augment}>+</button>
+                                        <button className="selected_button-red" onClick={this.augment}>+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className='confirm-footer'>
-                        <button
-                            className='confirm-button'
-                            onClick={()=>{
-                            }}>
-                            <span>确认</span>
-                        </button>
-                    </div>
+                    <Mutation mutation={gql(create_userCart)}
+                              onError={error=>console.log('error',error)}
+                    >
+                        {(create_userCart,{ loading, error }) => (
+                            <div className='confirm-footer'>
+                                <button
+                                    className='confirm-button'
+                                    onClick={()=>{
+                                        if(buttonType === 'add'){
+                                            this.onCreateUserCart(create_userCart)
+                                        }else if(buttonType === 'buy'){
+                                            this.buyNow()
+                                        }
+                                    }}
+                                >
+                                    <span>确认</span>
+                                </button>
+                            </div>
+                        )}
+                    </Mutation>
                 </div>
             </Modal>
         )
@@ -332,7 +446,8 @@ class Specification extends Component {
             spec: prevState.spec.map((item,index)=>{
                 if(index===i){
                     item.select=true
-                    this.props.changeState('selectSize',item.size)
+                    console.log('select item',item)
+                    this.props.changeState('selectSpec',item)
                 }else {
                     item.select=false
                 }
@@ -356,7 +471,7 @@ class Specification extends Component {
                                     'spec-gray': item.status < 1,
                                     'spec-red': item.status > 0 && item.select
                                 })}
-                                key={'spec'+index}
+                                key={'spec'+item.id}
                                 onClick={()=>{
                                     if(item.status > 0)  this.changeSelectedStatus(index)
                                 }}

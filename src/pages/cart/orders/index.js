@@ -43,7 +43,8 @@ class CartOrders extends Component {
 
     componentWillMount() {
         // console.log('CartOrders componentWillMount',this.props)
-        let cartList = JSON.parse(sessionStorage.getItem("shopping"))
+        let type = this.props.history.location.state.dataType
+        let cartList = JSON.parse(sessionStorage.getItem(type))
         if (cartList.length > 3) {
             let cartList1 = cartList.slice(0, 3)
             let unfoldList = cartList.slice(3)
@@ -90,10 +91,6 @@ class CartOrders extends Component {
         let tag = telephone ? telephone.replace(/[^0-9]/ig, "").slice(-4) : Math.random().toString(10).substr(2,4)
         const orderId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
 
-        let shopping = JSON.parse(sessionStorage.getItem("shopping"))
-        let shoppingLength = shopping.length
-        let deleteIdList = shopping.map(item => item.id)
-
         const orderContent = {
              remark,
              deliveryTime: "",
@@ -110,24 +107,30 @@ class CartOrders extends Component {
              user_id,
              productTotalPay: totalPrice,
              orderPay_id: "",
-             deleteId:deleteIdList
+             deleteId:[]
         }
+
+        let type = this.props.history.location.state.dataType
+        let shopping = JSON.parse(sessionStorage.getItem(type))
+        if(type === 'cartSelected') orderContent.deleteId = shopping.map(item => item.id)
+
+        // console.log('createOrder orderContent',orderContent)
 
         let createOrder = create_order({variables:orderContent})
 
         let createOrderProduct = shopping.map((item,index) => {
             let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
             let orderProductId =  createdAt.replace(/[^0-9]/ig, "").substr(2) + tag +index
-            let {count, id:productId, product_id:productData, specificationStock_id:specData} = item
-            let {img, name, price, unit} = productData
+            let {count, product_id:productData, specificationStock_id:specData} = item
+            let {id:product_id, img, name, price, unit} = productData
             let {id:specId, color, size} = specData
-            console.log('product',index,item,productId)
+            // console.log('product',index,item,product_id)
 
             const orderProduct = {
                 updatedAt: "",
                 productColor: color,
                 unit,
-                product_id:productId,
+                product_id,
                 specificationStock_id:specId,
                 productSize:size,
                 orderPay: price,
@@ -152,9 +155,11 @@ class CartOrders extends Component {
 
         Promise.all([createOrder, createOrderProduct]).then((data)=> {
             console.log('onSubmitOrderAndProduct data',data);
-            let cartCount = localStorage.getItem("cartCount") - shoppingLength
-            localStorage.setItem("cartCount",cartCount)
-            localStorage.removeItem("cartList")
+            if(type === 'cartSelected'){
+                let cartCount = JSON.parse(localStorage.getItem("cartCount"))*1 - totalCount
+                localStorage.setItem("cartCount",cartCount)
+                localStorage.removeItem("cartList")
+            }
 
             this.props.history.push({
                 pathname:'/cart/pay',

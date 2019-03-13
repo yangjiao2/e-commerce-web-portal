@@ -56,8 +56,6 @@ class All extends Component {
 
     renderPage = (data, refetch) => {
         let {page,updateData} = this.state
-        let cartListLength = data.cartList.length
-        localStorage.setItem("cartCount",cartListLength)
 
         switch (page) {
             case 'detail':

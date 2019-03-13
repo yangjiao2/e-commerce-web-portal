@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
+import {message} from 'antd'
 import {Checkbox, WhiteSpace} from 'antd-mobile'
 import classNames from 'classnames' 
 
@@ -24,7 +25,7 @@ class CartDetail extends Component {
         let cartListLength = cartList ? cartList.length : 0
 
         this.setState({
-            cartList: cartList || this.props.cartList
+            cartList: this.props.cartList || cartList
         },()=>{
             if(cartListLength){
                 this.sumPrice(false)
@@ -169,21 +170,25 @@ class CartDetail extends Component {
     sumPrice=(update)=>{
         if(update) localStorage.setItem("cartList",JSON.stringify(this.state.cartList))
 
-        let totalPrice=0,selectedCount=0,checkedCount=0
+        let totalPrice=0, selectedCount=0, checkedCount=0, cartCount=0
         let cartListLength = this.state.cartList.length
+        let isSelectAll = false
         this.state.cartList.forEach((item,index)=>{
+            cartCount+=item.count
             if(item.checked===true){
                 totalPrice+=item.count*item.product_id.price
                 selectedCount+=item.count
                 checkedCount++
             }
-        })
-        // console.log('isSelectAll',cartListLength,checkedCount)
-        let isSelectAll = cartListLength === checkedCount ? true : false
-        this.setState({
-            totalPrice,
-            selectedCount,
-            isSelectAll
+            if(index === cartListLength - 1){
+                localStorage.setItem("cartCount",JSON.stringify(cartCount))
+                isSelectAll = cartListLength === checkedCount
+                this.setState({
+                    totalPrice,
+                    selectedCount,
+                    isSelectAll
+                })
+            }
         })
     } 
 
@@ -196,13 +201,15 @@ class CartDetail extends Component {
             }
         }) 
         // console.log('cartList',this.state.cartList)
-        // console.log('shopping',shopping)
-        sessionStorage.setItem("shopping",JSON.stringify(shopping))
+        console.log('shopping',shopping)
+        sessionStorage.setItem("cartSelected",JSON.stringify(shopping))
         sessionStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
         sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))
         this.props.history.push({
             pathname: '/cart/orders',
-            state:{}
+            state:{
+                dataType: 'cartSelected'
+            }
         })
     } 
 
@@ -235,14 +242,24 @@ class CartDetail extends Component {
                                             <div className="selected">
                                                 <button
                                                     className={classNames({
-                                                        'selected_button': true,
+                                                        'selected_button-white': true,
                                                         'selected_button-disabled': item.count <= 1
                                                     })}
-                                                    disabled={item.count <= 1}
-                                                    onClick={(e)=>{this.reduce(e,index)}}
+                                                    // disabled={item.count <= 1}
+                                                    onClick={(e)=>{
+                                                        if(item.count > 1){
+                                                            this.reduce(e,index)
+                                                        }else {
+                                                            message.warning('数量不能小于1个')
+                                                        }
+                                                    }}
                                                 >-</button>
-                                                <input className="selected_input" type="text" value={item.count} onChange={(e)=>{this.getInputValue(e,index)}}/>
-                                                <button className="selected_button" onClick={(e)=>{this.augment(e,index)}}>+</button>
+                                                <input className="selected_input" type="text"
+                                                       min={1} step={1} max={item.specificationStock_id.stock}
+                                                       value={item.count}
+                                                       onChange={(e)=>{this.getInputValue(e,index)}}
+                                                />
+                                                <button className="selected_button-white" onClick={(e)=>{this.augment(e,index)}}>+</button>
                                             </div>
                                         </div>
                                     </div>

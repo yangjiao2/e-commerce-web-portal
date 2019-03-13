@@ -108,10 +108,7 @@ class AddressRender extends Component {
     changeOrdersAddress =(address) => {
         sessionStorage.setItem('ordersAddress',JSON.stringify(address))
 
-        this.props.history.push({
-            pathname:'/cart/orders',
-            state:{}
-        })
+        this.props.history.go(-2)
     }
 
     render() {

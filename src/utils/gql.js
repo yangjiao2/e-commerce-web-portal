@@ -54,6 +54,41 @@ const productAndSpec_by_id = `
     }
 `
 
+const create_userCart = `
+    mutation createuserCart($id: ID!, $user_id: ID, $product_id: ID, $specificationStock_id: ID, $count: Int, $createdAt: String, $updatedAt: String) {
+        createuserCart: create_userCart(id: $id user_id: $user_id product_id: $product_id specificationStock_id: $specificationStock_id count: $count createdAt: $createdAt updatedAt: $updatedAt) {
+            result
+            userCart {
+                id
+                user_id {
+                    id
+                }
+                product_id {
+                    recommend
+                    unit
+                    name
+                    status
+                    id
+                    intro
+                    price
+                    img
+                    stock
+                }
+                specificationStock_id {
+                    id
+                    color
+                    size
+                    stock
+                    status
+                }
+                count
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`
+
 const cart_by_userid = `
     query findUserCart($user_id:ID){
         cartList:userCart_by_props(user_id:$user_id){
@@ -363,6 +398,7 @@ export {
     category_by_props,
     productbyprops,
     productAndSpec_by_id,
+    create_userCart,
     cart_by_userid,
     delete_userCart_by_id,
     userAddressbyprops,

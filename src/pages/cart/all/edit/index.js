@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {message} from 'antd'
 import {Checkbox, WhiteSpace, Modal, Toast} from 'antd-mobile'
 import classNames from 'classnames'
 import {Mutation} from "react-apollo"
@@ -7,6 +8,11 @@ import gql from "graphql-tag"
 import '../index.css'
 import {delete_userCart_by_id} from "../../../../utils/gql"
 const alert = Modal.alert
+message.config({
+    top: '45%',
+    duration: 2,
+    maxCount: 2,
+})
 
 class CartEdit extends Component {
     constructor(props) {
@@ -74,9 +80,9 @@ class CartEdit extends Component {
 
     // 删除
     delete=(delete_userCart_by_id)=>{
-        let {cartList} = this.state
+        let {cartList, selectedCount} = this.state
 
-        alert('', `确定要删除这${this.state.selectedCount}种商品吗？`, [
+        alert('', `确定要删除这${selectedCount}种商品吗？`, [
             { text: '取消', onPress: () => console.log('cancel') },
             {
                 text: '确定',
@@ -92,6 +98,8 @@ class CartEdit extends Component {
                         let num = data.data.delete_userCart.replace(/[^0-9]/ig,"")
                         if(num){
                             Toast.info('删除成功', 1)
+                            let cartCount = localStorage.getItem("cartCount")*1 - num
+                            localStorage.setItem("cartCount",cartCount)
 
                             this.setState({
                                 cartList:cartList1,
@@ -185,7 +193,7 @@ class CartEdit extends Component {
     }
 
     render() {
-        let {cartList} = this.state
+        let {cartList, isSelectAll, selectedCount} = this.state
         let listLength = cartList.length
 
         return (
@@ -197,7 +205,7 @@ class CartEdit extends Component {
                     <div className="cart-content-wrap">
                         <div className='cart-content'>
                             {
-                                this.state.cartList.map((item,index)=>{
+                                cartList.map((item,index)=>{
                                     return(
                                         <div key={item.id+'edit'}>
                                             <div className="cart-list">
@@ -220,14 +228,20 @@ class CartEdit extends Component {
                                                     <div className="selected">
                                                         <button
                                                             className={classNames({
-                                                                'selected_button': true,
+                                                                'selected_button-white': true,
                                                                 'selected_button-disabled': item.count <= 1
                                                             })}
-                                                            disabled={item.count <= 1}
-                                                            onClick={(e)=>{this.reduce(e,index)}}
+                                                            // disabled={item.count <= 1}
+                                                            onClick={(e)=>{
+                                                                if(item.count > 1){
+                                                                    this.reduce(e,index)
+                                                                }else {
+                                                                    message.warning('数量不能小于1个')
+                                                                }
+                                                            }}
                                                         >-</button>
                                                         <input className="selected_input" type="text" value={item.count} onChange={(e)=>{this.getInputValue(e,index)}}/>
-                                                        <button className="selected_button" onClick={(e)=>{this.augment(e,index)}}>+</button>
+                                                        <button className="selected_button-white" onClick={(e)=>{this.augment(e,index)}}>+</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -243,7 +257,7 @@ class CartEdit extends Component {
                                     <div className="jiesuan">
                                         <div className="jiesuan-checkbox">
                                             <Checkbox
-                                                checked={this.state.isSelectAll}
+                                                checked={isSelectAll}
                                                 onChange={(e)=>{this.checkedAll(e,'')}}
                                                 style={{marginLeft:15}}
                                             />
@@ -251,8 +265,18 @@ class CartEdit extends Component {
                                         </div>
                                         <div className="jiesuan-total">
                                         </div>
-                                        <button className="jiesuan-button" onClick={()=>{this.delete(delete_userCart_by_id)}}>
-                                            <span>删除({this.state.selectedCount})</span>
+                                        <button
+                                            className={classNames({
+                                                'jiesuan-button': true,
+                                                'jiesuan-disabled': !selectedCount
+                                            })}
+                                            onClick={()=>{
+                                                if(selectedCount){
+                                                    this.delete(delete_userCart_by_id)
+                                                }
+                                            }}
+                                        >
+                                            <span>删除({selectedCount})</span>
                                         </button>
                                     </div>
                                 </div>:''
