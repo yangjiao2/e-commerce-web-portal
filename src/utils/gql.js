@@ -4,6 +4,7 @@ const category_by_props = `
             id
             text:name
             icon:img
+            status
         }
     }
 `
@@ -12,6 +13,10 @@ const productbyprops = `
     query productbyprops($recommend: Int, $where: product_filter, $sort_by: product_sort_by, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $filter: Filter, $status: String, $price: Float, $category_id: ID, $img: String, $stock: Int, $skip: Int) {
         productbyprops: product_by_props(recommend: $recommend where: $where sort_by: $sort_by limit: $limit unit: $unit order_by: $order_by name: $name filter: $filter status: $status price: $price category_id: $category_id img: $img stock: $stock skip: $skip) {
             recommend
+            category_id{
+                id
+                name
+            }
             updatedAt
             unit
             name
@@ -394,6 +399,49 @@ const create_shop = `
     }
 `
 
+const create_product = `
+    mutation createproduct($recommend: Int, $updatedAt: String, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID!, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+        createproduct: create_product(recommend: $recommend updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
+            result
+            product {
+                recommend
+                updatedAt
+                unit
+                name
+                createdAt
+                status
+                id
+                intro
+                price
+                img
+                stock
+            }
+        }
+    }
+`
+
+const update_product = `
+    mutation updateproduct($recommend: Int, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+        updateproduct: update_product(id: $id recommend: $recommend updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
+            result
+            product {
+                recommend
+                updatedAt
+                unit
+                name
+                createdAt
+                status
+                id
+                intro
+                price
+    
+                img
+                stock
+            }
+        }
+    }
+`
+
 export {
     category_by_props,
     productbyprops,
@@ -409,5 +457,7 @@ export {
     create_order_product,
     shop_by_props,
     create_shop,
-    update_shop
+    update_shop,
+    create_product,
+    update_product
 }

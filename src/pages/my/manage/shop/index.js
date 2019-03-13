@@ -8,6 +8,7 @@ import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import {shop_by_props, create_shop, update_shop} from "../../../../utils/gql"
 import {storeFile} from "../../../../configs/url"
+import moment from 'moment'
 
 const Item = List.Item
 
@@ -147,26 +148,26 @@ class ShopRender extends Component {
                 <List renderHeader={() => '店铺个性化管理'} className="my-list">
                     <InputItem onChange={(e) => {
                         this.setState({name: e})
-                    }} value={name} placeholder="请输入店铺名称">名称</InputItem>
+                    }} value={name} placeholder="请输入名称">名称</InputItem>
                     <InputItem onChange={(e) => {
                         this.setState({intro: e})
-                    }} value={intro} placeholder="请输入店铺名称简介">简介</InputItem>
+                    }} value={intro} placeholder="请输入简介">简介</InputItem>
                     <InputItem onChange={(e) => {
                         this.setState({description: e})
-                    }} value={description} placeholder="请输入店铺名称描述">描述</InputItem>
+                    }} value={description} placeholder="请输入描述">描述</InputItem>
                     <InputItem onChange={(e) => {
                         this.setState({address: e})
-                    }} value={address} placeholder="请输入店铺名称地址">地址</InputItem>
+                    }} value={address} placeholder="请输入地址">地址</InputItem>
                     <InputItem onChange={(e) => {
                         this.setState({notice: e})
-                    }} value={notice} placeholder="请输入店铺名称公告，不输入为不显示">通告</InputItem>
+                    }} value={notice} placeholder="不输入或留空则不显示">通告</InputItem>
                     <div className='my-list-subtitle'>首页轮播图</div>
                     <ImagePicker
                         files={files}
                         onChange={this.onChange}
                         onImageClick={(index, fs) => console.log(index, fs)}
                         selectable={true}
-                        multiple={false}
+                        multiple={true}
                     />
                     <Item>
                         {
@@ -179,6 +180,8 @@ class ShopRender extends Component {
                                     address={address}
                                     alert={alert}
                                     slideshow={slideshow}
+                                    notice={notice}
+                                    intro={intro}
                                 />
                                 :
                                 <UpdateShopButton
@@ -189,6 +192,8 @@ class ShopRender extends Component {
                                     address={address}
                                     alert={alert}
                                     slideshow={slideshow}
+                                    notice={notice}
+                                    intro={intro}
                                 />
                         }
                         <Button size="small" inline style={{marginLeft: '2.5px'}} onClick={this.onReset}>重置</Button>
@@ -242,7 +247,7 @@ class UpdateShopButton extends Component {
                         address,
                         intro,
                         notice,
-                        updatedAt: new Date().getTime(),
+                        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
                     }
                     return (
                         <Button type="primary" size="small" inline onClick={() => {
@@ -308,7 +313,7 @@ class CreateShopButton extends Component {
                         address: address ? address : '',
                         intro: intro ? intro : '',
                         notice: notice ? notice : '',
-                        createdAt: new Date().getTime(),
+                        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
                         updatedAt: ''
                     }
                     return (
