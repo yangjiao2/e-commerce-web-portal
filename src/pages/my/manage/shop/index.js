@@ -21,7 +21,7 @@ class Shop extends Component {
         return (
             <div className='shop-wrap'>
                 <NavBar
-                    className='shop-navbar'
+                    className='navbar'
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
@@ -143,7 +143,7 @@ class ShopRender extends Component {
         let {files, name, intro, description, address, notice, slideshow, imgDatas} = this.state
         let {newShop, shopID} = this.props
         return (
-            <div className='shop-wrapper'>
+            <div className='shop-wrapper content-wrap'>
                 <List renderHeader={() => '店铺个性化管理'} className="my-list">
                     <InputItem onChange={(e) => {
                         this.setState({name: e})
