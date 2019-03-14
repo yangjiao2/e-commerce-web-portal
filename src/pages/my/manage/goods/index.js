@@ -45,7 +45,7 @@ class Goods extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            accordionKey: ''
+            accordionKey: undefined
         }
     }
 
@@ -63,6 +63,7 @@ class Goods extends Component {
                     }}
                 >商品管理</NavBar>
                 <div className='content-wrap'>
+                    <div className='my-list-subtitle' style={{color: 'grey'}}><Icon type="bulb" style={{marginRight: 10}}/>{accordionKey? '折叠单项以展开更多分类':'请选择需要打开的分类'}</div>
                     <Accordion className="my-accordion" onChange={(key) => {
                         this.setState({
                             accordionKey: key[0]
@@ -83,7 +84,6 @@ class Goods extends Component {
                     </Accordion>
                 </div>
             </div>
-
         )
     }
 }
@@ -221,7 +221,10 @@ class AddGoods extends Component {
                     />
                     {
                         newGood ?
-                            <Mutation mutation={gql(create_product)}>
+                            <Mutation mutation={gql(create_product)} refetchQueries={[
+                                {query: gql(productbyprops), variables: {}},
+                                {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
+                            ]}>
                                 {(createproduct, {loading, error}) => {
                                     if (loading)
                                         return (
@@ -264,7 +267,10 @@ class AddGoods extends Component {
                                 }}
                             </Mutation>
                             :
-                            <Mutation mutation={gql(update_product)}>
+                            <Mutation mutation={gql(update_product)} refetchQueries={[
+                                {query: gql(productbyprops), variables: {}},
+                                {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
+                            ]}>
                                 {(updateproduct, {loading, error}) => {
                                     if (loading)
                                         return (
