@@ -73,7 +73,7 @@ class DetailRender extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            cartCount: localStorage.getItem('cartCount'),
+            cartCount: JSON.parse(localStorage.getItem('cartCount')),
             openSelect: false,
             buttonType: 'add'
         }
@@ -86,7 +86,7 @@ class DetailRender extends Component {
         })
     }
 
-    changeModalState = (state,val) => {
+    changeDetailState = (state,val) => {
         this.setState({
             [state]:val
         })
@@ -136,7 +136,7 @@ class DetailRender extends Component {
                         <span className='detail-bottom-button add' onClick={(e)=>{this.changeBottomButtonType(e,'add')}}>加入购物袋</span>
                         <span className='detail-bottom-button buy' onClick={(e)=>{this.changeBottomButtonType(e,'buy')}}>立即购买</span>
                         <SelectModal
-                            changeModalState={this.changeModalState}
+                            changeDetailState={this.changeDetailState}
                             openSelect={openSelect}
                             buttonType={buttonType}
                             productData={data}
@@ -242,7 +242,6 @@ class SelectModal extends Component {
 
     // 添加至购物袋
     onCreateUserCart = (create_userCart) => {
-        console.log('add cart')
         let id = idGen('cart')
         let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
         let {productData} = this.props
@@ -263,18 +262,18 @@ class SelectModal extends Component {
         }
         console.log('cartContent',cartContent)
 
-        this.props.changeModalState('openSelect')
+        this.props.changeDetailState('openSelect',false)
         create_userCart({variables:cartContent}).then((data)=>{
             console.log('create_userCart data',data)
-            let cartCount = localStorage.getItem("cartCount")*1 + count
-            console.log('cartCount',cartCount)
-            localStorage.setItem("cartCount",cartCount)
+            let cartCount = JSON.parse(localStorage.getItem("cartCount")) + count
+            this.props.changeDetailState('cartCount',cartCount)
+            message.success('成功添加至购物车')
+            localStorage.setItem("cartCount",JSON.stringify(cartCount))
         })
     }
 
     // 立即购买
     buyNow = () => {
-        console.log('buyNow')
         let {count, selectColor, specList} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let id = idGen('cart')
@@ -282,6 +281,7 @@ class SelectModal extends Component {
         let {id:product_id, img, intro, name, price, status, stock, unit} = productData.productbyid
         let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
         let {id:specificationStock_id, size, stock:specStock, status:specStatus} =  specFilter
+        let totalPrice = price * count
 
         let buyNowContent = [{
             count,
@@ -307,7 +307,8 @@ class SelectModal extends Component {
         }]
         console.log('buyNowContent',buyNowContent)
         sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
-        this.props.changeModalState('openSelect')
+        sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
+        this.props.changeDetailState('openSelect')
         this.props.history.push({
             pathname: '/cart/orders',
             state:{
@@ -327,13 +328,13 @@ class SelectModal extends Component {
             <Modal
                 popup
                 visible={this.props.openSelect}
-                onClose={()=>this.props.changeModalState('openSelect',false)}
+                onClose={()=>this.props.changeDetailState('openSelect',false)}
                 animationType="slide-up"
                 afterClose={() => { console.log('close model')}}
             >
                 <div className="popup-box" >
                     <div className="main-goods-box">
-                        <div className="close-popup" onClick={()=>this.props.changeModalState('openSelect',false)}>
+                        <div className="close-popup" onClick={()=>this.props.changeDetailState('openSelect',false)}>
                             ×
                         </div>
                         <div className="goods-box">

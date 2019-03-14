@@ -98,8 +98,8 @@ class CartEdit extends Component {
                         let num = data.data.delete_userCart.replace(/[^0-9]/ig,"")
                         if(num){
                             Toast.info('删除成功', 1)
-                            let cartCount = localStorage.getItem("cartCount")*1 - num
-                            localStorage.setItem("cartCount",cartCount)
+                            let cartCount = JSON.parse(localStorage.getItem("cartCount")) - num
+                            localStorage.setItem("cartCount",JSON.stringify(cartCount))
 
                             this.setState({
                                 cartList:cartList1,
