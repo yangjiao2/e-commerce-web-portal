@@ -54,3 +54,11 @@
 .modify-goods-modal{
     height: 470px
 }
+
+.not-like {
+    color: grey;
+}
+
+.like {
+    color: #3283fa;
+}

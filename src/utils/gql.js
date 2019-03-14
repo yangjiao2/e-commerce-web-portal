@@ -9,6 +9,46 @@ const category_by_props = `
     }
 `
 
+const update_category = `
+    mutation updatecategory($id: ID, $img: String, $order: Int, $status: String, $updatedAt: String) {
+        updatecategory: update_category(id: $id img: $img order: $order status: $status updatedAt: $updatedAt) {
+            result
+            category {
+                id
+                name
+                img
+                order
+                status
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`
+
+const delete_category = `
+    mutation deletecategory($id: ID) {
+        deletecategory: delete_category(id: $id)
+    }
+`
+
+const create_category = `
+    mutation createcategory($id: ID!, $name: String, $img: String, $order: Int, $status: String, $createdAt: String, $updatedAt: String) {
+        createcategory: create_category(id: $id name: $name img: $img order: $order status: $status createdAt: $createdAt updatedAt: $updatedAt) {
+            result
+            category {
+                id
+                name
+                img
+                order
+                status
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`
+
 const productbyprops = `
     query productbyprops($recommend: Int, $where: product_filter, $sort_by: product_sort_by, $limit: Int, $unit: String, $order_by: OrderBy, $name: String, $filter: Filter, $status: String, $price: Float, $category_id: ID, $img: String, $stock: Int, $skip: Int) {
         productbyprops: product_by_props(recommend: $recommend where: $where sort_by: $sort_by limit: $limit unit: $unit order_by: $order_by name: $name filter: $filter status: $status price: $price category_id: $category_id img: $img stock: $stock skip: $skip) {
@@ -444,6 +484,9 @@ const update_product = `
 
 export {
     category_by_props,
+    update_category,
+    delete_category,
+    create_category,
     productbyprops,
     productAndSpec_by_id,
     create_userCart,
