@@ -70,11 +70,11 @@ class All extends Component {
                             }
 
                             let categoryList = data.categorybyprops
-                            categoryList.push(more)
+                            let dataList =  categoryList.concat(more)
 
                             return (
                                 <Grid
-                                    data={categoryList}
+                                    data={dataList}
                                     hasLine={false}
                                     onClick={(kind)=>{
                                         this.props.history.push({
