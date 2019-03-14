@@ -14,7 +14,15 @@ import {
 } from 'antd-mobile'
 import {Switch, Row, Col, Icon} from 'antd'
 import {withRouter} from 'react-router-dom'
-import {create_product, update_product, category_by_props, productbyprops} from "../../../../utils/gql"
+import {
+    create_product,
+    update_product,
+    category_by_props,
+    productbyprops,
+    update_category,
+    delete_category,
+    create_category
+} from "../../../../utils/gql"
 import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import {idGen} from "../../../../utils/func"
@@ -24,6 +32,14 @@ import axios from 'axios'
 import classNames from 'classnames'
 
 const Item = List.Item
+const categoryFilterRefetch = {
+    "status": "1",
+    "limit": 7,
+    "sort_by": {"order": "asc"}
+}
+const categoryFilter = {
+    "sort_by": {"order": "asc"}
+}
 
 class Goods extends Component {
     constructor(props) {
@@ -72,8 +88,6 @@ class Goods extends Component {
     }
 }
 
-export default withRouter(Goods)
-
 class AddGoods extends Component {
     constructor(props) {
         super(props)
@@ -81,7 +95,7 @@ class AddGoods extends Component {
             files: [],
             imgDatas: [],
         }
-        if(props.good === undefined) {
+        if (props.good === undefined) {
             this.state = {
                 ...state,
                 name: '',
@@ -93,7 +107,7 @@ class AddGoods extends Component {
                 newGood: true
             }
         } else {
-            console.log(props.good)
+            // console.log(props.good)
             let {name, price, intro, stock, id} = props.good
             this.state = {
                 ...state,
@@ -147,11 +161,7 @@ class AddGoods extends Component {
 
     render() {
         let {files, imgDatas, name, intro, stock, price, category_id, newGood} = this.state
-        let id = newGood? idGen('goods'): this.state.id
-        const categoryFilter = {
-            "status": "1",
-            "sort_by": {"order": "asc"}
-        }
+        let id = newGood ? idGen('goods') : this.state.id
         return (
             <List className="my-add-goods-list">
                 <InputItem onChange={(e) => {
@@ -182,7 +192,7 @@ class AddGoods extends Component {
                                         cols={1}
                                         value={this.state.category_id}
                                         onChange={v => {
-                                            this.setState({category_id: v});
+                                            this.setState({category_id: v})
                                         }}
                                 >
                                     <List.Item arrow="horizontal">选择种类</List.Item>
@@ -210,7 +220,7 @@ class AddGoods extends Component {
                         multiple={false}
                     />
                     {
-                        newGood?
+                        newGood ?
                             <Mutation mutation={gql(create_product)}>
                                 {(createproduct, {loading, error}) => {
                                     if (loading)
@@ -243,7 +253,11 @@ class AddGoods extends Component {
                                                 let img = imgDatas.length === 1 ? prefix + imgDatas[0]['file-name'] : imgDatas.map((imgData, index) => (
                                                     prefix + imgDatas[index]['file-name']
                                                 ))
-                                                createproduct({variables: {...varObj, img}})
+                                                let variables = {...varObj}
+                                                if (imgDatas.length !== 0) {
+                                                    variables.img = img
+                                                }
+                                                createproduct({variables})
                                             })
                                         }}>创建</Button>
                                     )
@@ -281,7 +295,11 @@ class AddGoods extends Component {
                                                 let img = imgDatas.length === 1 ? prefix + imgDatas[0]['file-name'] : imgDatas.map((imgData, index) => (
                                                     prefix + imgDatas[index]['file-name']
                                                 ))
-                                                updateproduct({variables: {...varObj, img}})
+                                                let variables = {...varObj}
+                                                if (imgDatas.length !== 0) {
+                                                    variables.img = img
+                                                }
+                                                updateproduct({variables})
                                             })
                                         }}>更新</Button>
                                     )
@@ -290,65 +308,6 @@ class AddGoods extends Component {
                     }
                 </div>
             </List>
-        )
-    }
-}
-
-class AllCategory extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            newCategory: ''
-        }
-    }
-
-    render() {
-        let {newCategory} = this.state
-        const categoryFilter = {
-            "status": "1",
-            "sort_by": {"order": "asc"}
-        }
-        return (
-            <div>
-                <Query query={gql(category_by_props)} variables={categoryFilter}>
-                    {
-                        ({loading, error, data}) => {
-                            if (loading) {
-                                return (
-                                    <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
-                                    </div>
-                                )
-                            }
-                            if (error) {
-                                return 'error!'
-                            }
-
-                            let categoryList = data.categorybyprops
-                            // id: "coat", text: "外套", icon: "https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/coat.png"
-                            return (
-                                <List>
-                                    {
-                                        categoryList.map(category => {
-                                            console.log(category.status)
-                                            return (
-                                                <Item key={category.id} extra={<div className='list-extra'><Switch
-                                                    checked={category.status === '1'}/><Button type='warning' inline
-                                                                                               size="small">删除</Button>
-                                                </div>}>{category.text}</Item>
-                                            )
-                                        })
-                                    }
-                                </List>
-                            )
-                        }
-                    }
-                </Query>
-                <InputItem onChange={(e) => {
-                    this.setState({newCategory: e})
-                }} value={newCategory} placeholder="请输入分类名称"
-                           extra={<Button type='primary' inline size="small">添加</Button>}>新的分类</InputItem>
-            </div>
         )
     }
 }
@@ -366,7 +325,7 @@ class AllGoods extends Component {
         this.setState({
             modal: bool
         })
-        if(!bool) {
+        if (!bool) {
             this.setState({
                 product: {}
             })
@@ -374,7 +333,7 @@ class AllGoods extends Component {
     }
 
     render() {
-        let {modal,product} = this.state
+        let {modal, product} = this.state
         return (
             <Query query={gql(productbyprops)} variables={{}}>
                 {
@@ -398,10 +357,43 @@ class AllGoods extends Component {
                                             return (
                                                 <Row className='good-block' key={product.id}>
                                                     <Col span={6}>
-                                                        <div className='good-image' style={{backgroundImage: `url(${product.img})`}}/>
+                                                        <div className='good-image'
+                                                             style={{backgroundImage: `url(${product.img})`}}/>
                                                     </Col>
-                                                    <Col span={11} offset={2}>{product.name}</Col>
-                                                    <Col span={1} offset={3}><Icon type="form" onClick={()=>{this.setState({modal: true, product})}}/></Col>
+                                                    <Col span={11} offset={1}>{product.name}</Col>
+                                                    <Col span={5} style={{display: 'flex', justifyContent: 'space-around'}}>
+                                                        <Mutation mutation={gql(update_product)} refetchQueries={[
+                                                            {query: gql(productbyprops), variables: {}},
+                                                            {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
+                                                        ]}>
+                                                            {(updateproduct, {loading, error}) => {
+                                                                if (loading)
+                                                                    return (
+                                                                        <div className="loading">
+                                                                            <div className="align">
+                                                                                <ActivityIndicator text="Loading..." size="large"/>
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                                if (error)
+                                                                    return 'error'
+                                                                let {id, recommend} = product
+                                                                let variables = {
+                                                                    id,
+                                                                    recommend: Number(!recommend),
+                                                                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                                                                }
+                                                                return (
+                                                                    <Icon type="like" className={classNames('not-like', {'like': recommend===1})} onClick={() => {
+                                                                        updateproduct({variables})
+                                                                    }}/>
+                                                                )
+                                                            }}
+                                                        </Mutation>
+                                                        <Icon type="form" onClick={() => {
+                                                            this.setState({modal: true, product})
+                                                        }}/>
+                                                    </Col>
                                                 </Row>
                                             )
                                         })
@@ -415,7 +407,7 @@ class AllGoods extends Component {
                                     className='modify-goods-modal'
                                 >
                                     <div className='close-popup' onClick={this.controlModal(false)}>X</div>
-                                    <div style={{paddingTop:52}}>
+                                    <div style={{paddingTop: 52}}>
                                         <AddGoods good={product}/>
                                     </div>
                                 </Modal>
@@ -427,3 +419,196 @@ class AllGoods extends Component {
         )
     }
 }
+
+class AllCategory extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        return (
+            <div>
+                <Query query={gql(category_by_props)} variables={categoryFilter}>
+                    {
+                        ({loading, error, data}) => {
+                            if (loading) {
+                                return (
+                                    <div className="loading-center">
+                                        <ActivityIndicator text="Loading..." size="large"/>
+                                    </div>
+                                )
+                            }
+                            if (error) {
+                                return 'error!'
+                            }
+                            let categoryList = data.categorybyprops
+                            return (
+                                <div>
+                                    <List>
+                                        {
+                                            categoryList.map(category => {
+                                                return (
+                                                    <Item key={category.id} extra={
+                                                        <div className='list-extra'>
+                                                            <AllCategorySwitch category={category}/>
+                                                            <AllCategoryButton category={category}/>
+                                                        </div>
+                                                    }>
+                                                        {category.text}
+                                                    </Item>
+                                                )
+                                            })
+                                        }
+                                    </List>
+                                    <AllCategoryInput order={categoryList.length + 1}/>
+                                </div>
+                            )
+                        }
+                    }
+                </Query>
+            </div>
+        )
+    }
+}
+
+class AllCategorySwitch extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            checked: props.category.status === '1'
+        }
+    }
+
+    render() {
+        let {category} = this.props
+        let {checked} = this.state
+        return (
+            <Mutation mutation={gql(update_category)} refetchQueries={[
+                {query: gql(category_by_props), variables: categoryFilter},
+                {query: gql(category_by_props), variables: categoryFilterRefetch}
+            ]}>
+                {(updatecategory, {loading, error}) => {
+                    if (loading)
+                        return (
+                            <div className="loading">
+                                <div className="align">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            </div>
+                        )
+                    if (error)
+                        return 'error'
+                    let obj = {
+                        id: category.id,
+                        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                    }
+                    return (
+                        <Switch checked={checked} onChange={(bool) => {
+                            this.setState({checked: bool})
+                            updatecategory({variables: {...obj, status: bool ? '1' : '0'}})
+                        }}/>
+                    )
+                }}
+            </Mutation>
+        )
+    }
+}
+
+class AllCategoryButton extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        let {category} = this.props
+
+        return (
+            <Mutation mutation={gql(delete_category)} refetchQueries={[
+                {query: gql(category_by_props), variables: categoryFilter},
+                {query: gql(category_by_props), variables: categoryFilterRefetch}
+            ]}>
+                {(deletecategory, {loading, error}) => {
+                    if (loading)
+                        return (
+                            <div className="loading">
+                                <div className="align">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            </div>
+                        )
+                    if (error)
+                        return 'error'
+                    return (
+                        <Button type='warning' inline size="small" onClick={() => {
+                            deletecategory({variables: {id: category.id}})
+                        }}>删除</Button>
+                    )
+                }}
+            </Mutation>
+        )
+    }
+}
+
+class AllCategoryInput extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            newCategory: ''
+        }
+    }
+
+    // $id: ID!, $name: String, $img: String, $order: Int, $status: String, $createdAt: String, $updatedAt: String
+    render() {
+        let {order} = this.props
+        let {newCategory} = this.state
+        return (
+            <Mutation mutation={gql(create_category)} refetchQueries={[
+                {query: gql(category_by_props), variables: categoryFilter},
+                {query: gql(category_by_props), variables: categoryFilterRefetch}
+            ]}>
+                {(createcategory, {loading, error}) => {
+                    if (loading)
+                        return (
+                            <div className="loading">
+                                <div className="align">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            </div>
+                        )
+                    if (error)
+                        return 'error'
+                    let obj = {
+                        id: idGen('category'),
+                        name: newCategory,
+                        img: '',
+                        order,
+                        status: '1',
+                        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+                        updatedAt: ''
+                    }
+                    return (
+                        <InputItem
+                            onChange={(e) => {
+                                this.setState({newCategory: e})
+                            }}
+                            value={newCategory}
+                            placeholder="请输入分类名称"
+                            extra={
+                                <Button type='primary' inline size="small"
+                                        onClick={() => {
+                                            createcategory({variables: obj})
+                                        }}>添加</Button>
+                            }>
+                            新的分类
+                        </InputItem>
+                    )
+                }}
+            </Mutation>
+        )
+    }
+
+}
+
+export default withRouter(Goods)
