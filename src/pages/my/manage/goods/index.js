@@ -236,7 +236,7 @@ class AddGoods extends Component {
                                     let varObj = {
                                         id,
                                         unit: '1件',
-                                        status: '',
+                                        status: '1',
                                         recommend: 0,
                                         category_id: category_id[0],
                                         name,
@@ -279,7 +279,7 @@ class AddGoods extends Component {
                                     let varObj = {
                                         id,
                                         unit: '1件',
-                                        status: '',
+                                        status: '1',
                                         recommend: 0,
                                         category_id: category_id[0],
                                         name,
@@ -559,7 +559,6 @@ class AllCategoryInput extends Component {
         }
     }
 
-    // $id: ID!, $name: String, $img: String, $order: Int, $status: String, $createdAt: String, $updatedAt: String
     render() {
         let {order} = this.props
         let {newCategory} = this.state
