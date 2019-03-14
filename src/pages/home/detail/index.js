@@ -73,7 +73,7 @@ class DetailRender extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            cartCount: localStorage.getItem('cartCount'),
+            cartCount: JSON.parse(localStorage.getItem('cartCount')),
             openSelect: false,
             buttonType: 'add'
         }
@@ -86,7 +86,7 @@ class DetailRender extends Component {
         })
     }
 
-    changeModalState = (state,val) => {
+    changeDetailState = (state,val) => {
         this.setState({
             [state]:val
         })
@@ -136,7 +136,7 @@ class DetailRender extends Component {
                         <span className='detail-bottom-button add' onClick={(e)=>{this.changeBottomButtonType(e,'add')}}>加入购物袋</span>
                         <span className='detail-bottom-button buy' onClick={(e)=>{this.changeBottomButtonType(e,'buy')}}>立即购买</span>
                         <SelectModal
-                            changeModalState={this.changeModalState}
+                            changeDetailState={this.changeDetailState}
                             openSelect={openSelect}
                             buttonType={buttonType}
                             productData={data}
@@ -262,12 +262,13 @@ class SelectModal extends Component {
         }
         console.log('cartContent',cartContent)
 
-        this.props.changeModalState('openSelect')
+        this.props.changeDetailState('openSelect',false)
         create_userCart({variables:cartContent}).then((data)=>{
             console.log('create_userCart data',data)
-            let cartCount = localStorage.getItem("cartCount")*1 + count
-            console.log('cartCount',cartCount)
-            localStorage.setItem("cartCount",cartCount)
+            let cartCount = JSON.parse(localStorage.getItem("cartCount")) + count
+            this.props.changeDetailState('cartCount',cartCount)
+            message.success('成功添加至购物车')
+            localStorage.setItem("cartCount",JSON.stringify(cartCount))
         })
     }
 
@@ -307,7 +308,7 @@ class SelectModal extends Component {
         console.log('buyNowContent',buyNowContent)
         sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
         sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
-        this.props.changeModalState('openSelect')
+        this.props.changeDetailState('openSelect')
         this.props.history.push({
             pathname: '/cart/orders',
             state:{
@@ -327,13 +328,13 @@ class SelectModal extends Component {
             <Modal
                 popup
                 visible={this.props.openSelect}
-                onClose={()=>this.props.changeModalState('openSelect',false)}
+                onClose={()=>this.props.changeDetailState('openSelect',false)}
                 animationType="slide-up"
                 afterClose={() => { console.log('close model')}}
             >
                 <div className="popup-box" >
                     <div className="main-goods-box">
-                        <div className="close-popup" onClick={()=>this.props.changeModalState('openSelect',false)}>
+                        <div className="close-popup" onClick={()=>this.props.changeDetailState('openSelect',false)}>
                             ×
                         </div>
                         <div className="goods-box">
