@@ -242,7 +242,6 @@ class SelectModal extends Component {
 
     // 添加至购物袋
     onCreateUserCart = (create_userCart) => {
-        console.log('add cart')
         let id = idGen('cart')
         let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
         let {productData} = this.props
@@ -274,7 +273,6 @@ class SelectModal extends Component {
 
     // 立即购买
     buyNow = () => {
-        console.log('buyNow')
         let {count, selectColor, specList} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let id = idGen('cart')
@@ -282,6 +280,7 @@ class SelectModal extends Component {
         let {id:product_id, img, intro, name, price, status, stock, unit} = productData.productbyid
         let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
         let {id:specificationStock_id, size, stock:specStock, status:specStatus} =  specFilter
+        let totalPrice = price * count
 
         let buyNowContent = [{
             count,
@@ -307,6 +306,7 @@ class SelectModal extends Component {
         }]
         console.log('buyNowContent',buyNowContent)
         sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
+        sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
         this.props.changeModalState('openSelect')
         this.props.history.push({
             pathname: '/cart/orders',
