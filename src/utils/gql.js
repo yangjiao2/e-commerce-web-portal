@@ -295,6 +295,7 @@ const orderProduct_by_props = `
 
 const create_order = `
     mutation createorder($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, 
+                         $logisticsFee: Float, $expressId: String, $order_id: ID, $consigneeTel: String, $orderLogisticsId: ID!, $consignAddress: String, $LogisticsStatus: String, $consigneeName: String
                          $deleteId: [String]) {
         createorder: create_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
             result
@@ -342,6 +343,46 @@ const create_order = `
                     payTime
                 }
             } 
+        }
+        createorderLogistics: create_orderLogistics(updatedAt: $updatedAt logisticsFee: $logisticsFee expressId: $expressId createdAt: $createdAt order_id: $order_id consigneeTel: $consigneeTel id: $id consignAddress: $consignAddress LogisticsStatus: $LogisticsStatus user_id: $user_id consigneeName: $consigneeName) {
+            result
+            orderLogistics {
+                updatedAt
+                logisticsFee
+                expressId
+                createdAt
+                order_id {
+                    deliveryTime
+                    remark
+                    updatedAt
+        
+                    payTime
+                    orderTotalPay
+                    createdAt
+                    orderStatus
+        
+                    id
+                    orderShipFee
+                    count
+        
+                    productTotalPay
+                }
+                consigneeTel
+                id
+                consignAddress
+                LogisticsStatus
+                user_id {
+                    email
+                    updatedAt
+                    password
+                    telephone
+                    username
+                    createdAt
+                    openid
+                    id
+                }
+                consigneeName
+            }
         }
         delete_userCart(where: {
             id: {

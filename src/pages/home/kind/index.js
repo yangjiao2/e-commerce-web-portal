@@ -117,7 +117,6 @@ class KindRender extends Component {
                                           id: product.id
                                       }
                                   })
-
                               }}
                               renderItem={dataItem => (
                                   <div key={dataItem.id} className='product-item'>

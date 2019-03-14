@@ -105,3 +105,13 @@ a {
     background: rgba(0,0,0,.7);
     color: white;
 }
+
+.am-flexbox {
+    overflow: visible;
+}
+
+.hide-extra-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

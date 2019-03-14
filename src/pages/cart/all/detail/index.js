@@ -211,7 +211,17 @@ class CartDetail extends Component {
                 dataType: 'cartSelected'
             }
         })
-    } 
+    }
+
+    skipToProductDetail = (e,productId) => {
+        e.preventDefault()
+        this.props.history.push({
+            pathname: '/home/detail',
+            state: {
+                id:productId
+            }
+        })
+    }
 
     render() {
         let {cartList,isSelectAll,selectedCount,totalPrice} = this.state
@@ -230,10 +240,10 @@ class CartDetail extends Component {
                                                 onChange={(e)=>{this.changeCheckedStatus(e,index)}}
                                             />
                                         </div>
-                                        <div className="cart-list-image">
+                                        <div className="cart-list-image" onClick={(e)=>this.skipToProductDetail(e,item.product_id.id)}>
                                             <img src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt="商品图片"/>
                                         </div>
-                                        <div className="cart-list-intro">
+                                        <div className="cart-list-intro" onClick={(e)=>this.skipToProductDetail(e,item.product_id.id)}>
                                             <div>{item.product_id.name}</div>
                                             <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
                                             <div>¥ {item.product_id.price}</div>

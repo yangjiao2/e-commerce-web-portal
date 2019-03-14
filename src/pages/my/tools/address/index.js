@@ -106,6 +106,7 @@ class AddressRender extends Component {
     }
 
     changeOrdersAddress =(address) => {
+        console.log('address',address)
         sessionStorage.setItem('ordersAddress',JSON.stringify(address))
 
         this.props.history.go(-2)

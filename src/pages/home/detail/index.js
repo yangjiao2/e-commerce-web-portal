@@ -30,9 +30,9 @@ class Detail extends Component {
 
     render() {
         let {id} = this.state
-        let contentHeight = window.innerHeight
+
         return (
-            <div className='detail-wrap' style={{height: contentHeight}}>
+            <div className='detail-wrap' >
                 <div className='detail-navbar-wrap navbar'>
                     <NavBar
                         mode="light"
@@ -101,16 +101,18 @@ class DetailRender extends Component {
 
     render() {
         let {data} = this.props
-        let {name, img, price, stock} = data.productbyid
+        let {name, intro, img, price, stock} = data.productbyid
         let {cartCount, openSelect, buttonType} = this.state
         // console.log('DetailRender openSelect',openSelect)
 
         return (
             <div className='detail-wrapper content-wrap'>
                 <div className='detail-simple-show'>
-                    <div className='detail-img' style={{backgroundImage: "url('"+ img + "')"}}/>
+                    {/*<div className='detail-img' style={{backgroundImage: "url('"+ img + "')"}}/>*/}
+                    <img className='detail-img' src={img} alt="商品图片"/>
                     <div className='detail-intro'>
                         <div className='detail-name detail-padding'>{name}</div>
+                        <div className='detail-intro detail-padding'>{intro}</div>
                         <div className='detail-price detail-padding'>
                             <span>￥{price}</span>&nbsp;&nbsp;
                             <span>￥{price}</span>
@@ -120,7 +122,10 @@ class DetailRender extends Component {
                 </div>
                 <div className='detail-complicate-show'>
                     <div className='detail-padding detail-complicate-title'>商品信息</div>
-                    <div>通过商品详情图片展示</div>
+                    <div className='detail-complicate-show-img'>
+                        {/*通过商品详情图片展示*/}
+                        <img className='detail-img' src={img} alt="商品图片"/>
+                    </div>
                 </div>
                 <div className='detail-footer'>
                     <div className='detail-bottom'>
@@ -447,7 +452,7 @@ class Specification extends Component {
             spec: prevState.spec.map((item,index)=>{
                 if(index===i){
                     item.select=true
-                    console.log('select item',item)
+                    // console.log('select item',item)
                     this.props.changeState('selectSpec',item)
                 }else {
                     item.select=false

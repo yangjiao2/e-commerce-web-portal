@@ -7,7 +7,7 @@ import gql from "graphql-tag"
 import moment from 'moment'
 
 import {user_default_address, create_order, create_order_product} from "../../../utils/gql"
-
+import {idGen} from "../../../utils/func"
 import './index.css'
 
 const Item = List.Item
@@ -87,15 +87,18 @@ class CartOrders extends Component {
         let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
         let {totalCount, totalPrice, remark} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-        let {id:userAddress_id,telephone} = JSON.parse(sessionStorage.getItem('ordersAddress'))
+        let ordersAddress = JSON.parse(sessionStorage.getItem('ordersAddress'))
+        let {id:userAddress_id, telephone, username, province, city, area, address} = ordersAddress
+        let addressData = String(province + city + area + address)
         let tag = telephone ? telephone.replace(/[^0-9]/ig, "").slice(-4) : Math.random().toString(10).substr(2,4)
         const orderId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
+        let orderLogisticsId = idGen('deliver')
 
         const orderContent = {
              remark,
              deliveryTime: "",
              updatedAt: "",
-             orderLogistics_id: "",
+             orderLogistics_id: orderLogisticsId,
              payTime: "",
              orderTotalPay: totalPrice,
              createdAt,
@@ -110,13 +113,27 @@ class CartOrders extends Component {
              deleteId:[]
         }
 
+        const orderLogistics = {
+            updatedAt: "",
+            logisticsFee: 0.0,
+            expressId: "",
+            createdAt,
+            order_id: orderId,
+            consigneeTel: telephone,
+            orderLogisticsId,
+            consignAddress: addressData,
+            LogisticsStatus: "0",
+            user_id,
+            consigneeName: username
+        }
+
         let type = this.props.history.location.state.dataType
         let shopping = JSON.parse(sessionStorage.getItem(type))
         if(type === 'cartSelected') orderContent.deleteId = shopping.map(item => item.id)
 
         // console.log('createOrder orderContent',orderContent)
 
-        let createOrder = create_order({variables:orderContent})
+        let createOrder = create_order({variables:{...orderContent, ...orderLogistics}})
 
         let createOrderProduct = shopping.map((item,index) => {
             let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -235,7 +252,7 @@ class CartOrders extends Component {
                                                         alt=""/>
                                                 </div>
                                                 <div className="cart-orders-intro">
-                                                    <div>{item.product_id.name}</div>
+                                                    <div className='hide-extra-text'>{item.product_id.name}</div>
                                                     <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
                                                     <div>¥ {item.product_id.price}</div>
                                                 </div>
