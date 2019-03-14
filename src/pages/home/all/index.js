@@ -105,7 +105,7 @@ class All extends Component {
                                     return 'error!'
                                 }
                                 return (
-                                    <Like data={data.productbyprops} history={this.props.history}/>
+                                    <Recommend data={data.productbyprops} history={this.props.history}/>
                                 )
                             }
                         }
@@ -116,7 +116,7 @@ class All extends Component {
     }
 }
 
-class Like extends Component {
+class Recommend extends Component {
     constructor(props) {
         super(props)
         this.state = {}
@@ -126,15 +126,15 @@ class Like extends Component {
         let {data} = this.props
         return (
             <div className='guess-wrapper'>
-                <div className='guess-title'>- 猜你喜欢 -</div>
+                <div className='guess-title'>- 店长推荐 -</div>
                 <Grid data={data}
                       columnNum={2}
                       hasLine={false}
-                      onClick={(guess)=>{
+                      onClick={(recommend)=>{
                           this.props.history.push({
                               pathname: '/home/detail',
                               state: {
-                                  id: guess.id
+                                  id: recommend.id
                               }
                           })
                       }}
