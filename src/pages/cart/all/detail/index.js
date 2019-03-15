@@ -29,8 +29,6 @@ class CartDetail extends Component {
         },()=>{
             if(cartListLength){
                 this.sumPrice(false)
-            }else {
-                this.checkedAll('',true)
             }
         })
     }
@@ -45,8 +43,6 @@ class CartDetail extends Component {
                 },()=>{
                     if(cartListLength){
                         this.sumPrice(false)
-                    }else {
-                        this.checkedAll('',true)
                     }
                 })
             })
@@ -304,6 +300,8 @@ class CartDetail extends Component {
                             onClick={()=>{
                                 if(selectedCount){
                                     this.settleAccounts()
+                                }else {
+                                    message.warning('请选择商品！')
                                 }
                             }}
                         >
