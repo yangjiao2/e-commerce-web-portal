@@ -11,7 +11,7 @@ import {Icon} from 'antd'
 import classNames from 'classnames'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
-import {order_by_id} from "../../../../utils/gql"
+import {order_by_id, orderbyprops} from "../../../../utils/gql"
 
 class Orders extends Component {
     constructor(props) {
@@ -105,6 +105,10 @@ class SearchQuery extends Component {
         this.state = {}
     }
 
+    shouldComponentUpdate(nextProps) {
+        return nextProps.id !== this.props.id;
+    }
+
     statusRender = (status) => {
         switch (status) {
             case '0':
@@ -123,7 +127,7 @@ class SearchQuery extends Component {
     render() {
         let {id} = this.props
         return (
-            <Query query={gql(order_by_id)} variables={{id}} className='query-result'>
+            <Query query={gql(order_by_id)} variables={{id}}>
                 {
                     ({loading, error, data}) => {
                         if (loading) {
@@ -152,7 +156,7 @@ class SearchQuery extends Component {
                                 LogisticsStatus = orderLogistics_id.LogisticsStatus
                                 expressCreatedAt = orderLogistics_id.createdAt
                             }
-                            if(orderPay_id !== null) {
+                            if (orderPay_id !== null) {
 
                             }
 
@@ -161,12 +165,13 @@ class SearchQuery extends Component {
                                     <div>ID：{id}</div>
                                     <div>状态：{this.statusRender(orderStatus)}</div>
                                     <div>备注：{remark}</div>
-                                    <div>订单总计价格：{orderTotalPay}</div>
                                     <div>产品总量：{count}</div>
                                     <div>产品总计价格：{productTotalPay}</div>
+                                    <div>订单总计价格：{orderTotalPay}</div>
                                     <div>订单人名称：{username}</div>
                                     <div>订单电话：{telephone}</div>
                                     <div>订单地址：{province + city + area + address}</div>
+                                    <div>下单时间：{createdAt}</div>
                                     <div>用户名称：{usernameUser}</div>
                                     <div>用户邮箱：{email}</div>
                                     <div>用户电话：{telephoneUser}</div>
@@ -192,7 +197,34 @@ class Shiping extends Component {
 
     render() {
         return (
-            <div>Shiping</div>
+            <Query query={gql(orderbyprops)} variables={{orderStatus: '1'}}>
+                {
+                    ({loading, error, data}) => {
+                        if (loading) {
+                            return (
+                                <div className="loading-center">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            )
+                        }
+                        if (error) {
+                            return 'error!'
+                        }
+                        data = data.orderbyprops
+                        console.log(data)
+                        return (
+                            <div>
+                                {
+                                    data.length === 0?
+                                        '还没有这种订单'
+                                        :
+                                        <div>还未展示</div>
+                                }
+                            </div>
+                        )
+                    }
+                }
+            </Query>
         )
     }
 }
@@ -205,7 +237,34 @@ class Completed extends Component {
 
     render() {
         return (
-            <div>Completed</div>
+            <Query query={gql(orderbyprops)} variables={{orderStatus: '2'}}>
+                {
+                    ({loading, error, data}) => {
+                        if (loading) {
+                            return (
+                                <div className="loading-center">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            )
+                        }
+                        if (error) {
+                            return 'error!'
+                        }
+                        data = data.orderbyprops
+                        console.log(data)
+                        return (
+                            <div>
+                                {
+                                    data.length === 0?
+                                        '还没有这种订单'
+                                        :
+                                        <div>还未展示</div>
+                                }
+                            </div>
+                        )
+                    }
+                }
+            </Query>
         )
     }
 }
@@ -218,7 +277,34 @@ class Commented extends Component {
 
     render() {
         return (
-            <div>Commented</div>
+            <Query query={gql(orderbyprops)} variables={{orderStatus: '3'}}>
+                {
+                    ({loading, error, data}) => {
+                        if (loading) {
+                            return (
+                                <div className="loading-center">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            )
+                        }
+                        if (error) {
+                            return 'error!'
+                        }
+                        data = data.orderbyprops
+                        console.log(data)
+                        return (
+                            <div>
+                                {
+                                    data.length === 0?
+                                        '还没有这种订单'
+                                        :
+                                        <div>还未展示</div>
+                                }
+                            </div>
+                        )
+                    }
+                }
+            </Query>
         )
     }
 }

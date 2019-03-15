@@ -324,33 +324,33 @@ const order_by_id = `
 
 const orderProduct_by_props = `
     query orderProductbyprops($order_id: ID) {
-    orderProductbyprops: orderProduct_by_props(order_id: $order_id) {
-        updatedAt
-        productColor
-        unit
-        product_id {
+        orderProductbyprops: orderProduct_by_props(order_id: $order_id) {
             updatedAt
+            productColor
             unit
-            name
+            product_id {
+                updatedAt
+                unit
+                name
+                createdAt
+                status
+                id
+                intro
+                price
+                img
+                stock
+            }
+            productSize
+            orderPay
             createdAt
-            status
+            productImg
+            productName
+            productPrice
             id
-            intro
-            price
-            img
-            stock
+            count
+            productPay
         }
-        productSize
-        orderPay
-        createdAt
-        productImg
-        productName
-        productPrice
-        id
-        count
-        productPay
     }
-}
 `
 
 const create_order = `
