@@ -110,7 +110,7 @@ class DetailRender extends Component {
                 <div className='detail-simple-show'>
                     {/*<div className='detail-img' style={{backgroundImage: "url('"+ img + "')"}}/>*/}
                     <img className='detail-img' src={img} alt="商品图片"/>
-                    <div className='detail-intro'>
+                    <div className='detail-intro-content'>
                         <div className='detail-name detail-padding'>{name}</div>
                         <div className='detail-intro detail-padding'>{intro}</div>
                         <div className='detail-price detail-padding'>
@@ -132,7 +132,15 @@ class DetailRender extends Component {
                         <span className='detail-bottom-icon border-right' onClick={()=>{this.props.history.push({pathname: '/home'})}}>
                             <div className='detail-icon detail-icon-shop'/>
                         </span>
-                        <span className='detail-bottom-icon' onClick={()=>{this.props.history.push({pathname: '/cart'})}}>
+                        <span className='detail-bottom-icon'
+                              onClick={()=>{
+                                  this.props.history.push({
+                                      pathname: '/cart',
+                                      updateData:true,
+                                      tabHidden:false
+                                  })
+                              }}
+                        >
                             <div className='detail-icon detail-icon-cart'/>
                             <Badge text={cartCount} overflowCount={90} hot>
                                  <span style={{display: 'inline-block' }} />

@@ -20,12 +20,12 @@ class All extends Component {
     }
 
     componentWillMount() {
-        // console.log('cartAll componentWillMount',this.props)
+        console.log('cartAll componentWillMount',this.props)
         this.getHash()
     }
 
     componentDidMount() {
-        // console.log('cartAll componentDidMount',this.props)
+        console.log('cartAll componentDidMount',this.props)
         let state = this.props.history.location.state
         let updateData = state ? state.updateData : false
         if(updateData){
@@ -86,7 +86,7 @@ class All extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        // console.log('cart all data',data)
+                        console.log('cart all data',data)
 
                         return (
                             <div className='cart-wrap'>
