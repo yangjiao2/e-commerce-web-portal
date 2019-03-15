@@ -262,6 +262,66 @@ const orderbyprops = `
         }
     }
 `
+
+const order_by_id = `
+    query orderbyid($id: ID) {
+        orderbyid: order_by_id(id: $id) {
+            deliveryTime
+            remark
+            updatedAt
+            orderLogistics_id {
+                updatedAt
+                logisticsFee
+                expressId
+                createdAt
+                consigneeTel
+                id
+                consignAddress
+                LogisticsStatus
+                consigneeName
+            }
+            payTime
+            orderTotalPay
+            createdAt
+            orderStatus
+            userAddress_id {
+                address
+                updatedAt
+                telephone
+                default
+                city
+                username
+                postcode
+                createdAt
+                deletedAt
+                id
+                area
+                province
+            }
+            id
+            orderShipFee
+            count
+            user_id {
+                email
+                updatedAt
+                password
+                telephone
+                username
+                createdAt
+                openid
+                id
+            }
+            productTotalPay
+            orderPay_id {
+                id
+                totalPay
+                transactionId
+                payTime
+            }
+        }
+    }
+`
+
 const orderProduct_by_props = `
     query orderProductbyprops($order_id: ID) {
     orderProductbyprops: orderProduct_by_props(order_id: $order_id) {
@@ -536,6 +596,7 @@ export {
     userAddressbyprops,
     user_default_address,
     orderbyprops,
+    order_by_id,
     orderProduct_by_props,
     create_order,
     create_order_product,
