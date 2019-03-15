@@ -79,7 +79,7 @@ class Search extends Component {
     }
 
     onChange = (value) => {
-        this.setState({ value });
+        this.setState({value});
     };
 
     render() {
@@ -89,9 +89,9 @@ class Search extends Component {
                     ref={ref => this.autoFocusInst = ref}
                     placeholder="请在此处输入订单编号"
                     value={this.state.value}
-                    onSubmit={searchValue => this.setState({ searchValue })}
-                    onCancel={() => this.setState({ value: '' })}
-                    onChange={value => this.setState({ value })}
+                    onSubmit={searchValue => this.setState({searchValue})}
+                    onCancel={() => this.setState({value: ''})}
+                    onChange={value => this.setState({value})}
                 />
                 <SearchQuery id={this.state.searchValue}/>
             </div>
@@ -102,25 +102,28 @@ class Search extends Component {
 class SearchQuery extends Component {
     constructor(props) {
         super(props)
-        this.state = {
+        this.state = {}
+    }
 
+    statusRender = (status) => {
+        switch (status) {
+            case '0':
+                return '等待付款'
+            case '1':
+                return '等待发货'
+            case '2':
+                return '等待收货'
+            case '3':
+                return '完成'
+            default:
+                return '等待确认'
         }
-        console.log('mount')
-    }
-
-    componentWillMount() {
-        console.log('componentWillMount')
-    }
-
-    componentWillReceiveProps(next) {
-        console.log(next)
-        console.log('componentWillReceiveProps')
     }
 
     render() {
         let {id} = this.props
         return (
-            <Query query={gql(order_by_id)} variables={{id}}>
+            <Query query={gql(order_by_id)} variables={{id}} className='query-result'>
                 {
                     ({loading, error, data}) => {
                         if (loading) {
@@ -133,10 +136,47 @@ class SearchQuery extends Component {
                         if (error) {
                             return 'error!'
                         }
-                        console.log(data.orderbyid)
-                        return (
-                            <div>1</div>
-                        )
+                        data = data.orderbyid
+                        if (data === null) {
+                            return (
+                                <div>请输入正确的订单号</div>
+                            )
+                        } else {
+                            let {id, orderStatus, orderTotalPay, productTotalPay, count, remark, user_id, userAddress_id, createdAt, orderLogistics_id, orderPay_id} = data
+                            let {telephoneUser, usernameUser, email} = user_id
+                            let {province, city, area, address, telephone, username} = userAddress_id
+                            let expressId, logisticsFee, LogisticsStatus, expressCreatedAt
+                            if (orderLogistics_id !== null) {
+                                expressId = orderLogistics_id.expressId
+                                logisticsFee = orderLogistics_id.logisticsFee
+                                LogisticsStatus = orderLogistics_id.LogisticsStatus
+                                expressCreatedAt = orderLogistics_id.createdAt
+                            }
+                            if(orderPay_id !== null) {
+
+                            }
+
+                            return (
+                                <div>
+                                    <div>ID：{id}</div>
+                                    <div>状态：{this.statusRender(orderStatus)}</div>
+                                    <div>备注：{remark}</div>
+                                    <div>订单总计价格：{orderTotalPay}</div>
+                                    <div>产品总量：{count}</div>
+                                    <div>产品总计价格：{productTotalPay}</div>
+                                    <div>订单人名称：{username}</div>
+                                    <div>订单电话：{telephone}</div>
+                                    <div>订单地址：{province + city + area + address}</div>
+                                    <div>用户名称：{usernameUser}</div>
+                                    <div>用户邮箱：{email}</div>
+                                    <div>用户电话：{telephoneUser}</div>
+                                    <div>物流ID：{expressId}</div>
+                                    <div>物流费用：{logisticsFee}</div>
+                                    <div>物流状态：{LogisticsStatus}</div>
+                                    <div>发货时间：{expressCreatedAt}</div>
+                                </div>
+                            )
+                        }
                     }
                 }
             </Query>
