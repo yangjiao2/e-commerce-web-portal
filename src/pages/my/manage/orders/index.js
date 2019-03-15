@@ -78,7 +78,7 @@ class Search extends Component {
         this.autoFocusInst.focus();
     }
 
-    onChange= (value) => {
+    onChange = (value) => {
         this.setState({ value });
     };
 
@@ -105,7 +105,16 @@ class SearchQuery extends Component {
         this.state = {
 
         }
-        console.log('mount / mount again')
+        console.log('mount')
+    }
+
+    componentWillMount() {
+        console.log('componentWillMount')
+    }
+
+    componentWillReceiveProps(next) {
+        console.log(next)
+        console.log('componentWillReceiveProps')
     }
 
     render() {
