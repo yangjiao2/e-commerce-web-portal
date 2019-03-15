@@ -136,8 +136,10 @@ class DetailRender extends Component {
                               onClick={()=>{
                                   this.props.history.push({
                                       pathname: '/cart',
-                                      updateData:true,
-                                      tabHidden:false
+                                      state:{
+                                          updateData:true,
+                                          tabHidden:false
+                                      }
                                   })
                               }}
                         >
@@ -277,7 +279,7 @@ class SelectModal extends Component {
 
         this.props.changeDetailState('openSelect',false)
         create_userCart({variables:cartContent}).then((data)=>{
-            console.log('create_userCart data',data)
+            // console.log('create_userCart data',data)
             let cartCount = JSON.parse(localStorage.getItem("cartCount")) + count
             this.props.changeDetailState('cartCount',cartCount)
             message.success('成功添加至购物车')
@@ -343,7 +345,7 @@ class SelectModal extends Component {
                 visible={this.props.openSelect}
                 onClose={()=>this.props.changeDetailState('openSelect',false)}
                 animationType="slide-up"
-                afterClose={() => { console.log('close model')}}
+                // afterClose={() => { console.log('close model')}}
             >
                 <div className="popup-box" >
                     <div className="main-goods-box">

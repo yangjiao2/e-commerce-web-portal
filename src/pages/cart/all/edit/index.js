@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {message} from 'antd'
-import {Checkbox, WhiteSpace, Modal, Toast} from 'antd-mobile'
+import {Checkbox, WhiteSpace, Modal} from 'antd-mobile'
 import classNames from 'classnames'
 import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
@@ -98,7 +98,7 @@ class CartEdit extends Component {
                         // console.log('delete data',data)
                         let num = data.data.delete_userCart.replace(/[^0-9]/ig,"")
                         if(num){
-                            Toast.info('删除成功', 1)
+                            message.success('删除成功')
                             let cartCount = JSON.parse(localStorage.getItem("cartCount")) - num
                             localStorage.setItem("cartCount",JSON.stringify(cartCount))
 
@@ -284,6 +284,8 @@ class CartEdit extends Component {
                                             onClick={()=>{
                                                 if(selectedCount){
                                                     this.delete(delete_userCart_by_id)
+                                                }else {
+                                                    message.warning('请选择商品！')
                                                 }
                                             }}
                                         >
