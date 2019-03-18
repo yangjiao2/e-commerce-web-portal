@@ -2,8 +2,13 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {message} from 'antd'
 import {Checkbox, WhiteSpace} from 'antd-mobile'
-import classNames from 'classnames' 
+import {Mutation} from "react-apollo"
+import gql from "graphql-tag"
+import classNames from 'classnames'
+import moment from 'moment'
+import debounce from 'lodash.debounce'
 
+import {update_userCart} from "../../../../utils/gql"
 import '../index.css'
 
 class CartDetail extends Component {
@@ -14,7 +19,8 @@ class CartDetail extends Component {
             totalPrice:0,
             isSelectAll:false,
             selectedCount:0
-        } 
+        }
+        this.updateCartProductCount = debounce(this.updateCartProductCount, 5000)
     }
 
     //获取数据
@@ -49,12 +55,52 @@ class CartDetail extends Component {
         }
     }
 
+    // 判断数量update类型
+    handleChangedCount = (e,type,i,updateCount) => {
+        e.persist()
+        let result
+        switch (type) {
+            case 'augment':
+                result = this.augment(e,i)
+                break
+            case  'input':
+                result = this.getInputValue(e,i)
+                break
+            case 'reduce':
+                result = this.reduce(e,i)
+                break
+            default:
+                console.log('handleChangedCount type error')
+                break
+        }
+
+        if(result.id) {
+            let {id, count} = result
+            this.updateCartProductCount(id, count, updateCount)
+        }
+    }
+
+    // 使用函数防抖5s后请求更新数量
+    updateCartProductCount = (id,count,updateCount) => {
+        // console.log('updateCartProductCount id count',id,count)
+        let updatedAt = moment().format('YYYY-MM-DD HH:mm:ss')
+        const update = {
+            id,
+            count,
+            updatedAt
+        }
+        updateCount({variables:update})
+    }
+
     //获取输入框的值
-    getInputValue=(e,i)=>{
+    getInputValue = (e,i) =>{
+        let id = '', count = 0
         this.setState({
             cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    item.count=e.target.value
+                    item.count = e.target.value
+                    id = item.id
+                    count = item.count
                     return item
                 }else {
                     return item
@@ -62,40 +108,55 @@ class CartDetail extends Component {
             })
         }) 
         this.sumPrice(true)
+        return {
+            id, count
+        }
     } 
 
     // 增加
-    augment=(e,i)=>{
+    augment = (e,i) =>{
+        let id = '', count = 0
         this.setState({
             cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    item.count=item.count*1+1
+                    item.count = item.count*1 + 1
+                    id = item.id
+                    count = item.count
                     return item
                 }else {
                     return item
                 }
             })
-        }) 
+        })
         this.sumPrice(true)
+        return {
+            id, count
+        }
     } 
 
     // 减少
-    reduce=(e,i)=> {
+    reduce = (e,i) => {
+        let id = '', count = 0
         this.setState({
             cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
-                    item.count=item.count*1-1
+                    item.count = item.count*1 - 1
+                    id = item.id
+                    count = item.count
                     return item
                 }else {
                     return item
                 }
             })
-        }) 
+        })
         this.sumPrice(true)
+        return {
+            id, count
+        }
     } 
 
     //删除
-    del=(e,i)=> {
+    del = (e,i) => {
         this.setState({
             cartList:this.state.cartList.filter((item,index)=>{
                 if(index!==i){
@@ -111,7 +172,7 @@ class CartDetail extends Component {
     } 
 
     // 改变选择
-    changeCheckedStatus=(e,i)=>{
+    changeCheckedStatus = (e,i) => {
         this.setState({
             cartList:this.state.cartList.map((item,index)=>{
                 if(index===i){
@@ -138,7 +199,7 @@ class CartDetail extends Component {
     } 
 
     //全选或全不选,判断全选状态
-    checkedAll=(e,check)=>{
+    checkedAll = (e,check) => {
         if(e) e.stopPropagation()
         let checked = e.target ? e.target.checked : check 
 
@@ -163,13 +224,14 @@ class CartDetail extends Component {
     } 
 
     //计算总合计
-    sumPrice=(update)=>{
+    sumPrice = (update) => {
         if(update) localStorage.setItem("cartList",JSON.stringify(this.state.cartList))
 
+        let {cartList} = this.state
         let totalPrice=0, selectedCount=0, checkedCount=0, cartCount=0
-        let cartListLength = this.state.cartList.length
+        let cartListLength = cartList.length
         let isSelectAll = false
-        this.state.cartList.forEach((item,index)=>{
+        cartList.forEach((item,index)=>{
             cartCount+=item.count
             if(item.checked===true){
                 totalPrice+=item.count*item.product_id.price
@@ -189,7 +251,7 @@ class CartDetail extends Component {
     } 
 
     //结算传值
-    settleAccounts=()=>{
+    settleAccounts = () => {
         let shopping=[] 
         this.state.cartList.forEach((item,index)=>{
             if(item.checked===true){
@@ -245,28 +307,34 @@ class CartDetail extends Component {
                                             <div>¥ {item.product_id.price}</div>
                                         </div>
                                         <div className="cart-list-count">
-                                            <div className="selected">
-                                                <button
-                                                    className={classNames({
-                                                        'selected_button-white': true,
-                                                        'selected_button-disabled': item.count <= 1
-                                                    })}
-                                                    // disabled={item.count <= 1}
-                                                    onClick={(e)=>{
-                                                        if(item.count > 1){
-                                                            this.reduce(e,index)
-                                                        }else {
-                                                            message.warning('数量不能小于1个')
-                                                        }
-                                                    }}
-                                                >-</button>
-                                                <input className="selected_input" type="text"
-                                                       min={1} step={1} max={item.specificationStock_id.stock}
-                                                       value={item.count}
-                                                       onChange={(e)=>{this.getInputValue(e,index)}}
-                                                />
-                                                <button className="selected_button-white" onClick={(e)=>{this.augment(e,index)}}>+</button>
-                                            </div>
+                                            <Mutation mutation={gql(update_userCart)}
+                                                      onError={error=>console.log('error',error)}
+                                            >
+                                                {(update_userCart,{ loading, error }) => (
+                                                    <div className="selected">
+                                                        <button
+                                                            className={classNames({
+                                                                'selected_button-white': true,
+                                                                'selected_button-disabled': item.count <= 1
+                                                            })}
+                                                            // disabled={item.count <= 1}
+                                                            onClick={(e)=>{
+                                                                if(item.count > 1){
+                                                                    this.handleChangedCount(e,'reduce',index,update_userCart)
+                                                                }else {
+                                                                    message.warning('数量不能小于1个')
+                                                                }
+                                                            }}
+                                                        >-</button>
+                                                        <input className="selected_input" type="text"
+                                                               min={1} step={1} max={item.specificationStock_id.stock}
+                                                               value={item.count}
+                                                               onChange={(e)=>{this.handleChangedCount(e,'input',index,update_userCart)}}
+                                                        />
+                                                        <button className="selected_button-white" onClick={(e)=>{this.handleChangedCount(e,'augment',index,update_userCart)}}>+</button>
+                                                    </div>
+                                                )}
+                                            </Mutation>
                                         </div>
                                     </div>
                                     <WhiteSpace size="md" />

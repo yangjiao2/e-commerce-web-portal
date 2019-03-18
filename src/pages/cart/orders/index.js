@@ -73,16 +73,6 @@ class CartOrders extends Component {
         })
     }
 
-    onSubmitOrderAndProduct1 = (create_order,create_order_product) => {
-        let ls = [{"id": "4"},{"id": "5"}]
-        ls.forEach((item,index)=>{
-            console.log('ls item',item)
-            create_order({variables:item}).then(()=>{
-                console.log('ls ok',index)
-            })
-        })
-    }
-
     onSubmitOrderAndProduct = (create_order,create_order_product) => {
         let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
         let {totalCount, totalPrice, remark, delivery} = this.state

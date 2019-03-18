@@ -163,6 +163,33 @@ const cart_by_userid = `
     }
 `
 
+const update_userCart = `
+    mutation updateuserCart($id: ID, $specificationStock_id: ID, $count: Int, $updatedAt: String, $where: userCart_filter) {
+        updateuserCart: update_userCart(id: $id specificationStock_id: $specificationStock_id count: $count updatedAt: $updatedAt where: $where) {
+            result
+            userCart {
+                id
+                product_id {
+                    id
+                }
+                specificationStock_id {
+                    updatedAt
+                    color
+                    size
+                    slideImg
+                    status
+                    id
+                    detailImg
+                    stock
+                }
+                count
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`
+
 const delete_userCart_by_id = `
     mutation delete_userCart($id: [String]) {
         delete_userCart(where: {
@@ -619,6 +646,7 @@ export {
     productAndSpec_by_id,
     create_userCart,
     cart_by_userid,
+    update_userCart,
     delete_userCart_by_id,
     userAddressbyprops,
     user_default_address,
