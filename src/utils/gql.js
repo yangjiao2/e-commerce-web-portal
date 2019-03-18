@@ -93,6 +93,8 @@ const productAndSpec_by_id = `
             id
             color
             size
+            slideImg
+            detailImg
             stock
             status
         }
@@ -216,22 +218,25 @@ const user_default_address = `
 `
 
 const orderbyprops = `
-    query orderbyprops($deliveryTime: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-        orderbyprops: order_by_props(deliveryTime: $deliveryTime updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
-            deliveryTime
+    query orderbyprops($updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+        orderbyprops: order_by_props(updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
             updatedAt
             orderLogistics_id {
+                deliveryTime
+                serviceStore
                 updatedAt
                 logisticsFee
                 expressId
                 createdAt
+    
                 consigneeTel
                 id
+                expressName
                 consignAddress
                 LogisticsStatus
+    
                 consigneeName
             }
-            payTime
             orderTotalPay
             createdAt
             orderStatus
@@ -250,14 +255,19 @@ const orderbyprops = `
                 province
             }
             id
-            orderShipFee
             count
             productTotalPay
             orderPay_id {
-                id
-                totalPay
+                updatedAt
+                tradeNo
                 transactionId
-                payTime
+                time
+                createdAt
+                openid
+                id
+                totalFee
+    
+                cashFee
             }
         }
     }
@@ -266,21 +276,24 @@ const orderbyprops = `
 const order_by_id = `
     query orderbyid($id: ID) {
         orderbyid: order_by_id(id: $id) {
-            deliveryTime
             remark
             updatedAt
             orderLogistics_id {
+                deliveryTime
+                serviceStore
                 updatedAt
                 logisticsFee
                 expressId
                 createdAt
+    
                 consigneeTel
                 id
+                expressName
                 consignAddress
                 LogisticsStatus
+    
                 consigneeName
             }
-            payTime
             orderTotalPay
             createdAt
             orderStatus
@@ -299,7 +312,6 @@ const order_by_id = `
                 province
             }
             id
-            orderShipFee
             count
             user_id {
                 email
@@ -313,10 +325,16 @@ const order_by_id = `
             }
             productTotalPay
             orderPay_id {
-                id
-                totalPay
+                updatedAt
+                tradeNo
                 transactionId
-                payTime
+                time
+                createdAt
+                openid
+                id
+                totalFee
+    
+                cashFee
             }
         }
     }
@@ -354,27 +372,30 @@ const orderProduct_by_props = `
 `
 
 const create_order = `
-    mutation createorder($deliveryTime: String, $remark: String, $updatedAt: String, $orderLogistics_id: ID, $payTime: String, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $orderShipFee: Float, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, 
-                         $logisticsFee: Float, $expressId: String, $order_id: ID, $consigneeTel: String, $orderLogisticsId: ID!, $consignAddress: String, $LogisticsStatus: String, $consigneeName: String
+    mutation createorder($remark: String, $updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, 
+                         $deliveryTime: String, $serviceStore: String, $logisticsFee: Float, $expressId: String, $order_id: ID, $consigneeTel: String, $orderLogisticsId: ID!, $expressName: String, $consignAddress: String, $LogisticsStatus: String, $consigneeName: String
                          $deleteId: [String]) {
-        createorder: create_order(deliveryTime: $deliveryTime remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id payTime: $payTime orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id orderShipFee: $orderShipFee count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+        createorder: create_order(remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
             result
             order {
-                deliveryTime
                 remark
                 updatedAt
                 orderLogistics_id {
+                    deliveryTime
+                    serviceStore
                     updatedAt
                     logisticsFee
                     expressId
                     createdAt
+        
                     consigneeTel
                     id
+                    expressName
                     consignAddress
-                    LogisticsStatus    
+                    LogisticsStatus
+        
                     consigneeName
                 }
-                payTime
                 orderTotalPay
                 createdAt
                 orderStatus
@@ -393,42 +414,47 @@ const create_order = `
                     province
                 }
                 id
-                orderShipFee
                 count
                 productTotalPay
                 orderPay_id {
-                    id        
-                    totalPay
+                    updatedAt
+                    tradeNo
                     transactionId
-                    payTime
+                    time
+                    createdAt
+                    openid
+                    id
+                    totalFee
+        
+                    cashFee
                 }
             } 
         }
-        createorderLogistics: create_orderLogistics(updatedAt: $updatedAt logisticsFee: $logisticsFee expressId: $expressId createdAt: $createdAt order_id: $order_id consigneeTel: $consigneeTel id: $id consignAddress: $consignAddress LogisticsStatus: $LogisticsStatus user_id: $user_id consigneeName: $consigneeName) {
+        createorderLogistics: create_orderLogistics(deliveryTime: $deliveryTime serviceStore: $serviceStore updatedAt: $updatedAt logisticsFee: $logisticsFee expressId: $expressId createdAt: $createdAt order_id: $order_id consigneeTel: $consigneeTel id: $orderLogisticsId expressName: $expressName consignAddress: $consignAddress LogisticsStatus: $LogisticsStatus user_id: $user_id consigneeName: $consigneeName) {
             result
             orderLogistics {
+                deliveryTime
+                serviceStore
                 updatedAt
                 logisticsFee
                 expressId
                 createdAt
                 order_id {
-                    deliveryTime
                     remark
                     updatedAt
         
-                    payTime
                     orderTotalPay
                     createdAt
                     orderStatus
         
                     id
-                    orderShipFee
                     count
         
                     productTotalPay
                 }
                 consigneeTel
                 id
+                expressName
                 consignAddress
                 LogisticsStatus
                 user_id {
@@ -541,8 +567,8 @@ const create_shop = `
 `
 
 const create_product = `
-    mutation createproduct($recommend: Int, $updatedAt: String, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID!, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
-        createproduct: create_product(recommend: $recommend updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
+    mutation createproduct($recommend: Int, $updatedAt: String, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID!, $intro: String, $discountRate: Float, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+        createproduct: create_product(recommend: $recommend updatedAt: $updatedAt unit: $unit name: $name createdAt: $createdAt status: $status id: $id intro: $intro discountRate: $discountRate price: $price category_id: $category_id img: $img stock: $stock) {
             result
             product {
                 recommend
@@ -553,6 +579,7 @@ const create_product = `
                 status
                 id
                 intro
+                discountRate
                 price
                 img
                 stock

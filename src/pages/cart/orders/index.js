@@ -85,7 +85,7 @@ class CartOrders extends Component {
 
     onSubmitOrderAndProduct = (create_order,create_order_product) => {
         let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
-        let {totalCount, totalPrice, remark} = this.state
+        let {totalCount, totalPrice, remark, delivery} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let ordersAddress = JSON.parse(sessionStorage.getItem('ordersAddress'))
         let {id:userAddress_id, telephone, username, province, city, area, address} = ordersAddress
@@ -96,16 +96,13 @@ class CartOrders extends Component {
 
         const orderContent = {
              remark,
-             deliveryTime: "",
              updatedAt: "",
              orderLogistics_id: orderLogisticsId,
-             payTime: "",
              orderTotalPay: totalPrice,
              createdAt,
              orderStatus: "0",
              userAddress_id,
              id:orderId,
-             orderShipFee: 0,
              count: totalCount,
              user_id,
              productTotalPay: totalPrice,
@@ -115,6 +112,9 @@ class CartOrders extends Component {
 
         const orderLogistics = {
             updatedAt: "",
+            deliveryTime: "",
+            serviceStore: "",
+            expressName:delivery[0],
             logisticsFee: 0.0,
             expressId: "",
             createdAt,

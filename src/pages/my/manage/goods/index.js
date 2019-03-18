@@ -246,6 +246,7 @@ class AddGoods extends Component {
                                         stock,
                                         intro,
                                         price,
+                                        discountRate:100,
                                         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
                                         updatedAt: ''
                                     }
