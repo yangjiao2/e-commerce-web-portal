@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-import './index.css'
-import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
-import {Row, Col} from 'antd'
 import {withRouter} from 'react-router-dom'
-import {orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
+import {Row, Col} from 'antd'
+import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
+
+import {orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
+import './index.css'
 
 class Display extends Component {
     constructor(props) {
@@ -117,54 +118,10 @@ class DisplayRender extends Component {
         }
     }
 
-    orderCardBottomRender = (order) => {
-        let {orderStatus} = this.props
-        switch (orderStatus) {
-            case '0':
-                return (
-                    <div className='order-card-bottom'>
-                        <div
-                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;需付款:
-                        </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
-                    </div>
-                )
-            case '1':
-                return (
-                    <div className='order-card-bottom'>
-                        <div
-                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
-                        </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
-                    </div>
-                )
-            case '2':
-                return (
-                    <div className='order-card-bottom'>
-                        <div
-                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
-                        </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
-                    </div>
-                )
-            case '3':
-                return (
-                    <div className='order-card-bottom'>
-                        <div
-                            className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;实付款:
-                        </div>
-                        <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
-                    </div>
-                )
-            default:
-                return (
-                    <div>1</div>
-                )
-        }
-    }
-
     render() {
-        let {data} = this.props
+        let {data, orderStatus} = this.props
+        let content = orderStatus === '0' ? '需付款' : '实付款'
+
         return (
             <div className='content-wrap'>
                 {
@@ -175,7 +132,7 @@ class DisplayRender extends Component {
                         :
                         data.map(order => (
                             <div key={order.id} className='order-card'>
-                                <div className='order-card-top'>JD</div>
+                                <div className='order-card-top'>订单号: {order.id}</div>
 
                                 <Query query={gql(orderProduct_by_props)} variables={{order_id: order.id}}>
                                     {
@@ -211,7 +168,12 @@ class DisplayRender extends Component {
                                     }
                                 </Query>
 
-                                {this.orderCardBottomRender(order)}
+                                <div className='order-card-bottom'>
+                                    <div
+                                        className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;{content}:
+                                    </div>
+                                    <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
+                                </div>
 
                                 <ButtonGroupRender orderStatus={this.props.orderStatus}/>
                             </div>

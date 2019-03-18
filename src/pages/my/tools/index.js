@@ -16,7 +16,7 @@ class Tools extends Component {
         if (location && location.state) {
             this.props.history.push({
                 pathname: '/my/tools/' + location.state.page,
-                state: {}
+                state: location.state
             })
         }
     }

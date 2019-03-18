@@ -52,6 +52,7 @@
 
 .cart-list-intro :nth-child(2) {
     font-size: 12px;
+    color: gray;
 }
 
 .cart-list-intro :last-child {

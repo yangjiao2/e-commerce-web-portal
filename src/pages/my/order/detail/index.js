@@ -1,12 +1,13 @@
 import {Component} from "react"
 import React from "react"
-import './index.css'
-import {NavBar} from 'antd-mobile'
 import {Row, Col, Icon} from 'antd'
-import {orderProduct_by_props} from "../../../../utils/gql"
+import {NavBar} from 'antd-mobile'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
+
+import {orderProduct_by_props} from "../../../../utils/gql"
 import {ButtonGroupRender} from '../display'
+import './index.css'
 
 class Detail extends Component {
     constructor(props) {
@@ -68,27 +69,20 @@ class Detail extends Component {
     productsRender = (data) => {
         return (
             data.map(data => (
-                <div
-                    key={data.id}
-                    className='detail-good-wrap'
-                >
-                    <Row style={{width: '100%'}}>
-                        <Col span={6} style={{height: '100px'}}>
-                            <div className='order-product-img'
-                                 style={{backgroundImage: `url('${data.product_id.img}')`}}/>
-                        </Col>
-                        <Col span={16} offset={2}>
-                            <div className='order-product-name'>{data.product_id.name}</div>
-                            <div className='order-product-others'>
-                                <div>
-                                    数量：{data.count}&nbsp;规格：{data.productColor}
-                                </div>
-                                <div>
-                                    尺寸：{data.productSize}
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
+                <div key={'orders-detail-'+data.id}>
+                    <div className="cart-list">
+                        <div className="cart-list-image">
+                            <img src={data.product_id.img} alt=""/>
+                        </div>
+                        <div className="cart-orders-intro">
+                            <div className='hide-extra-text'>{data.product_id.name}</div>
+                            <div>{data.productColor}  {data.productSize}</div>
+                            <div>¥ {data.product_id.price}</div>
+                        </div>
+                        <div className="cart-orders-count">
+                            x {data.count}
+                        </div>
+                    </div>
                 </div>
             ))
         )
@@ -96,6 +90,7 @@ class Detail extends Component {
 
     render() {
         let {data} = this.state
+        let {username, telephone, province, city, area, address} = data.userAddress_id
         return (
             <div>
                 <div className='detail-wrap'>
@@ -125,17 +120,17 @@ class Detail extends Component {
                                     </Col>
                                     <Col span={20}>
                                         <div className='detail-address-content-username-phone'>
-                                            {data.userAddress_id.username}&nbsp;&nbsp;{data.userAddress_id.telephone}
+                                            {username}&nbsp;&nbsp;{telephone}
                                         </div>
                                         <div>
-                                            地址：{data.userAddress_id.province + data.userAddress_id.city + data.userAddress_id.area + data.userAddress_id.address}
+                                            地址：{province + city + area + address}
                                         </div>
                                     </Col>
                                 </Row>
                             </div>
                         </div>
                         <div className='detail-goods-wrap'>
-                            <div className='detail-store-name'>JD</div>
+                            <div className='detail-store-name'>订单号: {data.id}</div>
                             <Query query={gql(orderProduct_by_props)} variables={{order_id: data.id}}>
                                 {
                                     ({loading, error, data}) => {

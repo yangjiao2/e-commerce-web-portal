@@ -3,7 +3,10 @@
     padding: 10px;
     font-size: 16px;
     color: black;
+    display: flex;
     border: 1px solid #F3F3F3;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .address-add {
@@ -18,6 +21,15 @@
     box-shadow: 3px -1px 1px #ebedf0;
     background-color: #f44;
     color: white;
+}
+
+.address-info{
+    width: 85%;
+}
+
+.address-edit {
+    width: 15%;
+    text-align: center;
 }
 
 .address-username {

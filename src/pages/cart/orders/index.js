@@ -234,12 +234,10 @@ class CartOrders extends Component {
                             {
                                 cartList.map((item, index) => {
                                     return (
-                                        <div key={index}>
+                                        <div key={'cart-orders-'+item.id}>
                                             <div className="cart-list">
                                                 <div className="cart-list-image">
-                                                    <img
-                                                        src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"}
-                                                        alt=""/>
+                                                    <img src={item.product_id.img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt=""/>
                                                 </div>
                                                 <div className="cart-orders-intro">
                                                     <div className='hide-extra-text'>{item.product_id.name}</div>
@@ -382,7 +380,8 @@ const OrdersAddress =({props,selectAddress}) => {
                     props.history.push({
                         pathname:'/my/tools',
                         state: {
-                            page: 'address'
+                            page: 'address',
+                            prePage: 'orders'
                         }})
                 }}>
                 <div>

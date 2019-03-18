@@ -106,14 +106,19 @@ class AddressRender extends Component {
     }
 
     changeOrdersAddress =(address) => {
-        console.log('address',address)
-        sessionStorage.setItem('ordersAddress',JSON.stringify(address))
+        // console.log('address',address,this.props.history)
+        let {history} = this.props
+        let prePage = history.location.state.prePage
 
-        this.props.history.go(-2)
+        if(prePage){
+            sessionStorage.setItem('ordersAddress',JSON.stringify(address))
+            this.props.history.go(-2)
+        }
     }
 
     render() {
         let {changePage, changeAddress, defaultAddress, otherAddress} = this.props
+        let {username, telephone, province, city, area, address} = defaultAddress
 
         return (
             <div>
@@ -126,50 +131,53 @@ class AddressRender extends Component {
                 </div>
 
                 <div className='default-address'>
-                    <div className='address-card' onClick={() => this.changeOrdersAddress(defaultAddress)}>
-                        <Row className='address-username-telephone'>
-                            <Col span={6} className='address-username ellipsis'>{defaultAddress.username}</Col>
-                            <Col span={14} className='address-phone ellipsis'>{defaultAddress.telephone}&nbsp;&nbsp;
-                                <span className='address-label'>默认</span></Col>
-                        </Row>
-                        <Row>
-                            <Col span={20}
-                                 className='address-address'>{defaultAddress.province + defaultAddress.city + defaultAddress.area + defaultAddress.address}</Col>
-                            <Col span={2} offset={2}>
-                                <Icon
-                                    type="edit"
-                                    style={{fontSize: 14}}
-                                    onClick={()=>{
-                                        changePage(true)
-                                        changeAddress(defaultAddress)
-                                    }}
-                                />
-                            </Col>
-                        </Row>
+                    <div className='address-card'>
+                        <div className='address-info' onClick={() => this.changeOrdersAddress(defaultAddress)}>
+                            <Row className='address-username-telephone'>
+                                <Col span={6} className='address-username ellipsis'>{username}</Col>
+                                <Col span={14} className='address-phone ellipsis'>{telephone}&nbsp;&nbsp;
+                                    <span className='address-label'>默认</span></Col>
+                            </Row>
+                            <Row>
+                                <Col span={24} className='address-address'>{province + city + area + address}</Col>
+                            </Row>
+                        </div>
+                        <div className='address-edit'>
+                            <Icon
+                                type="edit"
+                                style={{fontSize: 14}}
+                                onClick={()=>{
+                                    changePage(true)
+                                    changeAddress(address)
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <div className='other-address'>
                     {otherAddress.map(address => {
                         return (
-                            <div key={address.id} className='address-card' onClick={() => this.changeOrdersAddress(address)}>
-                                <Row className='address-username-telephone'>
-                                    <Col span={6} className='address-username ellipsis'>{address.username}</Col>
-                                    <Col span={14} className='address-phone ellipsis'>{address.telephone}</Col>
-                                </Row>
-                                <Row>
-                                    <Col span={20} className='address-address'>{address.province + address.city + address.area + address.address}</Col>
-                                    <Col span={2} offset={2}>
-                                        <Icon
-                                            type="edit"
-                                            style={{fontSize: 14}}
-                                            onClick={()=>{
-                                                changePage(true)
-                                                changeAddress(address)
-                                            }}
-                                        />
-                                    </Col>
-                                </Row>
+                            <div key={address.id} className='address-card'>
+                                <div className='address-info' onClick={() => this.changeOrdersAddress(address)}>
+                                    <Row className='address-username-telephone'>
+                                        <Col span={6} className='address-username ellipsis'>{address.username}</Col>
+                                        <Col span={14} className='address-phone ellipsis'>{address.telephone}</Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24} className='address-address'>{address.province + address.city + address.area + address.address}</Col>
+                                    </Row>
+                                </div>
+                                <div className='address-edit'>
+                                    <Icon
+                                        type="edit"
+                                        style={{fontSize: 14}}
+                                        onClick={()=>{
+                                            changePage(true)
+                                            changeAddress(address)
+                                        }}
+                                    />
+                                </div>
                             </div>
                         )
                     })}
