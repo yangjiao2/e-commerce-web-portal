@@ -4,6 +4,7 @@ import {Row, Col} from 'antd'
 import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
+import classNames from 'classnames'
 
 import {orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
 import './index.css'
@@ -119,11 +120,11 @@ class DisplayRender extends Component {
     }
 
     render() {
-        let {data, orderStatus} = this.props
+        let {data, orderStatus, button = true} = this.props
         let content = orderStatus === '0' ? '需付款' : '实付款'
 
         return (
-            <div className='content-wrap'>
+            <div className={classNames({'content-wrap': button})}>
                 {
                     data.length === 0 ?
                         <div>
@@ -175,7 +176,13 @@ class DisplayRender extends Component {
                                     <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
                                 </div>
 
-                                <ButtonGroupRender orderStatus={this.props.orderStatus}/>
+                                {
+                                    button?
+                                        <ButtonGroupRender orderStatus={this.props.orderStatus}/>
+                                        :
+                                        ''
+                                }
+
                             </div>
                         ))
                 }
@@ -229,5 +236,6 @@ const ButtonGroupRender = (props) => {
 
 export default withRouter(Display)
 export {
+    DisplayRender,
     ButtonGroupRender
 }
