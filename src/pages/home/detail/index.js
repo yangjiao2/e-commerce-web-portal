@@ -9,6 +9,7 @@ import moment from 'moment'
 
 import {productAndSpec_by_id, create_userCart} from "../../../utils/gql"
 import {idGen} from '../../../utils/func'
+import {getCookie} from "../../../utils/cookie"
 import './index.css'
 
 class Detail extends Component {
@@ -258,7 +259,7 @@ class SelectModal extends Component {
     // 添加至购物袋
     onCreateUserCart = (create_userCart) => {
         let id = idGen('cart')
-        let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
+        let user_id = getCookie('user_id')
         let {productData} = this.props
         let product_id = productData.productbyid.id
         let {count, selectColor, specList} = this.state

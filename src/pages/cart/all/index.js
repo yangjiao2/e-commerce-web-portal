@@ -6,9 +6,9 @@ import gql from "graphql-tag"
 import CartDetail from "./detail"
 import CartEdit from "./edit"
 import Empty from "../empty"
-import './index.css'
-
 import {cart_by_userid} from "../../../utils/gql"
+import {getCookie} from "../../../utils/cookie"
+import './index.css'
 
 class All extends Component {
     constructor(props) {
@@ -70,10 +70,11 @@ class All extends Component {
 
     render() {
         let {page} = this.state
+        let user_id = getCookie('user_id')
         // console.log('render',page,this.props)
 
         return (
-            <Query query={gql(cart_by_userid)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA"}}>
+            <Query query={gql(cart_by_userid)} variables={{user_id}}>
                 {
                     ({loading, error, data, refetch}) => {
                         if (loading) {

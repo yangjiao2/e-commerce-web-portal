@@ -3,6 +3,13 @@
     background: white;
 }
 
+.orders-address-add {
+    height: 50px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 50px;
+}
+
 .orders-address-label {
     width: 16%;
     float: left;
@@ -119,5 +126,3 @@
 .packup-title {
     padding-top: 5px;
 }
-
-

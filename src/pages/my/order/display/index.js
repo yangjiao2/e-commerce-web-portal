@@ -6,6 +6,7 @@ import {Query} from "react-apollo"
 import gql from "graphql-tag"
 
 import {orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
+import {getCookie} from "../../../../utils/cookie"
 import './index.css'
 
 class Display extends Component {
@@ -55,6 +56,8 @@ class Display extends Component {
 
     render() {
         let {navTitle, orderStatus} = this.state
+        let user_id = getCookie('user_id')
+
         return (
             <div className='order-wrap'>
                 <div className='navbar'>
@@ -66,7 +69,7 @@ class Display extends Component {
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(orderbyprops)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA", orderStatus}}>
+                <Query query={gql(orderbyprops)} variables={{user_id, orderStatus}}>
                     {
                         ({loading, error, data}) => {
                             if (loading) {
