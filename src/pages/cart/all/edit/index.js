@@ -299,7 +299,10 @@ class CartEdit extends Component {
                                                 <div className="cart-list-intro" onClick={(e)=>this.skipToProductDetail(e,item.product_id.id)}>
                                                     <div>{item.product_id.name}</div>
                                                     <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
-                                                    <div>¥ {item.product_id.price}</div>
+                                                    <div className='product-item-price'>
+                                                        <span>￥{(item.product_id.price*item.product_id.discountRate/100).toFixed(2)}</span>&nbsp;
+                                                        <span>￥{(item.product_id.price).toFixed(2)}</span>
+                                                    </div>
                                                 </div>
                                                 <div className="cart-list-count">
                                                     <Mutation mutation={gql(update_userCart)}
