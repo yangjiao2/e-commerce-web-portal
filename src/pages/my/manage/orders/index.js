@@ -47,23 +47,23 @@ class Orders extends Component {
                         })
                     }}>
                         <Accordion.Panel header="查询订单"
-                                         className={classNames({'hidden': accordionKey === '1' || accordionKey === '2' || accordionKey === '3' || accordionKey === '4'})}>
+                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '0'})}>
                             <Search/>
                         </Accordion.Panel>
                         <Accordion.Panel header="待发货"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '2' || accordionKey === '3' || accordionKey === '4'})}>
+                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '1'})}>
                             <Shiping/>
                         </Accordion.Panel>
                         <Accordion.Panel header="待收货"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '3' || accordionKey === '4'})}>
+                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '2'})}>
                             <Unbox/>
                         </Accordion.Panel>
                         <Accordion.Panel header="待评价"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '2' || accordionKey === '4'})}>
+                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '3'})}>
                             <Completed/>
                         </Accordion.Panel>
                         <Accordion.Panel header="已完成"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '2' || accordionKey === '3'})}>
+                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '4'})}>
                             <Commented/>
                         </Accordion.Panel>
                     </Accordion>
