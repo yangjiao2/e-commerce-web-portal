@@ -43,8 +43,9 @@ class Address extends Component {
     }
 
     render() {
-        let {addressChoosed, addressID} = this.state
+        let {addressChoosed, addressID, single} = this.state
         let user_id = getCookie('user_id')
+        let navContent = single ? '编辑地址' : '地址管理'
 
         return (
             <div>
@@ -53,9 +54,13 @@ class Address extends Component {
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {
-                            this.props.history.go(-2)
+                            if(single){
+                                this.changePage(false)
+                            }else {
+                                this.props.history.go(-2)
+                            }
                         }}
-                    >地址管理</NavBar>
+                    >{navContent}</NavBar>
                 </div>
                 <div className='content-wrap'>
                     <Query query={gql(userAddressbyprops)} variables={{user_id}}>
@@ -81,8 +86,8 @@ class Address extends Component {
                                                 <SingleAddress
                                                     addressID={addressID}
                                                     addressChoosed={addressChoosed}
-                                                    changePage={this.changePage}
                                                     history={this.props.history}
+                                                    user_id={user_id}
                                                 />
                                                 :
                                                 <AddressRender
@@ -164,7 +169,6 @@ class AddressRender extends Component {
                                         <div className='address-edit'>
                                             <Icon
                                                 type="edit"
-                                                style={{fontSize: 14}}
                                                 onClick={()=>{
                                                     changePage(true)
                                                     changeAddress(address)

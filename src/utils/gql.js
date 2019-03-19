@@ -222,6 +222,30 @@ const delete_userCart_by_id = `
     }
 `
 
+const create_userAddress = `
+    mutation createuserAddress($address: String, $updatedAt: String, $telephone: String, $default: Int, $city: String, $username: String, $postcode: String, $createdAt: String, $deletedAt: String, $id: ID!, $user_id: ID, $area: String, $province: String) {
+        createuserAddress: create_userAddress(address: $address updatedAt: $updatedAt telephone: $telephone
+            default: $default city: $city username: $username postcode: $postcode createdAt: $createdAt deletedAt: $deletedAt id: $id user_id: $user_id area: $area province: $province) {
+            result
+            userAddress {
+                address
+                updatedAt
+                telephone
+                default
+                city
+                username
+                postcode
+                createdAt
+                deletedAt
+                id
+    
+                area
+                province
+            }
+        }
+    }
+`
+
 const userAddressbyprops = `
     query userAddressbyprops($user_id: ID) {
         userAddressbyprops: userAddress_by_props(user_id: $user_id) {
@@ -673,6 +697,7 @@ export {
     cart_by_userid,
     update_userCart,
     delete_userCart_by_id,
+    create_userAddress,
     userAddressbyprops,
     user_default_address,
     orderbyprops,
