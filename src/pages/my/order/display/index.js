@@ -130,8 +130,8 @@ class DisplayRender extends Component {
             <div className={classNames({'content-wrap': button})}>
                 {
                     data.length === 0 ?
-                        <div>
-                            还没有这种订单呢
+                        <div className='order-tip-wrap'>
+                            <div className='order-tip'>还没有这种订单</div>
                         </div>
                         :
                         data.map(order => (
