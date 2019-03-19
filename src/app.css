@@ -115,3 +115,7 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.gray {
+    color: gray;
+}

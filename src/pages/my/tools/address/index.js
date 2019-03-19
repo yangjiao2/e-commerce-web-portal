@@ -42,17 +42,6 @@ class Address extends Component {
         })
     }
 
-    getDefaultAddress = (data) => (
-        data.find(data => data.default === 1)
-    )
-
-    getOtherAddress = (data) => {
-        let defaultAddressIndex = data.find(data => data.default === 1)
-        let dataCopy = [...data]
-        dataCopy.splice(defaultAddressIndex, 1)
-        return dataCopy
-    }
-
     render() {
         let {addressChoosed, addressID} = this.state
         let user_id = getCookie('user_id')
@@ -97,8 +86,7 @@ class Address extends Component {
                                                 />
                                                 :
                                                 <AddressRender
-                                                    defaultAddress={this.getDefaultAddress(data)}
-                                                    otherAddress={this.getOtherAddress(data)}
+                                                    shoppingAddress={data}
                                                     changePage={this.changePage}
                                                     changeAddress={this.changeAddress}
                                                     history={this.props.history}
@@ -135,8 +123,7 @@ class AddressRender extends Component {
     }
 
     render() {
-        let {changePage, changeAddress, defaultAddress, otherAddress} = this.props
-        let {username, telephone, province, city, area, address} = defaultAddress || {}
+        let {changePage, changeAddress, shoppingAddress} = this.props
 
         return (
             <div>
@@ -144,46 +131,31 @@ class AddressRender extends Component {
                     changePage(true)
                     changeAddress({id: 'add'})
                 }}>
-                    <Icon type="plus" style={{fontSize: 22, fontWeight: 800}}/>&nbsp;
+                    <Icon type="plus"/>&nbsp;
                     添加新地址
                 </div>
                 {
-                    defaultAddress ?
-                        <div className='default-address'>
-                            <div className='address-card'>
-                                <div className='address-info' onClick={() => this.changeOrdersAddress(defaultAddress)}>
-                                    <Row className='address-username-telephone'>
-                                        <Col span={6} className='address-username ellipsis'>{username}</Col>
-                                        <Col span={14} className='address-phone ellipsis'>{telephone}&nbsp;&nbsp;
-                                            <span className='address-label'>默认</span></Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={24} className='address-address'>{province + city + area + address}</Col>
-                                    </Row>
-                                </div>
-                                <div className='address-edit'>
-                                    <Icon
-                                        type="edit"
-                                        style={{fontSize: 14}}
-                                        onClick={()=>{
-                                            changePage(true)
-                                            changeAddress(address)
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                    !shoppingAddress.length ?
+                        <div className='kind-empty gray'>
+                            <p>暂无收货地址</p>
+                            <p>点击下方按钮可新增地址</p>
                         </div>:''
                 }
                 {
-                    otherAddress.length ?
+                    shoppingAddress.length ?
                         <div className='other-address'>
-                            {otherAddress.map(address => {
+                            {shoppingAddress.map(address => {
                                 return (
                                     <div key={address.id} className='address-card'>
                                         <div className='address-info' onClick={() => this.changeOrdersAddress(address)}>
                                             <Row className='address-username-telephone'>
                                                 <Col span={6} className='address-username ellipsis'>{address.username}</Col>
-                                                <Col span={14} className='address-phone ellipsis'>{address.telephone}</Col>
+                                                <Col span={14} className='address-phone ellipsis'>
+                                                    {address.telephone}&nbsp;&nbsp;
+                                                    {address.default ?
+                                                        <span className='address-label'>默认</span>:''
+                                                    }
+                                                </Col>
                                             </Row>
                                             <Row>
                                                 <Col span={24} className='address-address'>{address.province + address.city + address.area + address.address}</Col>
