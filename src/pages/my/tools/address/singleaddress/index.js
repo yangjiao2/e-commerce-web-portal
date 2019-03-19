@@ -102,8 +102,9 @@ class SingleAddress extends Component {
     }
 
     render() {
-        let {changePage} = this.props
+        let {changePage, history} = this.props
         let {username, telephone, province, city, area, address, id} = this.state
+
         return (
             <div>
                 <div className='tools-addressadd-navbar-wrap'>
@@ -173,6 +174,7 @@ class SingleAddress extends Component {
                             address,
                             id
                         }}
+                        history={history}
                     />
                 </div>
 
@@ -207,10 +209,19 @@ class SaveAddressButton extends Component {
     }
 
     render() {
+        let prePage = this.props.history.location.state.prePage
         // let {data} = this.props
         return (
             <div className='address-button'>
-                <Button type='primary' block size='large' style={{outline: 'none'}}>保存并使用</Button>
+                <Button type='primary' block size='large' style={{outline: 'none'}}
+                        onClick={()=>{
+                            if(prePage){
+                                // sessionStorage.setItem('ordersAddress',JSON.stringify(address))
+                                this.props.history.go(-2)
+                            }
+                        }}
+                >
+                    保存并使用</Button>
             </div>
         )
     }

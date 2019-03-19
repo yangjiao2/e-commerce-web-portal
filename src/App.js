@@ -2,10 +2,16 @@ import React, {Component} from 'react'
 import {Row, Col, Icon} from 'antd'
 import {Switch, Route, NavLink, withRouter} from 'react-router-dom'
 import classnames from 'classnames'
+import {request} from 'graphql-request'
+import moment from 'moment'
 
 import Home from './pages/home'
 import Cart from './pages/cart'
 import My from './pages/my'
+import {graphqlFC} from "./configs/url"
+import {getCookie, setCookie} from "./utils/cookie"
+import {create_user} from "./utils/gql"
+import {idGen} from "./utils/func"
 import './app.css'
 
 class App extends Component {
@@ -77,6 +83,41 @@ class App extends Component {
         }
     }
 
+    oauthLogin = () => {
+        setCookie("openid","obR_j5GbxDfGlOolvSeTdZUwfpKA")
+        let openid =  getCookie("openid")
+        let user_id =  getCookie("user_id")
+        console.log('oauthLogin openid',openid)
+
+        if (!openid) {
+            window.location.href = "/subscribe"
+
+        }else if(!user_id){
+            let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+            let id = idGen('user')
+            const userContent = {
+                email: "",
+                updatedAt: "",
+                password: "",
+                telephone: "",
+                username: "",
+                createdAt,
+                openid,
+                id,
+                userData_id: ""
+
+            }
+            request(graphqlFC, create_user ,userContent)
+                .then(data => {
+                    console.log('create user data',data)
+                    setCookie('user_id',id)
+                })
+                .catch(err => {
+                    console.log(err, `graphql-request create user error`)
+                })
+        }
+    }
+
     render() {
         let {selectedTab, tabHidden} = this.state
         return (
@@ -126,7 +167,10 @@ class App extends Component {
                 </div>
                 <div className='tabbar-route-content'>
                     <Switch>
-                        <Route exact path="/" component={Home}/>
+                        <Route exact path="/" render={() => {
+                            this.oauthLogin()
+                            return <Home />
+                        }}/>
                         <Route path="/home" component={Home}/>
                         <Route path="/cart" component={Cart}/>
                         <Route path="/my" component={My}/>

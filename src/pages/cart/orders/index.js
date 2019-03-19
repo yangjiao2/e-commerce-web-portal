@@ -8,6 +8,7 @@ import moment from 'moment'
 
 import {user_default_address, create_order, create_order_product} from "../../../utils/gql"
 import {idGen} from "../../../utils/func"
+import {getCookie} from "../../../utils/cookie"
 import './index.css'
 
 const Item = List.Item
@@ -73,8 +74,7 @@ class CartOrders extends Component {
         })
     }
 
-    onSubmitOrderAndProduct = (create_order,create_order_product) => {
-        let user_id = "obR_j5GbxDfGlOolvSeTdZUwfpKA"
+    onSubmitOrderAndProduct = (user_id,create_order,create_order_product) => {
         let {totalCount, totalPrice, remark, delivery} = this.state
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let ordersAddress = JSON.parse(sessionStorage.getItem('ordersAddress'))
@@ -180,6 +180,7 @@ class CartOrders extends Component {
 
     render() {
         let {cartList, unfoldList, height, unfoldStatus, foldStatus, totalPrice, selectAddress} = this.state
+        let user_id = getCookie('user_id')
 
         return (
             <div className='orders-wrap'>
@@ -205,7 +206,7 @@ class CartOrders extends Component {
                         {
                             selectAddress ?
                                 <OrdersAddress props={this.props} selectAddress={selectAddress} />:
-                                <Query query={gql(user_default_address)} variables={{user_id: "obR_j5GbxDfGlOolvSeTdZUwfpKA", default:1}}>
+                                <Query query={gql(user_default_address)} variables={{user_id, default:1}}>
                                     {
                                         ({loading, error, data}) => {
                                             if (loading) {
@@ -221,9 +222,25 @@ class CartOrders extends Component {
                                             }
                                             let defaultAddress = data.defaultAddress[0]
 
-                                            return (
-                                                <OrdersAddress props={this.props} selectAddress={defaultAddress} />
-                                            )
+                                            if(defaultAddress){
+                                                return (
+                                                    <OrdersAddress props={this.props} selectAddress={defaultAddress} />
+                                                )
+                                            }else {
+                                                return (
+                                                    <div className='orders-address-add'
+                                                         onClick={() => {
+                                                             this.props.history.push({
+                                                                 pathname:'/my/tools',
+                                                                 state: {
+                                                                     page: 'address',
+                                                                     prePage: 'orders',
+                                                                     single: true
+                                                                 }})
+                                                         }}
+                                                    >+ 添加收货地址</div>
+                                                )
+                                            }
                                         }
                                     }
                                 </Query>
@@ -350,7 +367,7 @@ class CartOrders extends Component {
                                     {(create_order_product,{ loading, error }) => (
                                         <button className="jiesuan-button"
                                                 onClick={()=>{
-                                                    this.onSubmitOrderAndProduct(create_order,create_order_product)
+                                                    this.onSubmitOrderAndProduct(user_id,create_order,create_order_product)
                                                 }}>
                                             <span>提交订单</span>
                                         </button>
@@ -368,6 +385,8 @@ class CartOrders extends Component {
 export default withRouter(CartOrders)
 
 const OrdersAddress =({props,selectAddress}) => {
+    console.log('props',props)
+    console.log('selectAddress',selectAddress)
     let {default:isDefault, username, telephone, province, area, city, address} = selectAddress
     sessionStorage.setItem('ordersAddress',JSON.stringify(selectAddress))
 

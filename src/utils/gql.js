@@ -1,3 +1,21 @@
+const create_user = `
+    mutation createuser($email: String, $updatedAt: String, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID!, $userData_id: ID) {
+        createuser: create_user(email: $email updatedAt: $updatedAt password: $password telephone: $telephone username: $username createdAt: $createdAt openid: $openid id: $id userData_id: $userData_id) {
+            result
+            user {
+                email
+                updatedAt
+                password
+                telephone
+                username
+                createdAt
+                openid
+                id
+            }
+        }
+    }
+`
+
 const category_by_props = `
     query categorybyprops($sort_by: category_sort_by, $limit: Int, $status: String) {
         categorybyprops: category_by_props(sort_by: $sort_by limit: $limit status: $status) {
@@ -644,6 +662,7 @@ const update_product = `
 `
 
 export {
+    create_user,
     category_by_props,
     update_category,
     delete_category,
