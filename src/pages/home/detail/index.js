@@ -101,7 +101,7 @@ class DetailRender extends Component {
 
     render() {
         let {data} = this.props
-        let {name, intro, img, price, stock} = data.productbyid
+        let {name, intro, img, price, stock, discountRate} = data.productbyid
         let {cartCount, openSelect, buttonType} = this.state
         // console.log('DetailRender openSelect',openSelect)
 
@@ -114,8 +114,8 @@ class DetailRender extends Component {
                         <div className='detail-name detail-padding'>{name}</div>
                         <div className='detail-intro detail-padding'>{intro}</div>
                         <div className='detail-price detail-padding'>
-                            <span>￥{price}</span>&nbsp;&nbsp;
-                            <span>￥{price}</span>
+                            <span>￥{(price*discountRate/100).toFixed(2)}</span>&nbsp;&nbsp;
+                            <span>￥{price.toFixed(2)}</span>
                             <span className='detail-stock'>库存 {stock}</span>
                         </div>
                     </div>
@@ -275,7 +275,7 @@ class SelectModal extends Component {
             createdAt,
             updatedAt: ""
         }
-        console.log('cartContent',cartContent)
+        // console.log('cartContent',cartContent)
 
         this.props.changeDetailState('openSelect',false)
         create_userCart({variables:cartContent}).then((data)=>{

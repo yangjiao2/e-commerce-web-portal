@@ -67,6 +67,7 @@ const productbyprops = `
             price
             img
             stock
+            discountRate
         }
     }
 `
@@ -87,6 +88,7 @@ const productAndSpec_by_id = `
             price
             img
             stock
+            discountRate
         }
         
         spec: specificationStock_by_props(product_id: $id ) {
@@ -120,6 +122,7 @@ const create_userCart = `
                     price
                     img
                     stock
+                    discountRate
                 }
                 specificationStock_id {
                     id
@@ -151,6 +154,7 @@ const cart_by_userid = `
                 status
                 stock
                 unit
+                discountRate
             }
             specificationStock_id{
                 id
@@ -384,6 +388,7 @@ const orderProduct_by_props = `
                 price
                 img
                 stock
+                discountRate
             }
             productSize
             orderPay
@@ -616,8 +621,8 @@ const create_product = `
 `
 
 const update_product = `
-    mutation updateproduct($recommend: Int, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $id: ID, $intro: String, $price: Float, $category_id: ID, $img: String, $stock: Int) {
-        updateproduct: update_product(id: $id recommend: $recommend updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status intro: $intro price: $price category_id: $category_id img: $img stock: $stock) {
+    mutation updateproduct($id: ID, $recommend: Int, $updatedAt: String, $where: product_filter, $unit: String, $name: String, $createdAt: String, $status: String, $intro: String, $discountRate: Float, $price: Float, $category_id: ID, $img: String, $stock: Int) {
+        updateproduct: update_product(id: $id recommend: $recommend updatedAt: $updatedAt where: $where unit: $unit name: $name createdAt: $createdAt status: $status intro: $intro discountRate: $discountRate price: $price category_id: $category_id img: $img stock: $stock) {
             result
             product {
                 recommend
@@ -628,6 +633,7 @@ const update_product = `
                 status
                 id
                 intro
+                discountRate
                 price
     
                 img
