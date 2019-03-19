@@ -130,8 +130,8 @@ class DisplayRender extends Component {
             <div className={classNames({'content-wrap': button})}>
                 {
                     data.length === 0 ?
-                        <div>
-                            还没有这种订单呢
+                        <div className='order-tip-wrap'>
+                            <div className='order-tip'>还没有这种订单</div>
                         </div>
                         :
                         data.map(order => (
@@ -154,18 +154,27 @@ class DisplayRender extends Component {
                                             data = data.orderProductbyprops
                                             return (
                                                 <div>
-                                                    <div className='order-card-content' onClick={() => {
-                                                        this.props.history.push({
-                                                            pathname: '/my/order/detail',
-                                                            state: {
-                                                                data: order
-                                                            }
-                                                        })
-                                                    }}>
-                                                        {
-                                                            this.orderCardContentRender(data)
-                                                        }
-                                                    </div>
+                                                    {
+                                                        button?
+                                                            <div className='order-card-content' onClick={() => {
+                                                                this.props.history.push({
+                                                                    pathname: '/my/order/detail',
+                                                                    state: {
+                                                                        data: order
+                                                                    }
+                                                                })
+                                                            }}>
+                                                                {
+                                                                    this.orderCardContentRender(data)
+                                                                }
+                                                            </div>
+                                                            :
+                                                            <div className='order-card-content'>
+                                                                {
+                                                                    this.orderCardContentRender(data)
+                                                                }
+                                                            </div>
+                                                    }
                                                 </div>
                                             )
                                         }
