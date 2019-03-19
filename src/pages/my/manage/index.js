@@ -29,7 +29,7 @@ class Manage extends Component {
                     <Route path="/my/manage/shop" component={Shop}/>
                     <Route path="/my/manage/goods" component={Goods}/>
                     <Route path="/my/manage/orders" component={Orders}/>
-                    <Route path="/my/manage/*" component={Shop}/>
+                    <Route path="/my/manage/*" component={Orders}/>
                 </Switch>
             </div>
         )

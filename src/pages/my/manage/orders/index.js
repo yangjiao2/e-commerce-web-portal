@@ -5,13 +5,17 @@ import {
     SearchBar,
     NavBar,
     Accordion,
-    ActivityIndicator
+    ActivityIndicator,
+    List
 } from 'antd-mobile'
 import {Icon} from 'antd'
 import classNames from 'classnames'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import {order_by_id, orderbyprops} from "../../../../utils/gql"
+import {DisplayRender} from "../../order/display"
+
+const Item = List.Item;
 
 class Orders extends Component {
     constructor(props) {
@@ -43,19 +47,23 @@ class Orders extends Component {
                         })
                     }}>
                         <Accordion.Panel header="查询订单"
-                                         className={classNames({'hidden': accordionKey === '1' || accordionKey === '2' || accordionKey === '3'})}>
+                                         className={classNames({'hidden': accordionKey === '1' || accordionKey === '2' || accordionKey === '3' || accordionKey === '4'})}>
                             <Search/>
                         </Accordion.Panel>
                         <Accordion.Panel header="待发货"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '2' || accordionKey === '3'})}>
+                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '2' || accordionKey === '3' || accordionKey === '4'})}>
                             <Shiping/>
                         </Accordion.Panel>
-                        <Accordion.Panel header="已确认"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '3'})}>
+                        <Accordion.Panel header="待收货"
+                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '3' || accordionKey === '4'})}>
+                            <Unbox/>
+                        </Accordion.Panel>
+                        <Accordion.Panel header="待评价"
+                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '2' || accordionKey === '4'})}>
                             <Completed/>
                         </Accordion.Panel>
-                        <Accordion.Panel header="已评价"
-                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '2'})}>
+                        <Accordion.Panel header="已完成"
+                                         className={classNames({'hidden': accordionKey === '0' || accordionKey === '1' || accordionKey === '2' || accordionKey === '3'})}>
                             <Commented/>
                         </Accordion.Panel>
                     </Accordion>
@@ -118,6 +126,8 @@ class SearchQuery extends Component {
             case '2':
                 return '等待收货'
             case '3':
+                return '等待评价'
+            case '4':
                 return '完成'
             default:
                 return '等待确认'
@@ -127,7 +137,7 @@ class SearchQuery extends Component {
     render() {
         let {id} = this.props
         return (
-            <Query query={gql(order_by_id)} variables={{id}}>
+            <Query query={gql(order_by_id)} variables={{id}} className='search-query'>
                 {
                     ({loading, error, data}) => {
                         if (loading) {
@@ -143,15 +153,16 @@ class SearchQuery extends Component {
                         data = data.orderbyid
                         if (data === null) {
                             return (
-                                <div>请输入正确的订单号</div>
+                                <div className='order-tip-wrap'>
+                                    <div className='order-tip'>请输入正确的订单号</div>
+                                </div>
                             )
                         } else {
                             let {id, orderStatus, orderTotalPay, productTotalPay, count, remark, user_id, userAddress_id, createdAt, orderLogistics_id, orderPay_id} = data
-                            let {telephoneUser, usernameUser, email} = user_id
+                            let {telephone: telephoneUser, username: usernameUser, email} = user_id
                             let {province, city, area, address, telephone, username} = userAddress_id
-                            let expressId, logisticsFee, LogisticsStatus, expressCreatedAt
+                            let logisticsFee, LogisticsStatus, expressCreatedAt
                             if (orderLogistics_id !== null) {
-                                expressId = orderLogistics_id.expressId
                                 logisticsFee = orderLogistics_id.logisticsFee
                                 LogisticsStatus = orderLogistics_id.LogisticsStatus
                                 expressCreatedAt = orderLogistics_id.createdAt
@@ -160,26 +171,35 @@ class SearchQuery extends Component {
 
                             }
 
+                            const all = {
+                                '订单编号': id,
+                                '状态': this.statusRender(orderStatus),
+                                "备注": remark,
+                                "产品总量": count,
+                                "产品总计价格": productTotalPay,
+                                "订单总计价格": orderTotalPay,
+                                "订单人名称": username,
+                                "订单电话": telephone,
+                                "订单地址": province + city + area + address,
+                                "下单时间": createdAt,
+                                "用户名称": usernameUser,
+                                "用户邮箱": email,
+                                "用户电话": telephoneUser,
+                                "物流费用": logisticsFee,
+                                "物流状态": LogisticsStatus,
+                                "发货时间": expressCreatedAt
+                            }
+
                             return (
-                                <div>
-                                    <div>ID：{id}</div>
-                                    <div>状态：{this.statusRender(orderStatus)}</div>
-                                    <div>备注：{remark}</div>
-                                    <div>产品总量：{count}</div>
-                                    <div>产品总计价格：{productTotalPay}</div>
-                                    <div>订单总计价格：{orderTotalPay}</div>
-                                    <div>订单人名称：{username}</div>
-                                    <div>订单电话：{telephone}</div>
-                                    <div>订单地址：{province + city + area + address}</div>
-                                    <div>下单时间：{createdAt}</div>
-                                    <div>用户名称：{usernameUser}</div>
-                                    <div>用户邮箱：{email}</div>
-                                    <div>用户电话：{telephoneUser}</div>
-                                    <div>物流ID：{expressId}</div>
-                                    <div>物流费用：{logisticsFee}</div>
-                                    <div>物流状态：{LogisticsStatus}</div>
-                                    <div>发货时间：{expressCreatedAt}</div>
-                                </div>
+                                <List>
+                                    {
+                                        Object.keys(all).map((key, index) => (
+                                                <Item key={index}><span className='item-title'>{key}：</span><span
+                                                    className='item-value'>{all[key]}</span></Item>
+                                            )
+                                        )
+                                    }
+                                </List>
                             )
                         }
                     }
@@ -211,14 +231,22 @@ class Shiping extends Component {
                             return 'error!'
                         }
                         data = data.orderbyprops
-                        console.log(data)
+
+
                         return (
                             <div>
                                 {
-                                    data.length === 0?
-                                        '还没有这种订单'
+                                    data.length === 0 ?
+                                        <div className='order-tip-wrap'>
+                                            <div className='order-tip'>还没有这种订单</div>
+                                        </div>
                                         :
-                                        <div>还未展示</div>
+                                        <DisplayRender
+                                            data={data}
+                                            orderStatus='1'
+                                            button={false}
+                                            history={this.props.history}
+                                        />
                                 }
                             </div>
                         )
@@ -229,7 +257,7 @@ class Shiping extends Component {
     }
 }
 
-class Completed extends Component {
+class Unbox extends Component {
     constructor(props) {
         super(props)
         this.state = {}
@@ -255,10 +283,17 @@ class Completed extends Component {
                         return (
                             <div>
                                 {
-                                    data.length === 0?
-                                        '还没有这种订单'
+                                    data.length === 0 ?
+                                        <div className='order-tip-wrap'>
+                                            <div className='order-tip'>还没有这种订单</div>
+                                        </div>
                                         :
-                                        <div>还未展示</div>
+                                        <DisplayRender
+                                            data={data}
+                                            orderStatus='2'
+                                            button={false}
+                                            history={this.props.history}
+                                        />
                                 }
                             </div>
                         )
@@ -269,7 +304,7 @@ class Completed extends Component {
     }
 }
 
-class Commented extends Component {
+class Completed extends Component {
     constructor(props) {
         super(props)
         this.state = {}
@@ -295,10 +330,64 @@ class Commented extends Component {
                         return (
                             <div>
                                 {
-                                    data.length === 0?
-                                        '还没有这种订单'
+                                    data.length === 0 ?
+                                        <div className='order-tip-wrap'>
+                                            <div className='order-tip'>还没有这种订单</div>
+                                        </div>
                                         :
-                                        <div>还未展示</div>
+                                        <DisplayRender
+                                            data={data}
+                                            orderStatus='3'
+                                            button={false}
+                                            history={this.props.history}
+                                        />
+                                }
+                            </div>
+                        )
+                    }
+                }
+            </Query>
+        )
+    }
+}
+
+class Commented extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        return (
+            <Query query={gql(orderbyprops)} variables={{orderStatus: '4'}}>
+                {
+                    ({loading, error, data}) => {
+                        if (loading) {
+                            return (
+                                <div className="loading-center">
+                                    <ActivityIndicator text="Loading..." size="large"/>
+                                </div>
+                            )
+                        }
+                        if (error) {
+                            return 'error!'
+                        }
+                        data = data.orderbyprops
+                        console.log(data)
+                        return (
+                            <div>
+                                {
+                                    data.length === 0 ?
+                                        <div className='order-tip-wrap'>
+                                            <div className='order-tip'>还没有这种订单</div>
+                                        </div>
+                                        :
+                                        <DisplayRender
+                                            data={data}
+                                            orderStatus='4'
+                                            button={false}
+                                            history={this.props.history}
+                                        />
                                 }
                             </div>
                         )
