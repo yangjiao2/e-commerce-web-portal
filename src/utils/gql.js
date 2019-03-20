@@ -222,10 +222,70 @@ const delete_userCart_by_id = `
     }
 `
 
-const create_userAddress = `
-    mutation createuserAddress($address: String, $updatedAt: String, $telephone: String, $default: Int, $city: String, $username: String, $postcode: String, $createdAt: String, $deletedAt: String, $id: ID!, $user_id: ID, $area: String, $province: String) {
-        createuserAddress: create_userAddress(address: $address updatedAt: $updatedAt telephone: $telephone
-            default: $default city: $city username: $username postcode: $postcode createdAt: $createdAt deletedAt: $deletedAt id: $id user_id: $user_id area: $area province: $province) {
+const create_update_userAddress = `
+    mutation createuserAddress( $id: ID!, $address: String, $updatedAt: String, $telephone: String, $default: Int, $city: String, $username: String, $postcode: String, $createdAt: String, $deletedAt: String, $user_id: ID, $area: String, $province: String,
+                               $updateID: ID!, $updateDefault: Int, $newUpdatedAt: String) {
+        createuserAddress: create_userAddress(id: $id address: $address updatedAt: $updatedAt telephone: $telephone default: $default city: $city username: $username postcode: $postcode createdAt: $createdAt deletedAt: $deletedAt user_id: $user_id area: $area province: $province) {
+            result
+            userAddress {
+                address
+                updatedAt
+                telephone
+                default
+                city
+                username
+                postcode
+                createdAt
+                deletedAt
+                id
+    
+                area
+                province
+            }
+        }
+        updateuserAddress: update_userAddress(id: $updateID default: $updateDefault updatedAt: $createdAt) {
+            result
+            userAddress {
+                address
+                updatedAt
+                telephone
+                default
+                city
+                username
+                postcode
+                createdAt
+                deletedAt
+                id
+    
+                area
+                province
+            }
+        }
+    }
+`
+
+const update_userAddress = `
+    mutation updateuserAddress($id: ID, $address: String, $updatedAt: String, $where: userAddress_filter, $telephone: String, $default: Int, $city: String, $username: String, $postcode: String, $createdAt: String, $deletedAt: String, $user_id: ID, $area: String, $province: String,
+                               $updateID: ID!, $updateDefault: Int, $newUpdatedAt: String) {
+        updateAddress: update_userAddress(id: $id address: $address updatedAt: $updatedAt where: $where telephone: $telephone default: $default city: $city username: $username postcode: $postcode createdAt: $createdAt deletedAt: $deletedAt user_id: $user_id area: $area province: $province) {
+            result
+            userAddress {
+                address
+                updatedAt
+                telephone
+                default
+                city
+                username
+                postcode
+                createdAt
+                deletedAt
+                id
+    
+                area
+                province
+            }
+        }
+        updateuserAddress: update_userAddress(id: $updateID default: $updateDefault updatedAt: $createdAt) {
             result
             userAddress {
                 address
@@ -697,7 +757,8 @@ export {
     cart_by_userid,
     update_userCart,
     delete_userCart_by_id,
-    create_userAddress,
+    create_update_userAddress,
+    update_userAddress,
     userAddressbyprops,
     user_default_address,
     orderbyprops,

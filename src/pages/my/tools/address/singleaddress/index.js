@@ -4,7 +4,7 @@ import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
 
-import {create_userAddress} from "../../../../../utils/gql"
+import {create_update_userAddress, update_userAddress} from "../../../../../utils/gql"
 import './index.css'
 import {idGen} from "../../../../../utils/func"
 
@@ -107,10 +107,11 @@ class SingleAddress extends Component {
         }
     }
 
-    saveAddress = (user_id, create_userAddress) => {
+    saveAddress = (user_id, mutate) => {
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-        let id = idGen('address')
-        let {username, telephone, province, city, area, address, defaultStatus} = this.state
+        let {username, telephone, province, city, area, address, defaultStatus, id} = this.state
+        let addressId = id || idGen('address')
+
         let defaultStatus1 = defaultStatus ? 1 : 0
         const addressContent = {
             address,
@@ -122,23 +123,36 @@ class SingleAddress extends Component {
             postcode: "",
             createdAt,
             deletedAt: "",
-            id,
+            id: addressId,
             user_id,
             area,
             province
         }
 
-        create_userAddress({variables:addressContent}).then((data)=>{
+        let {defaultAddress} = this.props
+        // console.log('defaultAddress',defaultAddress)
+        if(defaultAddress){
+            let {id} = defaultAddress
+            addressContent.updateID = id
+            addressContent.updateDefault = 0
+        }else {
+            addressContent.updateID = ''
+        }
+        // console.log('addressContent',addressContent)
+        mutate({variables:addressContent}).then((data)=>{
+            this.props.refetch()
             let prePage = this.props.history.location.state.prePage
             if(prePage){
                 sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
                 this.props.history.go(-2)
+            }else {
+                this.props.changePage(false)
             }
         })
     }
 
     render() {
-        let {user_id} = this.props
+        let {addressID, user_id} = this.props
         let {username, telephone, province, city, area, address} = this.state
 
         return (
@@ -193,13 +207,13 @@ class SingleAddress extends Component {
                 </div>
 
                 <div className='address-button-group'>
-                    <Mutation mutation={gql(create_userAddress)}
+                    <Mutation mutation={addressID === 'add' ? gql(create_update_userAddress) : gql(update_userAddress)}
                               onError={error=>console.log('error',error)}
                     >
-                        {(create_userAddress,{ loading, error }) => (
+                        {(mutate,{ loading, error }) => (
                             <div className='address-add'
                                  onClick={()=>{
-                                     this.saveAddress(user_id, create_userAddress)
+                                     this.saveAddress(user_id, mutate)
                                  }}
                             >
                                 保存并使用

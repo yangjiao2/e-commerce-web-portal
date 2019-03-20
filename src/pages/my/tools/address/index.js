@@ -65,7 +65,7 @@ class Address extends Component {
                 <div className='content-wrap'>
                     <Query query={gql(userAddressbyprops)} variables={{user_id}}>
                         {
-                            ({loading, error, data}) => {
+                            ({loading, error, data, refetch}) => {
                                 if (loading) {
                                     return (
                                         <div className="loading-center">
@@ -78,6 +78,8 @@ class Address extends Component {
                                 }
 
                                 data = data.userAddressbyprops
+                                let defaultAddress = data.find(data => data.default === 1) || ''
+                                // sessionStorage.setItem('defaultAddress',defaultAddress)
 
                                 return (
                                     <div>
@@ -88,6 +90,9 @@ class Address extends Component {
                                                     addressChoosed={addressChoosed}
                                                     history={this.props.history}
                                                     user_id={user_id}
+                                                    defaultAddress={defaultAddress}
+                                                    changePage={this.changePage}
+                                                    refetch={refetch}
                                                 />
                                                 :
                                                 <AddressRender
