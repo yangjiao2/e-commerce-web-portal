@@ -350,6 +350,12 @@ const user_default_address = `
     }
 `
 
+const delete_address = `
+    mutation deleteuserAddress($id: ID) {
+        deleteuserAddress: delete_userAddress(id: $id)
+    }
+`
+
 const orderbyprops = `
     query orderbyprops($updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
         orderbyprops: order_by_props(updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
@@ -761,6 +767,7 @@ export {
     update_userAddress,
     userAddressbyprops,
     user_default_address,
+    delete_address,
     orderbyprops,
     order_by_id,
     orderProduct_by_props,

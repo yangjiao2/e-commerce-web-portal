@@ -385,8 +385,6 @@ class CartOrders extends Component {
 export default withRouter(CartOrders)
 
 const OrdersAddress =({props,selectAddress}) => {
-    console.log('props',props)
-    console.log('selectAddress',selectAddress)
     let {default:isDefault, username, telephone, province, area, city, address} = selectAddress
     sessionStorage.setItem('ordersAddress',JSON.stringify(selectAddress))
 

@@ -4,7 +4,11 @@ import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
 
-import {create_update_userAddress, update_userAddress} from "../../../../../utils/gql"
+import {
+    create_update_userAddress,
+    update_userAddress,
+    userAddressbyprops
+} from "../../../../../utils/gql"
 import './index.css'
 import {idGen} from "../../../../../utils/func"
 
@@ -129,8 +133,7 @@ class SingleAddress extends Component {
             province
         }
 
-        let {defaultAddress} = this.props
-        // console.log('defaultAddress',defaultAddress)
+        let {defaultAddress, addressID} = this.props
         if(defaultAddress){
             let {id} = defaultAddress
             addressContent.updateID = id
@@ -138,11 +141,15 @@ class SingleAddress extends Component {
         }else {
             addressContent.updateID = ''
         }
-        // console.log('addressContent',addressContent)
+
         mutate({variables:addressContent}).then((data)=>{
             this.props.refetch()
             let prePage = this.props.history.location.state.prePage
-            if(prePage){
+
+            if(defaultStatus1){
+                sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
+            }
+            if(prePage && addressID !== 'add'){
                 sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
                 this.props.history.go(-2)
             }else {
@@ -208,6 +215,9 @@ class SingleAddress extends Component {
 
                 <div className='address-button-group'>
                     <Mutation mutation={addressID === 'add' ? gql(create_update_userAddress) : gql(update_userAddress)}
+                              refetchQueries={[
+                                  {query: gql(userAddressbyprops), variables:{user_id}}
+                              ]}
                               onError={error=>console.log('error',error)}
                     >
                         {(mutate,{ loading, error }) => (

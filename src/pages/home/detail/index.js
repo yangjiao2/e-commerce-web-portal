@@ -7,7 +7,7 @@ import {NavBar, Icon, ActivityIndicator, Badge, Modal} from 'antd-mobile'
 import classNames from 'classnames'
 import moment from 'moment'
 
-import {productAndSpec_by_id, create_userCart} from "../../../utils/gql"
+import {productAndSpec_by_id, create_userCart, cart_by_userid} from "../../../utils/gql"
 import {idGen} from '../../../utils/func'
 import {getCookie} from "../../../utils/cookie"
 import './index.css'
@@ -257,9 +257,8 @@ class SelectModal extends Component {
     }
 
     // 添加至购物袋
-    onCreateUserCart = (create_userCart) => {
+    onCreateUserCart = (create_userCart, user_id) => {
         let id = idGen('cart')
-        let user_id = getCookie('user_id')
         let {productData} = this.props
         let product_id = productData.productbyid.id
         let {count, selectColor, specList} = this.state
@@ -334,6 +333,7 @@ class SelectModal extends Component {
     }
 
     render() {
+        let user_id = getCookie('user_id')
         let {price, img, buttonType} = this.props
         let {count, selectColor, specList, colorList} = this.state
         let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
@@ -417,6 +417,9 @@ class SelectModal extends Component {
                         </div>
                     </div>
                     <Mutation mutation={gql(create_userCart)}
+                              refetchQueries={[
+                                  {query: gql(cart_by_userid), variables:{user_id}}
+                              ]}
                               onError={error=>console.log('error',error)}
                     >
                         {(create_userCart,{ loading, error }) => (
@@ -425,7 +428,7 @@ class SelectModal extends Component {
                                     className='confirm-button'
                                     onClick={()=>{
                                         if(buttonType === 'add'){
-                                            this.onCreateUserCart(create_userCart)
+                                            this.onCreateUserCart(create_userCart, user_id)
                                         }else if(buttonType === 'buy'){
                                             this.buyNow()
                                         }

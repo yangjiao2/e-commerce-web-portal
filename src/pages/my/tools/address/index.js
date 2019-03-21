@@ -1,14 +1,15 @@
 import {Component} from "react"
 import React from "react"
-import {userAddressbyprops} from "../../../../utils/gql"
-import {ActivityIndicator, NavBar} from 'antd-mobile'
-import {Icon, Row, Col} from 'antd'
-import {Query} from "react-apollo"
+import {ActivityIndicator, NavBar, Modal} from 'antd-mobile'
+import {Icon, Row, Col, message} from 'antd'
+import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
 
 import SingleAddress from "./singleaddress"
 import {getCookie} from "../../../../utils/cookie"
+import {userAddressbyprops, delete_address} from "../../../../utils/gql"
 import './index.css'
+const alert = Modal.alert
 
 class Address extends Component {
     constructor(props) {
@@ -24,7 +25,8 @@ class Address extends Component {
         let state = this.props.history.location.state || ''
         if (state && state.single) {
             this.setState({
-                single: true
+                single: true,
+                addressID: 'add'
             })
         }
     }
@@ -78,8 +80,8 @@ class Address extends Component {
                                 }
 
                                 data = data.userAddressbyprops
+                                // console.log('address data',data)
                                 let defaultAddress = data.find(data => data.default === 1) || ''
-                                // sessionStorage.setItem('defaultAddress',defaultAddress)
 
                                 return (
                                     <div>
@@ -100,6 +102,7 @@ class Address extends Component {
                                                     changePage={this.changePage}
                                                     changeAddress={this.changeAddress}
                                                     history={this.props.history}
+                                                    refetch={refetch}
                                                 />
                                         }
                                     </div>
@@ -130,6 +133,25 @@ class AddressRender extends Component {
             sessionStorage.setItem('ordersAddress',JSON.stringify(address))
             this.props.history.go(-2)
         }
+    }
+
+    deleteAddress = (delete_address, deleteId) => {
+        alert('', `确定要删除这个收货地址吗？`, [
+            { text: '取消', onPress: () => console.log('cancel') },
+            {
+                text: '确定',
+                onPress: () => {
+                    delete_address({variables:{id:deleteId}}).then((data)=>{
+                        // console.log('delete data',data)
+                        let num = data.data.deleteuserAddress.replace(/[^0-9]/ig,"")
+                        if(num){
+                            message.success('删除成功')
+                            this.props.refetch()
+                        }
+                    })
+                }
+            }
+        ])
     }
 
     render() {
@@ -180,6 +202,20 @@ class AddressRender extends Component {
                                                 }}
                                             />
                                         </div>
+                                        <Mutation mutation={gql(delete_address)}
+                                                  onError={error=>console.log('error',error)}
+                                        >
+                                            {(delete_address,{ loading, error }) => (
+                                                <div className='address-edit'>
+                                                    <Icon
+                                                        type="delete"
+                                                        onClick={()=>{
+                                                            this.deleteAddress(delete_address,address.id)
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </Mutation>
                                     </div>
                                 )
                             })}
