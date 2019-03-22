@@ -479,6 +479,27 @@ const order_by_id = `
     }
 `
 
+const update_order = `
+    mutation updateorder($id: ID, $updatedAt: String, $orderStatus: String, $orderPay_id: ID) {
+        updateorder: update_order(id: $id updatedAt: $updatedAt orderStatus: $orderStatus count: $count orderPay_id: $orderPay_id) {
+            result
+            order {
+                remark
+                updatedAt
+    
+                orderTotalPay
+                createdAt
+                orderStatus
+    
+                id
+                count
+    
+                productTotalPay
+            }
+        }
+    }
+`
+
 const orderProduct_by_props = `
     query orderProductbyprops($order_id: ID) {
         orderProductbyprops: orderProduct_by_props(order_id: $order_id) {
@@ -770,6 +791,7 @@ export {
     delete_address,
     orderbyprops,
     order_by_id,
+    update_order,
     orderProduct_by_props,
     create_order,
     create_order_product,

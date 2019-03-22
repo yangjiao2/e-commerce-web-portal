@@ -161,7 +161,8 @@ class CartOrders extends Component {
         })
 
         Promise.all([createOrder, createOrderProduct]).then((data)=> {
-            console.log('onSubmitOrderAndProduct data',data);
+            console.log('onSubmitOrderAndProduct data',data)
+            sessionStorage.setItem('payOrder',JSON.stringify(orderContent))
             if(type === 'cartSelected'){
                 let cartCount = JSON.parse(localStorage.getItem("cartCount")) - totalCount
                 localStorage.setItem("cartCount",JSON.stringify(cartCount))
