@@ -96,7 +96,10 @@ class App extends Component {
             request(graphqlFC, find_user_by_openid ,{openid})
                 .then(data => {
                     // console.log('find user data',data)
-                    if(!data.userbyprops[0].id){
+                    if(data.userbyprops[0].id){
+                        let id = data.userbyprops[0].id
+                        setCookie('user_id',id)
+                    }else {
                         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
                         let id = idGen('user')
                         const userContent = {
