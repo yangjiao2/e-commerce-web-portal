@@ -9,6 +9,7 @@ import gql from "graphql-tag"
 import moment from 'moment'
 
 import {update_order} from "../../../utils/gql"
+import {getCookie} from "../../../utils/cookie"
 import './index.css'
 
 let clicktag = 1;  //微信发起支付点击标志
@@ -85,12 +86,13 @@ class Pay extends Component {
         console.log('getBridgeReady params',id,needPay)
         if(clicktag === 1) {
             clicktag = 0   //进行标志，防止多次点击
+            let openid = getCookie('openid')
 
             let $this = this
             axios.get('/payinfo', {
                     params: {
                         needPay:parseInt(needPay * 100,10),
-                        openid: $this.props.openid,
+                        openid,
                         tradeNo:id
                     }
                 })
