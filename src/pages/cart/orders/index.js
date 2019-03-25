@@ -296,7 +296,7 @@ class CartOrders extends Component {
                                                                     <img src={item.product_id.img} alt=""/>
                                                                 </div>
                                                                 <div className="cart-orders-intro">
-                                                                    <div>{item.product_id.name}</div>
+                                                                    <div className='hide-extra-text'>{item.product_id.name}</div>
                                                                     <div>{item.specificationStock_id.color}  {item.specificationStock_id.size}</div>
                                                                     <div>¥ {item.product_id.price}</div>
                                                                 </div>

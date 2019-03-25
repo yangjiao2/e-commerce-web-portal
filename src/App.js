@@ -95,7 +95,7 @@ class App extends Component {
         }else if(!user_id){
             request(graphqlFC, find_user_by_openid ,{openid})
                 .then(data => {
-                    console.log('create user data',data)
+                    // console.log('find user data',data)
                     if(!data.userbyprops[0].id){
                         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
                         let id = idGen('user')
