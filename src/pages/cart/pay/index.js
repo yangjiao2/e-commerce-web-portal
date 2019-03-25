@@ -98,7 +98,7 @@ class Pay extends Component {
                 })
                 .then((res) =>{
                     console.log('onBridgeReady res',res)
-                    $this.jsApiPay(res,id,update_order)
+                    $this.jsApiPay(res.data,id,update_order)
                     setTimeout(()=> {clicktag = 1}, 5000)
                 })
                 .catch((error) => {

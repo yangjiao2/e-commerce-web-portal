@@ -11,7 +11,7 @@ class Empty extends Component {
     }
 
     render() {
-        let contentHeight = window.innerHeight - 50
+        let contentHeight = window.innerHeight - 95
 
         return (
             <div className="cart-empty" style={{height: contentHeight}}>
