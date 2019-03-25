@@ -10,7 +10,7 @@ import Cart from './pages/cart'
 import My from './pages/my'
 import {graphqlFC} from "./configs/url"
 import {getCookie, setCookie} from "./utils/cookie"
-import {create_user} from "./utils/gql"
+import {find_user_by_openid, create_user} from "./utils/gql"
 import {idGen} from "./utils/func"
 import './app.css'
 
@@ -84,8 +84,8 @@ class App extends Component {
     }
 
     oauthLogin = () => {
-        setCookie("openid","obR_j5GbxDfGlOolvSeTdZUwfpKA")
         let openid =  getCookie("openid")
+        // setCookie("openid","obR_j5GbxDfGlOolvSeTdZUwfpKA")
         let user_id =  getCookie("user_id")
         console.log('oauthLogin openid',openid)
 
@@ -93,27 +93,36 @@ class App extends Component {
             window.location.href = "/subscribe"
 
         }else if(!user_id){
-            let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-            let id = idGen('user')
-            const userContent = {
-                email: "",
-                updatedAt: "",
-                password: "",
-                telephone: "",
-                username: "",
-                createdAt,
-                openid,
-                id,
-                userData_id: ""
-
-            }
-            request(graphqlFC, create_user ,userContent)
+            request(graphqlFC, find_user_by_openid ,{openid})
                 .then(data => {
                     console.log('create user data',data)
-                    setCookie('user_id',id)
+                    if(data){
+                        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+                        let id = idGen('user')
+                        const userContent = {
+                            email: "",
+                            updatedAt: "",
+                            password: "",
+                            telephone: "",
+                            username: "",
+                            createdAt,
+                            openid,
+                            id,
+                            userData_id: ""
+
+                        }
+                        request(graphqlFC, create_user ,userContent)
+                            .then(data => {
+                                console.log('create user data',data)
+                                setCookie('user_id',id)
+                            })
+                            .catch(err => {
+                                console.log(err, `graphql-request create user error`)
+                            })
+                    }
                 })
                 .catch(err => {
-                    console.log(err, `graphql-request create user error`)
+                    console.log(err, `graphql-request find user error`)
                 })
         }
     }

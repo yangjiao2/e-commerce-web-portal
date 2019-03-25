@@ -91,7 +91,7 @@ class All extends Component {
             <div className='my-wrap all'>
                 <div className='avatar-area'>
                     <div className='avatar'/>
-                    <div className='nickname'>110</div>
+                    <div className='nickname'>昵称</div>
                 </div>
                 <div className='my-card order-card'>
                     <div className='card-title'>

@@ -16,6 +16,14 @@ const create_user = `
     }
 `
 
+const find_user_by_openid = `
+    query userbyprops($openid: String) {
+        userbyprops: user_by_props(openid: $openid) {
+            id
+        }
+    }
+`
+
 const category_by_props = `
     query categorybyprops($sort_by: category_sort_by, $limit: Int, $status: String) {
         categorybyprops: category_by_props(sort_by: $sort_by limit: $limit status: $status) {
@@ -774,6 +782,7 @@ const update_product = `
 
 export {
     create_user,
+    find_user_by_openid,
     category_by_props,
     update_category,
     delete_category,
