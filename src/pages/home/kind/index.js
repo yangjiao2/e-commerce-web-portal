@@ -32,7 +32,7 @@ class Kind extends Component {
 
     render() {
         let {id, category} = this.state
-        let contentHeight = window.innerHeight - 95
+        let contentHeight = window.innerHeight - 45
         return (
             <div className='kind-wrap'  style={{height: contentHeight}}>
                 <div className='kind-navbar-wrap'>
@@ -43,13 +43,13 @@ class Kind extends Component {
                         onLeftClick={() => {this.props.history.go(-1)}}
                     >{category}</NavBar>
                 </div>
-                <div className='kind-search-wrap'>
-                    <Search
-                        className='kind-search'
-                        placeholder="请输入搜索内容"
-                        onSearch={value => console.log(value)}
-                    />
-                </div>
+                {/*<div className='kind-search-wrap'>*/}
+                    {/*<Search*/}
+                        {/*className='kind-search'*/}
+                        {/*placeholder="请输入搜索内容"*/}
+                        {/*onSearch={value => console.log(value)}*/}
+                    {/*/>*/}
+                {/*</div>*/}
                 <Query query={gql(productbyprops)} variables={{category_id: id}}>
                     {
                         ({loading, error, data}) => {

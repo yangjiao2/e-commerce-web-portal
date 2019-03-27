@@ -128,6 +128,47 @@ const productAndSpec_by_id = `
         }
     }
 `
+const specificationStock_by_props = `
+    query specificationStockbyprops($product_id: ID) {
+        specificationStockbyprops: specificationStock_by_props(product_id: $product_id) {
+            updatedAt
+            color
+            createdAt
+            size
+            slideImg
+            status
+            id
+            detailImg
+            stock
+        }
+    }
+`
+
+const delete_specificationStock = `
+    mutation deletespecificationStock($id: ID) {
+        deletespecificationStock: delete_specificationStock(id: $id)
+    }
+
+`
+
+const update_specificationStock = `
+    mutation updatespecificationStock($id: ID, $updatedAt: String, $color: String, $size: String, $slideImg: String, $status: String, $detailImg: String, $stock: Int) {
+        updatespecificationStock: update_specificationStock(id: $id updatedAt: $updatedAt color: $color size: $size slideImg: $slideImg status: $status detailImg: $detailImg stock: $stock) {
+            result
+            specificationStock {
+                updatedAt
+                color
+                createdAt
+                size
+                slideImg
+                status
+                id
+                detailImg
+                stock
+            }
+        }
+    }
+`
 
 const create_userCart = `
     mutation createuserCart($id: ID!, $user_id: ID, $product_id: ID, $specificationStock_id: ID, $count: Int, $createdAt: String, $updatedAt: String) {
@@ -780,6 +821,12 @@ const update_product = `
     }
 `
 
+const delete_product_by_id = `
+    mutation deleteproduct($id: ID) {
+        deleteproduct: delete_product(id: $id)
+    }
+`
+
 export {
     create_user,
     find_user_by_openid,
@@ -789,6 +836,9 @@ export {
     create_category,
     productbyprops,
     productAndSpec_by_id,
+    specificationStock_by_props,
+    update_specificationStock,
+    delete_specificationStock,
     create_userCart,
     cart_by_userid,
     update_userCart,
@@ -808,5 +858,6 @@ export {
     create_shop,
     update_shop,
     create_product,
-    update_product
+    update_product,
+    delete_product_by_id
 }
