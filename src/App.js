@@ -95,8 +95,8 @@ class App extends Component {
         }else if(!user_id){
             request(graphqlFC, find_user_by_openid ,{openid})
                 .then(data => {
-                    // console.log('find user data',data)
-                    if(data.userbyprops[0].id){
+                    console.log('find user data',data)
+                    if(data.userbyprops.length){
                         let id = data.userbyprops[0].id
                         setCookie('user_id',id)
                     }else {

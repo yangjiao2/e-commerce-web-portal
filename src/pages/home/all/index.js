@@ -11,7 +11,10 @@ class All extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI']
+            data: ['https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/ecslider1.jpg',
+                'https://zos.alipayobjects.com/rmsportal/AiyWuByWklrrUDlFignR.png',
+                'https://zos.alipayobjects.com/rmsportal/TekJlZRVCjLFexlOCuWn.png',
+                'https://zos.alipayobjects.com/rmsportal/IJOtIlfsYdTyaDTRVrLI.png']
         }
     }
 
@@ -48,7 +51,7 @@ class All extends Component {
                             }}
                         >
                             <img
-                                src={`https://zos.alipayobjects.com/rmsportal/${val}.png`}
+                                src={val}
                                 alt=""
                                 style={{width: '100%', verticalAlign: 'top'}}
                             />

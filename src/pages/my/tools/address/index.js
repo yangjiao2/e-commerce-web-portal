@@ -182,7 +182,7 @@ class AddressRender extends Component {
                                         <div className='address-info' onClick={() => this.changeOrdersAddress(address)}>
                                             <Row className='address-username-telephone'>
                                                 <Col span={6} className='address-username ellipsis'>{address.username}</Col>
-                                                <Col span={14} className='address-phone ellipsis'>
+                                                <Col span={18} className='address-phone ellipsis'>
                                                     {address.telephone}&nbsp;&nbsp;
                                                     {address.default ?
                                                         <span className='address-label'>默认</span>:''
