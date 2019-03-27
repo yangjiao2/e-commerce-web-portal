@@ -17,6 +17,7 @@ import {withRouter} from 'react-router-dom'
 import {
     create_product,
     update_product,
+    delete_product_by_id,
     category_by_props,
     productbyprops,
     update_category,
@@ -63,7 +64,9 @@ class Goods extends Component {
                     }}
                 >商品管理</NavBar>
                 <div className='content-wrap'>
-                    <div className='my-list-subtitle' style={{color: 'grey'}}><Icon type="bulb" style={{marginRight: 10}}/>{accordionKey? '折叠单项以展开更多分类':'请选择需要打开的分类'}</div>
+                    <div className='my-list-subtitle' style={{color: 'grey'}}><Icon type="bulb"
+                                                                                    style={{marginRight: 10}}/>{accordionKey ? '折叠单项以展开更多分类' : '请选择需要打开的分类'}
+                    </div>
                     <Accordion className="my-accordion" onChange={(key) => {
                         this.setState({
                             accordionKey: key[0]
@@ -246,7 +249,7 @@ class AddGoods extends Component {
                                         stock,
                                         intro,
                                         price,
-                                        discountRate:100,
+                                        discountRate: 100,
                                         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
                                         updatedAt: ''
                                     }
@@ -268,50 +271,74 @@ class AddGoods extends Component {
                                 }}
                             </Mutation>
                             :
-                            <Mutation mutation={gql(update_product)} refetchQueries={[
-                                {query: gql(productbyprops), variables: {}},
-                                {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
-                            ]}>
-                                {(updateproduct, {loading, error}) => {
-                                    if (loading)
-                                        return (
-                                            <div className="loading">
-                                                <div className="align">
-                                                    <ActivityIndicator text="Loading..." size="large"/>
+                            <div>
+                                <Mutation mutation={gql(update_product)} refetchQueries={[
+                                    {query: gql(productbyprops), variables: {}},
+                                    {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
+                                ]}>
+                                    {(updateproduct, {loading, error}) => {
+                                        if (loading)
+                                            return (
+                                                <div className="loading">
+                                                    <div className="align">
+                                                        <ActivityIndicator text="Loading..." size="large"/>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )
+                                        if (error)
+                                            return 'error'
+                                        let varObj = {
+                                            id,
+                                            unit: '1件',
+                                            status: '1',
+                                            recommend: 0,
+                                            category_id: category_id[0],
+                                            name,
+                                            stock,
+                                            intro,
+                                            price,
+                                            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                                        }
+                                        return (
+                                            <Button type="primary" size="small" inline onClick={() => {
+                                                Promise.all(this.uploadImg()).then(res => {
+                                                    let prefix = 'https://case-1254337200.cos.ap-beijing.myqcloud.com/'
+                                                    let img = imgDatas.length === 1 ? prefix + imgDatas[0]['file-name'] : imgDatas.map((imgData, index) => (
+                                                        prefix + imgDatas[index]['file-name']
+                                                    ))
+                                                    let variables = {...varObj}
+                                                    if (imgDatas.length !== 0) {
+                                                        variables.img = img
+                                                    }
+                                                    updateproduct({variables})
+                                                })
+                                            }}>更新</Button>
                                         )
-                                    if (error)
-                                        return 'error'
-                                    let varObj = {
-                                        id,
-                                        unit: '1件',
-                                        status: '1',
-                                        recommend: 0,
-                                        category_id: category_id[0],
-                                        name,
-                                        stock,
-                                        intro,
-                                        price,
-                                        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
-                                    }
-                                    return (
-                                        <Button type="primary" size="small" inline onClick={() => {
-                                            Promise.all(this.uploadImg()).then(res => {
-                                                let prefix = 'https://case-1254337200.cos.ap-beijing.myqcloud.com/'
-                                                let img = imgDatas.length === 1 ? prefix + imgDatas[0]['file-name'] : imgDatas.map((imgData, index) => (
-                                                    prefix + imgDatas[index]['file-name']
-                                                ))
-                                                let variables = {...varObj}
-                                                if (imgDatas.length !== 0) {
-                                                    variables.img = img
-                                                }
-                                                updateproduct({variables})
-                                            })
-                                        }}>更新</Button>
-                                    )
-                                }}
-                            </Mutation>
+                                    }}
+                                </Mutation>
+                                <Mutation mutation={gql(delete_product_by_id)} refetchQueries={[
+                                    {query: gql(productbyprops), variables: {}},
+                                    {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
+                                ]}>
+                                    {(deleteproduct, {loading, error}) => {
+                                        if (loading)
+                                            return (
+                                                <div className="loading">
+                                                    <div className="align">
+                                                        <ActivityIndicator text="Loading..." size="large"/>
+                                                    </div>
+                                                </div>
+                                            )
+                                        if (error)
+                                            return 'error'
+                                        return (
+                                            <Button type="warning" size="small" inline onClick={() => {
+                                                deleteproduct({variables: {id}})
+                                            }}>删除</Button>
+                                        )
+                                    }}
+                                </Mutation>
+                            </div>
                     }
                 </div>
             </List>
@@ -368,17 +395,22 @@ class AllGoods extends Component {
                                                              style={{backgroundImage: `url(${product.img})`}}/>
                                                     </Col>
                                                     <Col span={11} offset={1}>{product.name}</Col>
-                                                    <Col span={5} style={{display: 'flex', justifyContent: 'space-around'}}>
+                                                    <Col span={5}
+                                                         style={{display: 'flex', justifyContent: 'space-around'}}>
                                                         <Mutation mutation={gql(update_product)} refetchQueries={[
                                                             {query: gql(productbyprops), variables: {}},
-                                                            {query: gql(productbyprops), variables: {status: '1', recommend: 1}}
+                                                            {
+                                                                query: gql(productbyprops),
+                                                                variables: {status: '1', recommend: 1}
+                                                            }
                                                         ]}>
                                                             {(updateproduct, {loading, error}) => {
                                                                 if (loading)
                                                                     return (
                                                                         <div className="loading">
                                                                             <div className="align">
-                                                                                <ActivityIndicator text="Loading..." size="large"/>
+                                                                                <ActivityIndicator text="Loading..."
+                                                                                                   size="large"/>
                                                                             </div>
                                                                         </div>
                                                                     )
@@ -391,9 +423,11 @@ class AllGoods extends Component {
                                                                     updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
                                                                 }
                                                                 return (
-                                                                    <Icon type="like" className={classNames('not-like', {'like': recommend===1})} onClick={() => {
-                                                                        updateproduct({variables})
-                                                                    }}/>
+                                                                    <Icon type="like"
+                                                                          className={classNames('not-like', {'like': recommend === 1})}
+                                                                          onClick={() => {
+                                                                              updateproduct({variables})
+                                                                          }}/>
                                                                 )
                                                             }}
                                                         </Mutation>

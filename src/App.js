@@ -85,7 +85,7 @@ class App extends Component {
 
     oauthLogin = () => {
         let openid =  getCookie("openid")
-        // setCookie("openid","obR_j5GbxDfGlOolvSeTdZUwfpKA")
+        setCookie("openid","obR_j5GbxDfGlOolvSeTdZUwfpKA")
         let user_id =  getCookie("user_id")
         console.log('oauthLogin openid',openid)
 

@@ -780,6 +780,12 @@ const update_product = `
     }
 `
 
+const delete_product_by_id = `
+    mutation deleteproduct($id: ID) {
+        deleteproduct: delete_product(id: $id)
+    }
+`
+
 export {
     create_user,
     find_user_by_openid,
@@ -808,5 +814,6 @@ export {
     create_shop,
     update_shop,
     create_product,
-    update_product
+    update_product,
+    delete_product_by_id
 }
