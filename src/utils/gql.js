@@ -144,6 +144,32 @@ const specificationStock_by_props = `
     }
 `
 
+const delete_specificationStock = `
+    mutation deletespecificationStock($id: ID) {
+        deletespecificationStock: delete_specificationStock(id: $id)
+    }
+
+`
+
+const update_specificationStock = `
+    mutation updatespecificationStock($id: ID, $updatedAt: String, $color: String, $size: String, $slideImg: String, $status: String, $detailImg: String, $stock: Int) {
+        updatespecificationStock: update_specificationStock(id: $id updatedAt: $updatedAt color: $color size: $size slideImg: $slideImg status: $status detailImg: $detailImg stock: $stock) {
+            result
+            specificationStock {
+                updatedAt
+                color
+                createdAt
+                size
+                slideImg
+                status
+                id
+                detailImg
+                stock
+            }
+        }
+    }
+`
+
 const create_userCart = `
     mutation createuserCart($id: ID!, $user_id: ID, $product_id: ID, $specificationStock_id: ID, $count: Int, $createdAt: String, $updatedAt: String) {
         createuserCart: create_userCart(id: $id user_id: $user_id product_id: $product_id specificationStock_id: $specificationStock_id count: $count createdAt: $createdAt updatedAt: $updatedAt) {
@@ -811,6 +837,8 @@ export {
     productbyprops,
     productAndSpec_by_id,
     specificationStock_by_props,
+    update_specificationStock,
+    delete_specificationStock,
     create_userCart,
     cart_by_userid,
     update_userCart,

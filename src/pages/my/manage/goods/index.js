@@ -23,7 +23,9 @@ import {
     update_category,
     delete_category,
     create_category,
-    specificationStock_by_props
+    specificationStock_by_props,
+    delete_specificationStock,
+    update_specificationStock
 } from "../../../../utils/gql"
 import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
@@ -696,7 +698,7 @@ class AddGoods extends Component {
                                 >
                                     <div className='close-popup' onClick={this.controlModal(false)}>X</div>
                                     <div style={{paddingTop: 52}}>
-                                        <AddSpecStock specs={specs}/>
+                                        <AddSpecStock specs={specs} productID={id}/>
                                     </div>
                                 </Modal>
                             </div>
@@ -712,21 +714,134 @@ class AddSpecStock extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            list: true,
+            size: '',
+            color: '',
+            stock: 0,
+            id: ''
+        }
+    }
 
+    controlList = (bool, index) => () => {
+        let {specs} = this.props
+        this.setState({
+            list: bool,
+            index
+        })
+        if (index !== -1) {
+            let {size, color, stock, id} = specs[index]
+            this.setState({
+                size,
+                color,
+                stock,
+                id
+            })
+        } else {
+            this.setState({
+                size: '',
+                color: '',
+                stock: 20,
+                id: idGen('spec')
+            })
         }
     }
 
     render() {
-        let {specs} = this.props
+        let {specs, productID} = this.props
+        let {list, size, color, stock, id, index} = this.state
         return (
-            <List renderHeader={() => '规格设置'}>
+            <div>
                 {
-                    specs.map(spec=>(
-                        <Item key={spec.id} arrow="horizontal" onClick={() => {}}>{spec.color} &nbsp; {spec.size}</Item>
-                    ))
+                    list ?
+                        <List renderHeader={() => '规格设置'}>
+                            {
+                                specs.map((spec, index) => (
+                                    <Item key={spec.id} arrow="horizontal"
+                                          onClick={this.controlList(false, index)}>{spec.color} &nbsp; {spec.size}</Item>
+                                ))
+                            }
+                            <Item arrow="horizontal" onClick={this.controlList(false, -1)}>新增规格</Item>
+                        </List>
+                        :
+                        <List renderHeader={() => <div onClick={this.controlList(true, -1)}><Icon
+                            type="left"/>&nbsp;点击返回规格列表</div>}>
+                            <InputItem onChange={(e) => {
+                                this.setState({intro: e})
+                            }} value={size} placeholder="请输入简介">简介</InputItem>
+                            <InputItem onChange={(e) => {
+                                this.setState({price: e})
+                            }} value={color} placeholder="请输入价格">价格</InputItem>
+                            <Item extra={<Stepper onChange={(e) => {
+                                this.setState({stock: e})
+                            }} value={stock} style={{width: '100%', minWidth: '100px'}} showNumber
+                                                  size="small"/>}>库存</Item>
+                            <div className='list-others'>
+                                <div className='spec-button-group'>
+                                    {
+                                        index === -1?
+                                            <div>新增的按钮还没写</div>
+                                            :
+                                            <div>
+                                                <Mutation mutation={gql(update_specificationStock)} refetchQueries={[
+                                                    {query: gql(specificationStock_by_props), variables: {product_id: productID}}
+                                                ]}>
+                                                    {(updatespecificationStock, {loading, error}) => {
+                                                        if (loading)
+                                                            return (
+                                                                <div className="loading">
+                                                                    <div className="align">
+                                                                        <ActivityIndicator text="Loading..."
+                                                                                           size="large"/>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        if (error)
+                                                            return 'error'
+                                                        let varObj = {
+                                                            id,
+                                                            color,
+                                                            size,
+                                                            stock,
+                                                            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                                                        }
+                                                        return (
+                                                            <Button type="primary" size="small" inline
+                                                                    onClick={() => {
+                                                                        updatespecificationStock({variables: varObj})
+                                                                    }}>更新</Button>
+                                                        )
+                                                    }}
+                                                </Mutation>
+                                                <Mutation mutation={gql(delete_specificationStock)} refetchQueries={[
+                                                    {query: gql(specificationStock_by_props), variables: {product_id: productID}},
+                                                ]}>
+                                                    {(deletespecificationStock, {loading, error}) => {
+                                                        if (loading)
+                                                            return (
+                                                                <div className="loading">
+                                                                    <div className="align">
+                                                                        <ActivityIndicator text="Loading..." size="large"/>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        if (error)
+                                                            return 'error'
+                                                        return (
+                                                            <Button type="warning" size="small" inline
+                                                                    style={{marginLeft: 10}} onClick={() => {
+                                                                deletespecificationStock({variables: {id}})
+                                                            }}>删除</Button>
+                                                        )
+                                                    }}
+                                                </Mutation>
+                                                <div>更新删除的按钮还没测试</div>
+                                            </div>
+                                    }
+                                </div>
+                            </div>
+                        </List>
                 }
-                <Item arrow="horizontal" onClick={() => {}}>新增规格</Item>
-            </List>
+            </div>
         )
     }
 }
