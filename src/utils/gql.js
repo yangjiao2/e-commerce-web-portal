@@ -128,6 +128,21 @@ const productAndSpec_by_id = `
         }
     }
 `
+const specificationStock_by_props = `
+    query specificationStockbyprops($product_id: ID) {
+        specificationStockbyprops: specificationStock_by_props(product_id: $product_id) {
+            updatedAt
+            color
+            createdAt
+            size
+            slideImg
+            status
+            id
+            detailImg
+            stock
+        }
+    }
+`
 
 const create_userCart = `
     mutation createuserCart($id: ID!, $user_id: ID, $product_id: ID, $specificationStock_id: ID, $count: Int, $createdAt: String, $updatedAt: String) {
@@ -795,6 +810,7 @@ export {
     create_category,
     productbyprops,
     productAndSpec_by_id,
+    specificationStock_by_props,
     create_userCart,
     cart_by_userid,
     update_userCart,
