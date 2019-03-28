@@ -25,7 +25,8 @@ import {
     create_category,
     specificationStock_by_props,
     delete_specificationStock,
-    update_specificationStock
+    update_specificationStock,
+    create_specificationStock
 } from "../../../../utils/gql"
 import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
@@ -766,11 +767,11 @@ class AddSpecStock extends Component {
                         <List renderHeader={() => <div onClick={this.controlList(true, -1)}><Icon
                             type="left"/>&nbsp;点击返回规格列表</div>}>
                             <InputItem onChange={(e) => {
-                                this.setState({intro: e})
-                            }} value={size} placeholder="请输入简介">简介</InputItem>
+                                this.setState({size: e})
+                            }} value={size} placeholder="请输入尺寸">尺寸</InputItem>
                             <InputItem onChange={(e) => {
-                                this.setState({price: e})
-                            }} value={color} placeholder="请输入价格">价格</InputItem>
+                                this.setState({color: e})
+                            }} value={color} placeholder="请输入颜色">颜色</InputItem>
                             <Item extra={<Stepper onChange={(e) => {
                                 this.setState({stock: e})
                             }} value={stock} style={{width: '100%', minWidth: '100px'}} showNumber
@@ -779,7 +780,40 @@ class AddSpecStock extends Component {
                                 <div className='spec-button-group'>
                                     {
                                         index === -1?
-                                            <div>新增的按钮还没写</div>
+                                            <Mutation mutation={gql(create_specificationStock)} refetchQueries={[
+                                                {query: gql(specificationStock_by_props), variables: {product_id: productID}}
+                                            ]}>
+                                                {(createspecificationStock, {loading, error}) => {
+                                                    if (loading)
+                                                        return (
+                                                            <div className="loading">
+                                                                <div className="align">
+                                                                    <ActivityIndicator text="Loading..." size="large"/>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    if (error)
+                                                        return 'error'
+                                                    let varObj = {
+                                                        id,
+                                                        product_id: productID,
+                                                        color,
+                                                        size,
+                                                        stock,
+                                                        slideImg: [],
+                                                        detailImg: [],
+                                                        status: '1',
+                                                        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                                        updatedAt: ''
+                                                    }
+                                                    return (
+                                                        <Button type="primary" size="small" inline
+                                                                onClick={() => {
+                                                                    createspecificationStock({variables: varObj})
+                                                                }}>添加</Button>
+                                                    )
+                                                }}
+                                            </Mutation>
                                             :
                                             <div>
                                                 <Mutation mutation={gql(update_specificationStock)} refetchQueries={[
@@ -834,7 +868,6 @@ class AddSpecStock extends Component {
                                                         )
                                                     }}
                                                 </Mutation>
-                                                <div>更新删除的按钮还没测试</div>
                                             </div>
                                     }
                                 </div>
