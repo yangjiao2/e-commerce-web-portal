@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
-import {Input} from 'antd'
+// import {Input} from 'antd'
 import {NavBar, Icon, ActivityIndicator, Grid} from 'antd-mobile'
 
 import {productbyprops} from "../../../utils/gql"
 import './index.css'
 
-const Search = Input.Search
+// const Search = Input.Search
 
 class Kind extends Component {
     constructor(props) {

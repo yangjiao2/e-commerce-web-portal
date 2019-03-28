@@ -1,93 +1,14 @@
 import React, {Component} from "react"
+import {message} from 'antd'
 import {InputItem, TextareaItem, Picker, Switch} from 'antd-mobile'
 import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
+import {district} from 'antd-mobile-full-demo-data';
 
-import {
-    create_update_userAddress,
-    update_userAddress,
-    userAddressbyprops
-} from "../../../../../utils/gql"
+import {create_update_userAddress, update_userAddress, userAddressbyprops} from "../../../../../utils/gql"
 import './index.css'
 import {idGen} from "../../../../../utils/func"
-
-const provinceAll = [
-    {
-        label: '江苏省',
-        value: '江苏省',
-    },
-    {
-        label: '河南省',
-        value: '河南省',
-    },
-    {
-        label: '安徽省',
-        value: '安徽省',
-        children: [
-            {
-                label: '合肥市',
-                value: '合肥市',
-                children: [
-                    {
-                        label: '蜀山区',
-                        value: '蜀山区',
-                    },
-                    {
-                        label: '瑶海区',
-                        value: '瑶海区',
-                    },
-                    {
-                        label: '包河区',
-                        value: '包河区',
-                    },
-                    {
-                        label: '庐阳区',
-                        value: '庐阳区',
-                    }
-                ],
-            },
-            {
-                label: '芜湖市',
-                value: '芜湖市',
-                children: [
-                    {
-                        label: '镜湖区',
-                        value: '镜湖区',
-                    },
-                    {
-                        label: '弋江区',
-                        value: '弋江区',
-                    },
-                ],
-            },
-            {
-                label: '六安市',
-                value: '六安市',
-            },
-            {
-                label: '淮南市',
-                value: '淮南市',
-            },
-            {
-                label: '马鞍山市',
-                value: '马鞍山市',
-            },
-            {
-                label: '黄山市',
-                value: '黄山市',
-            }
-        ]
-    },
-    {
-        label: '湖北省',
-        value: '湖北省',
-    },
-    {
-        label: '江西省',
-        value: '江西省',
-    },
-]
 
 class SingleAddress extends Component {
     constructor(props) {
@@ -109,53 +30,92 @@ class SingleAddress extends Component {
             let defaultStatus = default1 ? 1 : 0
             this.state = {...state, province, city, area, address, telephone, username, id, defaultStatus}
         }
+        this.handleDistrict()
+    }
+
+    handleDistrict = () => {
+        district.forEach((item)=>{
+            let {label} = item
+            item.value = label
+            if(item.children){
+                item.children.forEach((item)=>{
+                    let {label} = item
+                    item.value = label
+                    if(item.children){
+                        item.children.forEach((item)=>{
+                            let {label} = item
+                            item.value = label
+                        })
+                    }
+                })
+            }
+        })
     }
 
     saveAddress = (user_id, mutate) => {
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let {username, telephone, province, city, area, address, defaultStatus, id} = this.state
-        let addressId = id || idGen('address')
+        let areaAddress = province + city + area
+        const testPhoneNum = /^1[0-9]{10}$/;
+        let isPoneAvailable = testPhoneNum.test(telephone);
 
-        let defaultStatus1 = defaultStatus ? 1 : 0
-        const addressContent = {
-            address,
-            updatedAt: "",
-            telephone,
-            default: defaultStatus1,
-            city,
-            username,
-            postcode: "",
-            createdAt,
-            deletedAt: "",
-            id: addressId,
-            user_id,
-            area,
-            province
-        }
+        if(username && isPoneAvailable && areaAddress && address){
+            let addressId = id || idGen('address')
 
-        let {defaultAddress, addressID} = this.props
-        if(defaultAddress){
-            let {id} = defaultAddress
-            addressContent.updateID = id
-            addressContent.updateDefault = 0
-        }else {
-            addressContent.updateID = ''
-        }
-
-        mutate({variables:addressContent}).then((data)=>{
-            this.props.refetch()
-            let prePage = this.props.history.location.state.prePage
-
-            if(defaultStatus1){
-                sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
+            let defaultStatus1 = defaultStatus ? 1 : 0
+            const addressContent = {
+                address,
+                updatedAt: "",
+                telephone,
+                default: defaultStatus1,
+                city,
+                username,
+                postcode: "",
+                createdAt,
+                deletedAt: "",
+                id: addressId,
+                user_id,
+                area,
+                province
             }
-            if(prePage && addressID !== 'add'){
-                sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
-                this.props.history.go(-2)
+
+            let {defaultAddress, addressID} = this.props
+            if(defaultAddress){
+                let {id} = defaultAddress
+                addressContent.updateID = id
+                addressContent.updateDefault = 0
             }else {
-                this.props.changePage(false)
+                addressContent.updateID = ''
             }
-        })
+
+            mutate({variables:addressContent}).then((data)=>{
+                this.props.refetch()
+                let prePage = this.props.history.location.state.prePage
+
+                if(defaultStatus1){
+                    sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
+                }
+                if(prePage && addressID !== 'add'){
+                    sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
+                    this.props.history.go(-2)
+                }else {
+                    this.props.changePage(false)
+                }
+            })
+        }else if(!username){
+            message.warning('收货人不能为空',1)
+        }else if(!telephone){
+            message.warning('联系电话不能为空',1);
+        } else if(!isPoneAvailable){
+            message.warning('请输入11位有效手机号码',1)
+        }else if(!areaAddress){
+            message.warning('请选择地区',1)
+        }else if(!address){
+            message.warning('请输入详细地址，无需包含省市',1)
+        }else {
+            message.warning('收货地址暂未完善',2)
+        }
+
     }
 
     render() {
@@ -176,9 +136,10 @@ class SingleAddress extends Component {
                         <div>联系电话</div>
                     </InputItem>
                     <Picker
-                        data={provinceAll}
+                        data={district}
                         value={[province, city ? city : '', area ? area : '']}
                         onOk={(address) => {
+                            console.log('onOK address',address)
                             this.setState({province: address[0], city: address[1], area: address[2]})
                         }}
                     >
