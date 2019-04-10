@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import './index.css'
 import {Grid} from 'antd-mobile'
 import {withRouter} from 'react-router-dom'
+import Logo from '../../../components/logo'
 
 const orderIcon = [
     {
@@ -178,6 +179,8 @@ class All extends Component {
                         />
                     </div>
                 </div>
+
+                <Logo/>
             </div>
         )
     }

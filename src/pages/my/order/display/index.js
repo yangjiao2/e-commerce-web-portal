@@ -190,7 +190,7 @@ class DisplayRender extends Component {
 
                                 {
                                     button?
-                                        <ButtonGroupRender orderStatus={this.props.orderStatus}/>
+                                        <ButtonGroupRender orderStatus={this.props.orderStatus} history={this.props.history}/>
                                         :
                                         ''
                                 }
@@ -209,7 +209,12 @@ const ButtonGroupRender = (props) => {
         case '0':
             return (
                 <div className='order-card-button-group'>
-                    <Button size="small" className='pay-button order-button'>去支付</Button>
+                    <Button size="small" className='pay-button order-button' onClick={()=>{
+                        props.history.push({
+                            pathname:'/cart/pay',
+                            state:{}
+                        })
+                    }}>去支付</Button>
                 </div>
             )
         case '1':

@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom'
 import {Query} from "react-apollo"
 import gql from "graphql-tag"
 import {Grid, Carousel, WhiteSpace, ActivityIndicator} from 'antd-mobile'
-
+import Logo from '../../../components/logo'
 import {category_by_props, productbyprops} from "../../../utils/gql"
 import './index.css'
 
@@ -114,6 +114,7 @@ class All extends Component {
                         }
                     </Query>
                 </div>
+                <Logo/>
             </div>
         )
     }
