@@ -105,10 +105,10 @@ class All extends Component {
 
                             return (
                                 <Grid
-                                    // data={dataList}
-                                    // dataOther={demoDataList}
-                                    data={demoDataList}
-                                    dataOther={dataList}
+                                    data={dataList}
+                                    dataOther={demoDataList}
+                                    // data={demoDataList}
+                                    // dataOther={dataList}
                                     hasLine={false}
                                     onClick={(kind) => {
                                         this.props.history.push({
@@ -194,10 +194,10 @@ class Recommend extends Component {
             <div className='guess-wrapper'>
                 <div className='guess-title'>- 店长推荐 -</div>
                 <Grid
-                    // data={data}
-                    // demoData={demoData}
-                    data={demoData}
-                    demoData={data}
+                    data={data}
+                    demoData={demoData}
+                    // data={demoData}
+                    // demoData={data}
                     columnNum={2}
                     hasLine={false}
                     onClick={(recommend) => {
