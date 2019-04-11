@@ -1,8 +1,12 @@
 import React, {Component} from 'react'
 import './index.css'
-import {Grid} from 'antd-mobile'
+import {Grid, ActivityIndicator} from 'antd-mobile'
 import {withRouter} from 'react-router-dom'
 import Logo from '../../../components/logo'
+import {getCookie} from "../../../utils/cookie"
+import {user_by_id} from "../../../utils/gql"
+import {Query} from "react-apollo"
+import gql from "graphql-tag"
 
 const orderIcon = [
     {
@@ -88,12 +92,38 @@ class All extends Component {
     }
 
     render() {
+        let user_id = getCookie('user_id')
         return (
             <div className='my-wrap all'>
-                <div className='avatar-area'>
-                    <div className='avatar'/>
-                    <div className='nickname'>昵称</div>
-                </div>
+                <Query query={gql(user_by_id)} variables={{user_id}}>
+                    {
+                        ({loading, error, data}) => {
+                            if (loading) {
+                                return (
+                                    <div className="loading-center">
+                                        <ActivityIndicator text="Loading..." size="large"/>
+                                    </div>
+                                )
+                            }
+                            if (error) {
+                                return 'error!'
+                            }
+                            data = data.userbyid
+                            return (
+                                <div className='avatar-area' onClick={()=>{
+                                    this.props.history.push({
+                                        pathname: `/my/profile`,
+                                        state: {}
+                                    })
+                                }}>
+                                    <div className='avatar'/>
+                                    <div className='nickname'>{data.username}</div>
+                                </div>
+                            )
+                        }
+                    }
+                </Query>
+
                 <div className='my-card order-card'>
                     <div className='card-title'>
                         电商订单
@@ -179,7 +209,6 @@ class All extends Component {
                         />
                     </div>
                 </div>
-
                 <Logo/>
             </div>
         )

@@ -24,6 +24,49 @@ const find_user_by_openid = `
     }
 `
 
+const user_by_id = `
+    query userbyid($id: ID) {
+        userbyid: user_by_id(id: $id) {
+            email
+            updatedAt
+            password
+            telephone
+            username
+            createdAt
+            openid
+            id
+            userData_id {
+                id
+                nickname
+                avatar
+                isVip
+                vipCode
+                userPoint
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`
+
+const update_user = `
+    mutation updateuser($email: String, $updatedAt: String, $where: user_filter, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID, $userData_id: ID) {
+        updateuser: update_user(email: $email updatedAt: $updatedAt where: $where password: $password telephone: $telephone username: $username createdAt: $createdAt openid: $openid id: $id userData_id: $userData_id) {
+            result
+            user {
+                email
+                updatedAt
+                password
+                telephone
+                username
+                createdAt
+                openid
+                id
+            }
+        }
+    }
+`
+
 const category_by_props = `
     query categorybyprops($sort_by: category_sort_by, $limit: Int, $status: String) {
         categorybyprops: category_by_props(sort_by: $sort_by limit: $limit status: $status) {
@@ -850,6 +893,8 @@ const delete_product_by_id = `
 export {
     create_user,
     find_user_by_openid,
+    user_by_id,
+    update_user,
     category_by_props,
     update_category,
     delete_category,
