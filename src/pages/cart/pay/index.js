@@ -51,7 +51,7 @@ class Pay extends Component {
                         let updatedAt = moment().format('YYYY-MM-DD HH:mm:ss')
                         const updateContent = {
                             id,
-                            orderStatus: 1,
+                            orderStatus: '1',
                             updatedAt
                         }
                         update_order({variables:updateContent})
