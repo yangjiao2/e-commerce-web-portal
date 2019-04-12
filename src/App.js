@@ -92,7 +92,8 @@ class App extends Component {
         if (!openid) {
             window.location.href = "/subscribe"
 
-        }else if(!user_id){
+        }
+        if(!user_id){
             request(graphqlFC, find_user_by_openid ,{openid})
                 .then(data => {
                     console.log('find user data',data)

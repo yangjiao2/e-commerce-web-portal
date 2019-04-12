@@ -3,10 +3,11 @@ import {withRouter} from 'react-router-dom'
 import {Row, Col} from 'antd'
 import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
 import {Query} from "react-apollo"
+import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import classNames from 'classnames'
 
-import {orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
+import {delete_order, orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
 import {getCookie} from "../../../../utils/cookie"
 import './index.css'
 
@@ -155,7 +156,7 @@ class DisplayRender extends Component {
                                             return (
                                                 <div>
                                                     {
-                                                        button?
+                                                        button ?
                                                             <div className='order-card-content' onClick={() => {
                                                                 this.props.history.push({
                                                                     pathname: '/my/order/detail',
@@ -185,12 +186,14 @@ class DisplayRender extends Component {
                                     <div
                                         className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;{content}:
                                     </div>
-                                    <div className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
+                                    <div
+                                        className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
                                 </div>
 
                                 {
-                                    button?
-                                        <ButtonGroupRender orderStatus={this.props.orderStatus} history={this.props.history}/>
+                                    button ?
+                                        <ButtonGroupRender id={order.id} orderStatus={this.props.orderStatus}
+                                                           history={this.props.history}/>
                                         :
                                         ''
                                 }
@@ -204,15 +207,40 @@ class DisplayRender extends Component {
 }
 
 const ButtonGroupRender = (props) => {
-    let {orderStatus} = props
+    let {orderStatus, id} = props
+    let user_id = getCookie('user_id')
     switch (orderStatus) {
         case '0':
             return (
                 <div className='order-card-button-group'>
-                    <Button size="small" className='pay-button order-button' onClick={()=>{
+                    <Mutation
+                        mutation={gql(delete_order)}
+                        refetchQueries={[{query: gql(orderbyprops), variables: {user_id, orderStatus}}]}
+                    >
+                        {(delete_order, {loading, error}) => {
+                            if (loading) {
+                                return (
+                                    <div className="loading-center">
+                                        <ActivityIndicator text="Loading..." size="large"/>
+                                    </div>
+                                )
+                            }
+                            if (error) {
+                                return 'error!'
+                            }
+                            return (
+                                <Button size="small" className='pay-button order-button' onClick={() => {
+                                    delete_order({variables: {id}})
+                                }}>取消</Button>
+                            )
+                        }}
+                    </Mutation>
+
+
+                    <Button size="small" className='pay-button order-button' style={{marginLeft: 5}} onClick={() => {
                         props.history.push({
-                            pathname:'/cart/pay',
-                            state:{}
+                            pathname: '/cart/pay',
+                            state: {}
                         })
                     }}>去支付</Button>
                 </div>

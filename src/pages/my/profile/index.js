@@ -35,7 +35,7 @@ class Profile extends Component {
 
                 <Mutation
                     mutation={gql(update_user)}
-                    refetchQueries={[{query: gql(user_by_id), variables: {user_id}}]}
+                    refetchQueries={[{query: gql(user_by_id), variables: {id: user_id}}]}
                 >
                     {(update_user, {loading, error}) => {
                         if (loading) {
@@ -56,6 +56,8 @@ class Profile extends Component {
                                     }} value={username} placeholder="请输入昵称">昵称</InputItem>
                                 </List>
                                 <Button onClick={() => {
+                                    console.log(username)
+                                    console.log(user_id)
                                     update_user({variables: {id: user_id, username}})
                                 }}>确认</Button>
                             </div>

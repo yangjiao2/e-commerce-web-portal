@@ -50,8 +50,8 @@ const user_by_id = `
 `
 
 const update_user = `
-    mutation updateuser($email: String, $updatedAt: String, $where: user_filter, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID, $userData_id: ID) {
-        updateuser: update_user(email: $email updatedAt: $updatedAt where: $where password: $password telephone: $telephone username: $username createdAt: $createdAt openid: $openid id: $id userData_id: $userData_id) {
+    mutation updateuser($id: ID, $email: String, $updatedAt: String, $where: user_filter, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $userData_id: ID) {
+        updateuser: update_user(id: $id email: $email updatedAt: $updatedAt where: $where password: $password telephone: $telephone username: $username createdAt: $createdAt openid: $openid userData_id: $userData_id) {
             result
             user {
                 email
@@ -612,6 +612,12 @@ const update_order = `
     }
 `
 
+const delete_order = `
+    mutation deleteorder($id: ID) {
+        deleteorder: delete_order(id: $id)
+    }
+`
+
 const orderProduct_by_props = `
     query orderProductbyprops($order_id: ID) {
         orderProductbyprops: orderProduct_by_props(order_id: $order_id) {
@@ -917,6 +923,7 @@ export {
     orderbyprops,
     order_by_id,
     update_order,
+    delete_order,
     orderProduct_by_props,
     create_order,
     create_order_product,
