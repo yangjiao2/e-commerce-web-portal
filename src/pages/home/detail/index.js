@@ -320,7 +320,7 @@ class SelectModal extends Component {
                 status:specStatus
             }
         }]
-        console.log('buyNowContent',buyNowContent)
+        // console.log('buyNowContent',buyNowContent)
         sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
         sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
         this.props.changeDetailState('openSelect')

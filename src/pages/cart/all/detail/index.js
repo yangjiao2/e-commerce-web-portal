@@ -259,7 +259,7 @@ class CartDetail extends Component {
             }
         }) 
         // console.log('cartList',this.state.cartList)
-        console.log('shopping',shopping)
+        // console.log('shopping',shopping)
         sessionStorage.setItem("cartSelected",JSON.stringify(shopping))
         sessionStorage.setItem("totalPrice",JSON.stringify(this.state.totalPrice))
         sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))

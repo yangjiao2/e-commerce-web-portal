@@ -138,7 +138,7 @@ class All extends Component {
                                 if (error) {
                                     return 'error!'
                                 }
-                                console.log(data.productbyprops)
+                                // console.log(data.productbyprops)
                                 return (
                                     <Recommend data={data.productbyprops} history={this.props.history}/>
                                 )

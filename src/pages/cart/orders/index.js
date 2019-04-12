@@ -155,16 +155,16 @@ class CartOrders extends Component {
                     productPay: price,
                     orderPay_id: "",
                 }
-                console.log(`orderProduct${index}`,orderProduct)
+                // console.log(`orderProduct${index}`,orderProduct)
 
                 return create_order_product({variables:orderProduct}).then((data)=>{
-                    console.log('ok data',index,data)
+                    // console.log('ok data',index,data)
                     return data.data
                 })
             })
 
             Promise.all([createOrder, createOrderProduct]).then((data)=> {
-                console.log('onSubmitOrderAndProduct data',data)
+                // console.log('onSubmitOrderAndProduct data',data)
                 sessionStorage.setItem('payOrder',JSON.stringify(orderContent))
                 if(type === 'cartSelected'){
                     let cartCount = JSON.parse(localStorage.getItem("cartCount")) - totalCount

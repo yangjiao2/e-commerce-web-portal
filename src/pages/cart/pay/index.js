@@ -11,6 +11,7 @@ import moment from 'moment'
 import {update_order} from "../../../utils/gql"
 import {getCookie} from "../../../utils/cookie"
 import './index.css'
+import {getIsWechatBrowser} from "../../../utils/func"
 
 let clicktag = 1;  //微信发起支付点击标志
 class Pay extends Component {
@@ -83,8 +84,9 @@ class Pay extends Component {
     }
 
     getBridgeReady = (update_order,id,needPay) => {
-        console.log('getBridgeReady params',id,needPay)
-        if(clicktag === 1) {
+        // console.log('getBridgeReady params',id,needPay)
+        let isWechat = getIsWechatBrowser()
+        if(clicktag === 1 && isWechat) {
             clicktag = 0   //进行标志，防止多次点击
             let openid = getCookie('openid')
 
@@ -97,7 +99,7 @@ class Pay extends Component {
                     }
                 })
                 .then((res) =>{
-                    console.log('onBridgeReady res',res)
+                    // console.log('onBridgeReady res',res)
                     $this.jsApiPay(res.data,id,update_order)
                     setTimeout(()=> {clicktag = 1}, 5000)
                 })
@@ -105,6 +107,8 @@ class Pay extends Component {
                     message.warning('网络或系统故障，请稍后重试')
                     console.log('onBridgeReady error',error)
                 })
+        }else {
+            message.info('当前只支持在微信中打开')
         }
     }
 

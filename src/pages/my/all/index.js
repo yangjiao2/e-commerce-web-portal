@@ -93,7 +93,7 @@ class All extends Component {
 
     render() {
         let user_id = getCookie('user_id')
-        console.log(user_id)
+        // console.log(user_id)
         return (
             <div className='my-wrap all'>
                 <Query query={gql(user_by_id)} variables={{id: user_id}}>

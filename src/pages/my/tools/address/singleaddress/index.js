@@ -139,7 +139,7 @@ class SingleAddress extends Component {
                         data={district}
                         value={[province, city ? city : '', area ? area : '']}
                         onOk={(address) => {
-                            console.log('onOK address',address)
+                            // console.log('onOK address',address)
                             this.setState({province: address[0], city: address[1], area: address[2]})
                         }}
                     >
