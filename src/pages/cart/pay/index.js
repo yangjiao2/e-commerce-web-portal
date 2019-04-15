@@ -151,7 +151,10 @@ class Pay extends Component {
                 <div className="confirm-footer">
                     <Mutation mutation={gql(update_order)}
                               onError={error => console.log('error', error)}
-                              refetchQueries={[{query: gql(orderbyprops), variables: {user_id, orderStatus:'1'}}]}
+                              refetchQueries={[
+                                  {query: gql(orderbyprops), variables: {user_id, orderStatus: '1'}},
+                                  {query: gql(orderbyprops), variables: {user_id, orderStatus: '0'}},
+                              ]}
                     >
                         {(update_order, {loading, error}) => (
                             <button
