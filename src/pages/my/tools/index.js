@@ -14,7 +14,7 @@ class Tools extends Component {
     componentWillMount() {
         let {location} = this.props
         if (location && location.state) {
-            this.props.history.push({
+            this.props.history.replace({
                 pathname: '/my/tools/' + location.state.page,
                 state: location.state
             })

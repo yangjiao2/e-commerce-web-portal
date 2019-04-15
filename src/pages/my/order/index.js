@@ -13,7 +13,7 @@ class Order extends Component {
         let {location} = this.props
         if (location && location.state) {
             if(['pay', 'ship', 'unbox', 'judge'].indexOf(location.state.kind)>-1) {
-                this.props.history.push({
+                this.props.history.replace({
                     pathname: '/my/order/display',
                     state: {
                         kind: location.state.kind
