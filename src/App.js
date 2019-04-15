@@ -87,13 +87,12 @@ class App extends Component {
         let isWechatLogin = getIsWechatBrowser()
         // console.log('isWechatLogin',isWechatLogin)
         if (isWechatLogin) {
-            setCookie("openid","o2fcFv6Rh2-4rCh3d5_1uCWCT5Yc")
+            // setCookie("openid","o2fcFv6Rh2-4rCh3d5_1uCWCT5Yc")
             let openid = getCookie("openid")
             let user_id = getCookie("user_id")
             console.log('oauthLogin openid', openid)
 
             if (!openid) {
-                // 需要修改
                 window.location.href = "/subscribe"
             } else if (!user_id) {
                 request(graphqlFC, find_user_by_openid, {openid})
