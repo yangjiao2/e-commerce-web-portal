@@ -7,7 +7,7 @@ import {Query, Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
 
-import {user_default_address, create_order, create_order_product} from "../../../utils/gql"
+import {user_default_address, create_order, create_order_product, orderbyprops} from "../../../utils/gql"
 import {idGen} from "../../../utils/func"
 import {getCookie} from "../../../utils/cookie"
 import './index.css'
@@ -368,8 +368,10 @@ class CartOrders extends Component {
                                     <span>合计：</span>
                                     <span className="jiesuan-total_price">¥ {totalPrice}</span>
                                 </div>
-                                <Mutation mutation={gql(create_order_product)}
-                                          onError={error=>console.log('create_order_product error',error)}
+                                <Mutation
+                                    mutation={gql(create_order_product)}
+                                    onError={error=>console.log('create_order_product error',error)}
+                                    refetchQueries={[{query: gql(orderbyprops), variables: {user_id, orderStatus:'0'}}]}
                                 >
                                     {(create_order_product,{ loading, error }) => (
                                         <button className="jiesuan-button"

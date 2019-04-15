@@ -8,7 +8,7 @@ import {Mutation} from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
 
-import {update_order} from "../../../utils/gql"
+import {orderbyprops, update_order} from "../../../utils/gql"
 import {getCookie} from "../../../utils/cookie"
 import './index.css'
 import {getIsWechatBrowser} from "../../../utils/func"
@@ -119,6 +119,7 @@ class Pay extends Component {
     render() {
         let {checked, payOrder} = this.state
         let {id, orderTotalPay} = payOrder
+        let user_id = getCookie('user_id')
         return (
             <div className='pay-wrap'>
                 <div className='pay-navbar-wrap navbar'>
@@ -150,6 +151,7 @@ class Pay extends Component {
                 <div className="confirm-footer">
                     <Mutation mutation={gql(update_order)}
                               onError={error => console.log('error', error)}
+                              refetchQueries={[{query: gql(orderbyprops), variables: {user_id, orderStatus:'1'}}]}
                     >
                         {(update_order, {loading, error}) => (
                             <button
