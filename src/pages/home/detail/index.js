@@ -323,7 +323,7 @@ class SelectModal extends Component {
         // console.log('buyNowContent',buyNowContent)
         sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
         sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
-        sessionStorage.setItem("totalCount",JSON.stringify(this.state.selectedCount))
+        sessionStorage.setItem("totalCount",JSON.stringify(this.state.count))
         this.props.changeDetailState('openSelect')
         this.props.history.push({
             pathname: '/cart/orders',

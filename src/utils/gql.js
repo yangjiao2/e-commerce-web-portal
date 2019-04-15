@@ -593,7 +593,7 @@ const order_by_id = `
 
 const update_order = `
     mutation updateorder($id: ID, $updatedAt: String, $orderStatus: String, $orderPay_id: ID) {
-        updateorder: update_order(id: $id updatedAt: $updatedAt orderStatus: $orderStatus count: $count orderPay_id: $orderPay_id) {
+        updateorder: update_order(id: $id updatedAt: $updatedAt orderStatus: $orderStatus orderPay_id: $orderPay_id) {
             result
             order {
                 remark

@@ -86,54 +86,54 @@ class App extends Component {
     oauthLogin = () => {
         let isWechatLogin = getIsWechatBrowser()
         // console.log('isWechatLogin',isWechatLogin)
-        if(isWechatLogin){
-            // setCookie("openid","obR_j5GbxDfGlOolvSeTdZUwfpKA")
-            let openid =  getCookie("openid")
-            let user_id =  getCookie("user_id")
-            console.log('oauthLogin openid',openid)
+        if (isWechatLogin) {
+            // setCookie("openid","o2fcFv6Rh2-4rCh3d5_1uCWCT5Yc")
+            let openid = getCookie("openid")
+            let user_id = getCookie("user_id")
+            console.log('oauthLogin openid', openid)
 
             if (!openid) {
+                // 需要修改
                 window.location.href = "/subscribe"
-            }
-            if(!user_id){
-                request(graphqlFC, find_user_by_openid ,{openid})
-                  .then(data => {
-                      console.log('find user data',data)
-                      if(data.userbyprops.length){
-                          let id = data.userbyprops[0].id
-                          setCookie('user_id',id)
-                      }else {
-                          let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-                          let id = idGen('user')
-                          const userContent = {
-                              email: "",
-                              updatedAt: "",
-                              password: "",
-                              telephone: "",
-                              username: "",
-                              createdAt,
-                              openid,
-                              id,
-                              userData_id: ""
+            } else if (!user_id) {
+                request(graphqlFC, find_user_by_openid, {openid})
+                    .then(data => {
+                        console.log('find user data', data)
+                        if (data.userbyprops.length) {
+                            let id = data.userbyprops[0].id
+                            setCookie('user_id', id)
+                        } else {
+                            let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+                            let id = idGen('user')
+                            const userContent = {
+                                email: "",
+                                updatedAt: "",
+                                password: "",
+                                telephone: "",
+                                username: "点击修改昵称",
+                                createdAt,
+                                openid,
+                                id,
+                                userData_id: ""
 
-                          }
-                          request(graphqlFC, create_user ,userContent)
-                            .then(data => {
-                                console.log('create user data',data)
-                                setCookie('user_id',id)
-                            })
-                            .catch(err => {
-                                console.log(err, `graphql-request create user error`)
-                            })
-                      }
-                  })
-                  .catch(err => {
-                      console.log(err, `graphql-request find user error`)
-                  })
+                            }
+                            request(graphqlFC, create_user, userContent)
+                                .then(data => {
+                                    console.log('create user data', data)
+                                    setCookie('user_id', id)
+                                })
+                                .catch(err => {
+                                    console.log(err, `graphql-request create user error`)
+                                })
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err, `graphql-request find user error`)
+                    })
             }
-        }else {
-            setCookie("user_id","ioobot")
-            setCookie("openid","ioobot")
+        } else {
+            setCookie("user_id", "ioobot")
+            setCookie("openid", "ioobot")
         }
     }
 
@@ -188,7 +188,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" render={() => {
                             this.oauthLogin()
-                            return <Home />
+                            return <Home/>
                         }}/>
                         <Route path="/home" component={Home}/>
                         <Route path="/cart" component={Cart}/>
