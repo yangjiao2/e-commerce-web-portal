@@ -97,7 +97,6 @@ updatedAt,string,
 order,collection,
 id,ID,key
 user_id,ID,non-null
-userAddress_id,ID,non-null
 remark,string,
 productTotalPay,float,non-null
 orderTotalPay,float,non-null

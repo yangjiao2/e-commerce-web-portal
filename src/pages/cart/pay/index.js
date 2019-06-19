@@ -93,7 +93,7 @@ class Pay extends Component {
             let openid = getCookie('openid')
 
             let $this = this
-            axios.get('/payinfo', {
+            axios.get('http://localhost:3000/payinfo', {
                 params: {
                     needPay: parseInt(needPay * 100, 10),
                     openid,

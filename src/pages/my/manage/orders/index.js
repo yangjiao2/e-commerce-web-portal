@@ -34,7 +34,7 @@ class Orders extends Component {
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
-                        this.props.history.go(-2)
+                        this.props.history.go(-1)
                     }}
                 >订单管理</NavBar>
                 <div className='content-wrap'>
@@ -143,7 +143,7 @@ class SearchQuery extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -158,9 +158,9 @@ class SearchQuery extends Component {
                                 </div>
                             )
                         } else {
-                            let {id, orderStatus, orderTotalPay, productTotalPay, count, remark, user_id, userAddress_id, createdAt, orderLogistics_id, orderPay_id} = data
+                            let {id, orderStatus, orderTotalPay, productTotalPay, count, remark, user_id, createdAt, orderLogistics_id, orderPay_id} = data
                             let {telephone: telephoneUser, username: usernameUser, email} = user_id
-                            let {province, city, area, address, telephone, username} = userAddress_id
+                            let {consigneeName, consigneeTel, consignAddress} = orderLogistics_id
                             let logisticsFee, LogisticsStatus, expressCreatedAt
                             if (orderLogistics_id !== null) {
                                 logisticsFee = orderLogistics_id.logisticsFee
@@ -178,9 +178,9 @@ class SearchQuery extends Component {
                                 "产品总量": count,
                                 "产品总计价格": productTotalPay,
                                 "订单总计价格": orderTotalPay,
-                                "订单人名称": username,
-                                "订单电话": telephone,
-                                "订单地址": province + city + area + address,
+                                "收货人": consigneeName,
+                                "收货人联系号码": consigneeTel,
+                                "收货地址": consignAddress,
                                 "下单时间": createdAt,
                                 "用户名称": usernameUser,
                                 "用户邮箱": email,
@@ -223,7 +223,7 @@ class Shiping extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -231,7 +231,6 @@ class Shiping extends Component {
                             return 'error!'
                         }
                         data = data.orderbyprops
-
 
                         return (
                             <div>
@@ -271,7 +270,7 @@ class Unbox extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -279,7 +278,7 @@ class Unbox extends Component {
                             return 'error!'
                         }
                         data = data.orderbyprops
-                        console.log(data)
+                        // console.log(data)
                         return (
                             <div>
                                 {
@@ -318,7 +317,7 @@ class Completed extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -326,7 +325,7 @@ class Completed extends Component {
                             return 'error!'
                         }
                         data = data.orderbyprops
-                        console.log(data)
+                        // console.log(data)
                         return (
                             <div>
                                 {
@@ -365,7 +364,7 @@ class Commented extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -373,7 +372,7 @@ class Commented extends Component {
                             return 'error!'
                         }
                         data = data.orderbyprops
-                        console.log(data)
+                        // console.log(data)
                         return (
                             <div>
                                 {

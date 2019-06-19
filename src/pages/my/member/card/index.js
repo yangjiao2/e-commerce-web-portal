@@ -17,7 +17,7 @@ class Card extends Component {
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
-                        this.props.history.go(-2)
+                        this.props.history.go(-1)
                     }}
                 >会员卡</NavBar>
             </div>

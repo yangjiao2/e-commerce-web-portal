@@ -18,7 +18,7 @@ class Message extends Component {
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {
-                            this.props.history.go(-2)
+                            this.props.history.go(-1)
                         }}
                     >系统消息</NavBar>
                 </div>

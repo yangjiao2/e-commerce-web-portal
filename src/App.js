@@ -88,6 +88,7 @@ class App extends Component {
         // console.log('isWechatLogin',isWechatLogin)
         if (isWechatLogin) {
             // setCookie("openid","o2fcFv6Rh2-4rCh3d5_1uCWCT5Yc")
+            setCookie("openid","o2fcFv8x3wy5WtcP116S5GzzkgDQ")
             let openid = getCookie("openid")
             let user_id = getCookie("user_id")
             console.log('oauthLogin openid', openid)

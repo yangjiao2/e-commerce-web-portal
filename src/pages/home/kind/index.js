@@ -56,7 +56,7 @@ class Kind extends Component {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large"/>
                                     </div>
                                 )
                             }
@@ -125,7 +125,7 @@ class KindRender extends Component {
                                       <div className='product-item-description'>
                                           <div className='product-item-name'>{dataItem.name}</div>
                                           <div className='product-item-price'>
-                                              <span>￥{dataItem.price}</span>&nbsp;
+                                              <span>￥{(dataItem.price * dataItem.discountRate / 100).toFixed(2)}</span>&nbsp;
                                               <span>￥{dataItem.price}</span>
                                           </div>
                                       </div>

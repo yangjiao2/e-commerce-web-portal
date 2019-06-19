@@ -17,7 +17,7 @@ class Coupon extends Component {
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
-                        this.props.history.go(-2)
+                        this.props.history.go(-1)
                     }}
                 >优惠券</NavBar>
             </div>

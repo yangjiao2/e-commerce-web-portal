@@ -17,7 +17,7 @@ class Credit extends Component {
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
-                        this.props.history.go(-2)
+                        this.props.history.go(-1)
                     }}
                 >我的积分</NavBar>
             </div>

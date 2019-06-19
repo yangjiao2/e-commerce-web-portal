@@ -16,9 +16,9 @@ class SingleAddress extends Component {
         let state = {
             username: '',
             telephone: '',
-            province: '安徽省',
-            city: '合肥市',
-            area: '蜀山区',
+            province: '',
+            city: '',
+            area: '',
             address: '',
             id: '',
             defaultStatus:false
@@ -79,7 +79,7 @@ class SingleAddress extends Component {
                 province
             }
 
-            let {defaultAddress, addressID} = this.props
+            let {defaultAddress} = this.props
             if(defaultAddress){
                 let {id} = defaultAddress
                 addressContent.updateID = id
@@ -95,9 +95,9 @@ class SingleAddress extends Component {
                 if(defaultStatus1){
                     sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
                 }
-                if(prePage && addressID !== 'add'){
+                if(prePage){
                     sessionStorage.setItem('ordersAddress',JSON.stringify(addressContent))
-                    this.props.history.go(-2)
+                    this.props.history.go(-1)
                 }else {
                     this.props.changePage(false)
                 }
@@ -146,7 +146,8 @@ class SingleAddress extends Component {
                         <TextareaItem
                             title="选择地区"
                             editable={false}
-                            value={province+city+area}
+                            value={province ? province+city+area : null}
+                            placeholder="请选择地区"
                         />
                     </Picker>
                     <TextareaItem

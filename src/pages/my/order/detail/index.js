@@ -90,8 +90,10 @@ class Detail extends Component {
 
     render() {
         let {data} = this.state
-        let {username, telephone, province, city, area, address} = data.userAddress_id
-        return (
+      console.log("detail data",data)
+      let {consigneeName, consigneeTel, consignAddress} = data.orderLogistics_id
+
+      return (
             <div>
                 <div className='detail-wrap'>
                     <div className='navbar'>
@@ -120,10 +122,10 @@ class Detail extends Component {
                                     </Col>
                                     <Col span={20}>
                                         <div className='detail-address-content-username-phone'>
-                                            {username}&nbsp;&nbsp;{telephone}
+                                            {consigneeName}&nbsp;&nbsp;{consigneeTel}
                                         </div>
                                         <div>
-                                            地址：{province + city + area + address}
+                                            收货地址：{consignAddress}
                                         </div>
                                     </Col>
                                 </Row>

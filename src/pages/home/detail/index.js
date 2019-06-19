@@ -49,7 +49,7 @@ class Detail extends Component {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large"/>
                                     </div>
                                 )
                             }
