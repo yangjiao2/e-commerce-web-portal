@@ -64,7 +64,7 @@ class Goods extends Component {
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
-                        this.props.history.go(-2)
+                        this.props.history.go(-1)
                     }}
                 >商品管理</NavBar>
                 <div className='content-wrap'>
@@ -110,7 +110,7 @@ class AllCategory extends Component {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large"/>
                                     </div>
                                 )
                             }
@@ -168,7 +168,7 @@ class AllCategorySwitch extends Component {
                         return (
                             <div className="loading">
                                 <div className="align">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             </div>
                         )
@@ -209,7 +209,7 @@ class AllCategoryButton extends Component {
                         return (
                             <div className="loading">
                                 <div className="align">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             </div>
                         )
@@ -247,7 +247,7 @@ class AllCategoryInput extends Component {
                         return (
                             <div className="loading">
                                 <div className="align">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             </div>
                         )
@@ -314,7 +314,7 @@ class AllGoods extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -348,7 +348,7 @@ class AllGoods extends Component {
                                                                     return (
                                                                         <div className="loading">
                                                                             <div className="align">
-                                                                                <ActivityIndicator text="Loading..."
+                                                                                <ActivityIndicator text="加载中..."
                                                                                                    size="large"/>
                                                                             </div>
                                                                         </div>
@@ -488,7 +488,7 @@ class AddGoods extends Component {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             )
                         }
@@ -510,7 +510,7 @@ class AddGoods extends Component {
                                                 if (loading) {
                                                     return (
                                                         <div className="loading-center">
-                                                            <ActivityIndicator text="Loading..." size="large"/>
+                                                            <ActivityIndicator text="加载中..." size="large"/>
                                                         </div>
                                                     )
                                                 }
@@ -570,7 +570,7 @@ class AddGoods extends Component {
                                                             return (
                                                                 <div className="loading">
                                                                     <div className="align">
-                                                                        <ActivityIndicator text="Loading..."
+                                                                        <ActivityIndicator text="加载中..."
                                                                                            size="large"/>
                                                                     </div>
                                                                 </div>
@@ -622,7 +622,7 @@ class AddGoods extends Component {
                                                                 return (
                                                                     <div className="loading">
                                                                         <div className="align">
-                                                                            <ActivityIndicator text="Loading..."
+                                                                            <ActivityIndicator text="加载中..."
                                                                                                size="large"/>
                                                                         </div>
                                                                     </div>
@@ -671,7 +671,7 @@ class AddGoods extends Component {
                                                                 return (
                                                                     <div className="loading">
                                                                         <div className="align">
-                                                                            <ActivityIndicator text="Loading..."
+                                                                            <ActivityIndicator text="加载中..."
                                                                                                size="large"/>
                                                                         </div>
                                                                     </div>
@@ -788,7 +788,7 @@ class AddSpecStock extends Component {
                                                         return (
                                                             <div className="loading">
                                                                 <div className="align">
-                                                                    <ActivityIndicator text="Loading..." size="large"/>
+                                                                    <ActivityIndicator text="加载中..." size="large"/>
                                                                 </div>
                                                             </div>
                                                         )
@@ -824,7 +824,7 @@ class AddSpecStock extends Component {
                                                             return (
                                                                 <div className="loading">
                                                                     <div className="align">
-                                                                        <ActivityIndicator text="Loading..."
+                                                                        <ActivityIndicator text="加载中..."
                                                                                            size="large"/>
                                                                     </div>
                                                                 </div>
@@ -854,7 +854,7 @@ class AddSpecStock extends Component {
                                                             return (
                                                                 <div className="loading">
                                                                     <div className="align">
-                                                                        <ActivityIndicator text="Loading..." size="large"/>
+                                                                        <ActivityIndicator text="加载中..." size="large"/>
                                                                     </div>
                                                                 </div>
                                                             )

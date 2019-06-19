@@ -469,8 +469,8 @@ const delete_address = `
 `
 
 const orderbyprops = `
-    query orderbyprops($updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
-        orderbyprops: order_by_props(updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
+    query orderbyprops($updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID) {
+        orderbyprops: order_by_props(updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
             updatedAt
             orderLogistics_id {
                 deliveryTime
@@ -491,20 +491,6 @@ const orderbyprops = `
             orderTotalPay
             createdAt
             orderStatus
-            userAddress_id {
-                address
-                updatedAt
-                telephone
-                default
-                city
-                username
-                postcode
-                createdAt
-                deletedAt
-                id
-                area
-                province
-            }
             id
             count
             productTotalPay
@@ -548,20 +534,6 @@ const order_by_id = `
             orderTotalPay
             createdAt
             orderStatus
-            userAddress_id {
-                address
-                updatedAt
-                telephone
-                default
-                city
-                username
-                postcode
-                createdAt
-                deletedAt
-                id
-                area
-                province
-            }
             id
             count
             user_id {
@@ -666,13 +638,11 @@ const create_order = `
                     logisticsFee
                     expressId
                     createdAt
-        
                     consigneeTel
                     id
                     expressName
                     consignAddress
                     LogisticsStatus
-        
                     consigneeName
                 }
                 orderTotalPay

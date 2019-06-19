@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {Row, Col} from 'antd'
+import {Row, Col, message} from 'antd'
 import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
 import {Query} from "react-apollo"
 import {Mutation} from "react-apollo"
@@ -67,7 +67,7 @@ class Display extends Component {
                         mode="light"
                         icon={<Icon type="left"/>}
                         onLeftClick={() => {
-                            this.props.history.go(-2)
+                            this.props.history.go(-1)
                         }}
                     >{navTitle}</NavBar>
                 </div>
@@ -77,7 +77,7 @@ class Display extends Component {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large"/>
                                     </div>
                                 )
                             }
@@ -145,7 +145,7 @@ class DisplayRender extends Component {
                                             if (loading) {
                                                 return (
                                                     <div className="loading-center">
-                                                        <ActivityIndicator text="Loading..." size="large"/>
+                                                        <ActivityIndicator text="加载中..." size="large"/>
                                                     </div>
                                                 )
                                             }
@@ -192,7 +192,7 @@ class DisplayRender extends Component {
 
                                 {
                                     button ?
-                                        <ButtonGroupRender id={order.id} orderStatus={this.props.orderStatus}
+                                        <ButtonGroupRender id={order.id} order={order} orderStatus={this.props.orderStatus}
                                                            history={this.props.history}/>
                                         :
                                         ''
@@ -207,7 +207,7 @@ class DisplayRender extends Component {
 }
 
 const ButtonGroupRender = (props) => {
-    let {orderStatus, id} = props
+    let {orderStatus, id, order} = props
     let user_id = getCookie('user_id')
     switch (orderStatus) {
         case '0':
@@ -221,7 +221,7 @@ const ButtonGroupRender = (props) => {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large"/>
                                     </div>
                                 )
                             }
@@ -238,6 +238,7 @@ const ButtonGroupRender = (props) => {
 
 
                     <Button size="small" className='pay-button order-button' style={{marginLeft: 5}} onClick={() => {
+                        sessionStorage.setItem('payOrder',JSON.stringify(order))
                         props.history.push({
                             pathname: '/cart/pay',
                             state: {}
@@ -248,31 +249,29 @@ const ButtonGroupRender = (props) => {
         case '1':
             return (
                 <div className='order-card-button-group'>
-                    <Button size="small" className='ship-button order-button'>催发货</Button>
-                    &nbsp;&nbsp;
-                    <Button size="small" className='cancel-button order-button'>取消订单</Button>
+                    <Button size="small" className='ship-button order-button' onClick={() => {
+                      message.success('已提醒')
+                    }}>催发货</Button>
                 </div>
             )
         case '2':
             return (
                 <div className='order-card-button-group'>
-                    <Button size="small" className='unbox-button order-button'>查看物流</Button>
-                    &nbsp;&nbsp;
-                    <Button size="small" className='cancel-button order-button'>取消订单</Button>
+                    <Button size="small" className='unbox-button order-button' onClick={() => {
+                      message.info('暂无物流信息')
+                    }}>查看物流</Button>
                 </div>
             )
-        case '3':
-            return (
-                <div className='order-card-button-group'>
-                    <Button size="small" className='judge-button order-button'>去评价</Button>
-                    &nbsp;&nbsp;
-                    <Button size="small" className='more-button order-button'>售后</Button>
-                </div>
-            )
+        // case '3':
+        //     return (
+        //         <div className='order-card-button-group'>
+        //             <Button size="small" className='judge-button order-button'>去评价</Button>
+        //         </div>
+        //     )
         default:
             return (
                 <div>
-                    ok
+
                 </div>
             )
     }

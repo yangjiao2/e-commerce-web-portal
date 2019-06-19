@@ -26,7 +26,7 @@ const orderIcon = [
     },
     {
         icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/judge.png',
-        text: '待评价',
+        text: '已完成',
         id: 'judge'
     }
 ]
@@ -42,11 +42,11 @@ const toolsIcon = [
         text: '购物袋',
         id: 'cart'
     },
-    {
-        icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/message.png',
-        text: '系统通知',
-        id: 'message'
-    }
+    // {
+    //     icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/message.png',
+    //     text: '系统通知',
+    //     id: 'message'
+    // }
 ]
 
 const memberIcon = [
@@ -102,7 +102,7 @@ class All extends Component {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="Loading..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large"/>
                                     </div>
                                 )
                             }

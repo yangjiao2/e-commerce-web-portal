@@ -59,7 +59,7 @@ class Address extends Component {
                             if(single){
                                 this.changePage(false)
                             }else {
-                                this.props.history.go(-2)
+                                this.props.history.go(-1)
                             }
                         }}
                     >{navContent}</NavBar>
@@ -71,7 +71,7 @@ class Address extends Component {
                                 if (loading) {
                                     return (
                                         <div className="loading-center">
-                                            <ActivityIndicator text="Loading..." size="large"/>
+                                            <ActivityIndicator text="加载中..." size="large"/>
                                         </div>
                                     )
                                 }
@@ -131,7 +131,7 @@ class AddressRender extends Component {
 
         if(prePage){
             sessionStorage.setItem('ordersAddress',JSON.stringify(address))
-            this.props.history.go(-2)
+            this.props.history.go(-1)
         }
     }
 

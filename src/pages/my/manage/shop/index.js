@@ -26,7 +26,7 @@ class Shop extends Component {
                     mode="light"
                     icon={<Icon type="left"/>}
                     onLeftClick={() => {
-                        this.props.history.go(-2)
+                        this.props.history.go(-1)
                     }}
                 >店铺管理</NavBar>
                 <Query query={gql(shop_by_props)} variables={{limit: 1}}>
@@ -36,7 +36,7 @@ class Shop extends Component {
                                 return (
                                     <div className="loading">
                                         <div className="align">
-                                            <ActivityIndicator text="Loading..." size="large"/>
+                                            <ActivityIndicator text="加载中..." size="large"/>
                                         </div>
                                     </div>
                                 )
@@ -234,7 +234,7 @@ class UpdateShopButton extends Component {
                         return (
                             <div className="loading">
                                 <div className="align">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             </div>
                         )
@@ -300,7 +300,7 @@ class CreateShopButton extends Component {
                         return (
                             <div className="loading">
                                 <div className="align">
-                                    <ActivityIndicator text="Loading..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large"/>
                                 </div>
                             </div>
                         )

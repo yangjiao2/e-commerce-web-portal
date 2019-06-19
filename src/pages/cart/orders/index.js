@@ -180,7 +180,7 @@ class CartOrders extends Component {
                 console.log('submit error',err)
             })
         }else {
-            message.warning('请添加收货地址')
+            message.warning('请先添加收货地址')
         }
 
     }
