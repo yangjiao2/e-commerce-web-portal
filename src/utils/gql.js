@@ -866,6 +866,17 @@ const delete_product_by_id = `
     }
 `
 
+const slideshow_by_props = `
+    query slideshowbyprops($updatedAt: String, $where: slideshow_filter, $sort_by: slideshow_sort_by, $limit: Int, $order_by: OrderBy, $name: String, $createdAt: String, $filter: Filter, $status: Int, $img: String, $skip: Int) {
+    slideshowbyprops: slideshow_by_props(updatedAt: $updatedAt where: $where sort_by: $sort_by limit: $limit order_by: $order_by name: $name createdAt: $createdAt filter: $filter status: $status img: $img skip: $skip) {
+        id
+        name
+        img
+        status
+    }
+  }
+`
+
 export {
     create_user,
     find_user_by_openid,
@@ -902,5 +913,6 @@ export {
     update_shop,
     create_product,
     update_product,
-    delete_product_by_id
+    delete_product_by_id,
+	slideshow_by_props
 }
