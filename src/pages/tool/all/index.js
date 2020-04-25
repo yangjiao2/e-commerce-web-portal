@@ -7,31 +7,31 @@ import { getCookie } from "../../../utils/cookie"
 import { user_by_id } from "../../../utils/gql"
 import { Query } from "react-apollo"
 import gql from "graphql-tag"
-import { StarOutlined, EnvironmentOutlined, ShoppingCartOutlined, SolutionOutlined } from '@ant-design/icons'
-import { from } from 'apollo-boost'
+import { PayCircleOutlined, FieldTimeOutlined, ShoppingOutlined, ShopOutlined } from '@ant-design/icons'
 
-const toolsIcon = [
+const orderIcon = [
     {
-        icon: <EnvironmentOutlined />, // 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/address.png',
-        text: '收货地址',
-        id: 'address'
+        icon: <PayCircleOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/pay.png',
+        text: '待付款',
+        id: 'pay'
     },
     {
-        icon: <ShoppingCartOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/cart.png',
-        text: '购物车',
-        id: 'cart'
+        icon: <FieldTimeOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/ship.png',
+        text: '待发货',
+        id: 'ship'
     },
     {
-        icon: <StarOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/cart.png',
-        text: '收藏夹',
-        id: 'cart'
+        icon: <ShoppingOutlined />,//'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/unbox.png',
+        text: '待收货',
+        id: 'unbox'
     },
     {
-        icon: <SolutionOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/message.png',
-        text: '用户信息',
-        id: 'profile'
+        icon: <ShopOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/judge.png',
+        text: '已完成',
+        id: 'judge'
     }
 ]
+
 
 class All extends Component {
     constructor(props) {
@@ -41,51 +41,22 @@ class All extends Component {
 
     render() {
         let user_id = getCookie('user_id')
-        // console.log(user_id)
         return (
             <div className='my-wrap all'>
-                {/* <div className='my-card order-card'>
-                    <div className='card-title'>
-                        电商订单
-                    </div>
+                <div>
                     <div className='card-icons'>
                         <Grid data={orderIcon}
                             columnNum={4}
-                            hasLine={false}
+                            // hasLine={false}
+                            square={false}
                             onClick={(order) => {
+                                console.log('tool all', order);
                                 this.props.history.push({
-                                    pathname: '/my/order',
+                                    pathname: '/my/order/',
                                     state: {
                                         kind: order.id
                                     }
                                 })
-                            }}
-                        />
-                    </div>
-                </div> */}
-
-                <div className=''>
-                    <div className='card-icons'>
-                        <Grid data={toolsIcon}
-                            columnNum={4}
-                            square={false}
-                            onClick={(tools) => {
-                                if (tools.id === 'cart') {
-                                    this.props.history.push({
-                                        pathname: '/cart'
-                                    })
-                                } else if (tools.id === 'profile') {
-                                    this.props.history.push({
-                                        pathname: 'my/profile'
-                                    })
-                                } else {
-                                    this.props.history.push({
-                                        pathname: '/my/info',
-                                        state: {
-                                            page: tools.id
-                                        }
-                                    })
-                                }
                             }}
                             renderItem={dataItem => (
                                 <div style={{ padding: '4px' }}>
@@ -99,7 +70,10 @@ class All extends Component {
                         />
                     </div>
                 </div>
+
+
                 {/*
+
                 <div className='my-card member-card' style={{ display: 'none' }}>
                     <div className='card-title'>
                         会员中心

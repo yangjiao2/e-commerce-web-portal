@@ -1,14 +1,14 @@
-import React, {Component} from 'react'
-import {withRouter} from 'react-router-dom'
-import {Row, Col, message} from 'antd'
-import {NavBar, Icon, ActivityIndicator, Button} from 'antd-mobile'
-import {Query} from "react-apollo"
-import {Mutation} from "react-apollo"
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import { Row, Col, message } from 'antd'
+import { NavBar, Icon, ActivityIndicator, Button } from 'antd-mobile'
+import { Query } from "react-apollo"
+import { Mutation } from "react-apollo"
 import gql from "graphql-tag"
 import classNames from 'classnames'
 
-import {delete_order, orderbyprops, orderProduct_by_props} from "../../../../utils/gql"
-import {getCookie} from "../../../../utils/cookie"
+import { delete_order, orderbyprops, orderProduct_by_props } from "../../../../utils/gql"
+import { getCookie } from "../../../../utils/cookie"
 import './index.css'
 
 class Display extends Component {
@@ -22,7 +22,7 @@ class Display extends Component {
     }
 
     componentWillMount() {
-        let {location} = this.props
+        let { location } = this.props
         if (location && location.state) {
             let navTitle = '',
                 orderStatus = '0'
@@ -57,36 +57,36 @@ class Display extends Component {
     }
 
     render() {
-        let {navTitle, orderStatus} = this.state
+        let { navTitle, orderStatus } = this.state
         let user_id = getCookie('user_id')
 
         return (
             <div className='order-wrap'>
-                <div className='navbar'>
+                <div >
                     <NavBar
                         mode="light"
-                        icon={<Icon type="left"/>}
+                        icon={<Icon type="left" />}
                         onLeftClick={() => {
                             this.props.history.go(-1)
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(orderbyprops)} variables={{user_id, orderStatus}}>
+                <Query query={gql(orderbyprops)} variables={{ user_id, orderStatus }}>
                     {
-                        ({loading, error, data}) => {
+                        ({ loading, error, data }) => {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="加载中..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large" />
                                     </div>
                                 )
                             }
                             if (error) {
-                                return 'error!'
+                                return 'my-order-display-error!'
                             }
                             return (
                                 <DisplayRender data={data.orderbyprops} orderStatus={orderStatus}
-                                               history={this.props.history}/>
+                                    history={this.props.history} />
                             )
                         }
                     }
@@ -105,10 +105,10 @@ class DisplayRender extends Component {
     orderCardContentRender = (data) => {
         if (data.length === 1) {
             return (
-                <Row style={{width: '100%'}}>
-                    <Col span={6} style={{height: '100%'}}>
+                <Row style={{ width: '100%' }}>
+                    <Col span={6} style={{ height: '100%' }}>
                         <div className='order-product-img'
-                             style={{backgroundImage: `url('${data[0].product_id.img}')`}}/>
+                            style={{ backgroundImage: `url('${data[0].product_id.img}')` }} />
                     </Col>
                     <Col span={16} offset={2}>
                         <div className='order-product-name'>{data[0].product_id.name}</div>
@@ -117,18 +117,18 @@ class DisplayRender extends Component {
             )
         } else {
             return (data.map(data => (
-                <div className='order-product-img' style={{backgroundImage: `url('${data.product_id.img}')`}}
-                     key={data.id}/>
+                <div className='order-product-img' style={{ backgroundImage: `url('${data.product_id.img}')` }}
+                    key={data.id} />
             )))
         }
     }
 
     render() {
-        let {data, orderStatus, button = true} = this.props
+        let { data, orderStatus, button = true } = this.props
         let content = orderStatus === '0' ? '需付款' : '实付款'
 
         return (
-            <div className={classNames({'content-wrap': button})}>
+            <div className={classNames({ 'content-wrap': button })}>
                 {
                     data.length === 0 ?
                         <div className='order-tip-wrap'>
@@ -139,13 +139,13 @@ class DisplayRender extends Component {
                             <div key={order.id} className='order-card'>
                                 <div className='order-card-top'>订单号: {order.id}</div>
 
-                                <Query query={gql(orderProduct_by_props)} variables={{order_id: order.id}}>
+                                <Query query={gql(orderProduct_by_props)} variables={{ order_id: order.id }}>
                                     {
-                                        ({loading, error, data}) => {
+                                        ({ loading, error, data }) => {
                                             if (loading) {
                                                 return (
                                                     <div className="loading-center">
-                                                        <ActivityIndicator text="加载中..." size="large"/>
+                                                        <ActivityIndicator text="加载中..." size="large" />
                                                     </div>
                                                 )
                                             }
@@ -193,7 +193,7 @@ class DisplayRender extends Component {
                                 {
                                     button ?
                                         <ButtonGroupRender id={order.id} order={order} orderStatus={this.props.orderStatus}
-                                                           history={this.props.history}/>
+                                            history={this.props.history} />
                                         :
                                         ''
                                 }
@@ -207,7 +207,7 @@ class DisplayRender extends Component {
 }
 
 const ButtonGroupRender = (props) => {
-    let {orderStatus, id, order} = props
+    let { orderStatus, id, order } = props
     let user_id = getCookie('user_id')
     switch (orderStatus) {
         case '0':
@@ -215,13 +215,13 @@ const ButtonGroupRender = (props) => {
                 <div className='order-card-button-group'>
                     <Mutation
                         mutation={gql(delete_order)}
-                        refetchQueries={[{query: gql(orderbyprops), variables: {user_id, orderStatus}}]}
+                        refetchQueries={[{ query: gql(orderbyprops), variables: { user_id, orderStatus } }]}
                     >
-                        {(delete_order, {loading, error}) => {
+                        {(delete_order, { loading, error }) => {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="加载中..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large" />
                                     </div>
                                 )
                             }
@@ -230,15 +230,15 @@ const ButtonGroupRender = (props) => {
                             }
                             return (
                                 <Button size="small" className='pay-button order-button' onClick={() => {
-                                    delete_order({variables: {id}})
+                                    delete_order({ variables: { id } })
                                 }}>取消</Button>
                             )
                         }}
                     </Mutation>
 
 
-                    <Button size="small" className='pay-button order-button' style={{marginLeft: 5}} onClick={() => {
-                        sessionStorage.setItem('payOrder',JSON.stringify(order))
+                    <Button size="small" className='pay-button order-button' style={{ marginLeft: 5 }} onClick={() => {
+                        sessionStorage.setItem('payOrder', JSON.stringify(order))
                         props.history.push({
                             pathname: '/cart/pay',
                             state: {}
@@ -250,7 +250,7 @@ const ButtonGroupRender = (props) => {
             return (
                 <div className='order-card-button-group'>
                     <Button size="small" className='ship-button order-button' onClick={() => {
-                      message.success('已提醒')
+                        message.success('已提醒')
                     }}>催发货</Button>
                 </div>
             )
@@ -258,7 +258,7 @@ const ButtonGroupRender = (props) => {
             return (
                 <div className='order-card-button-group'>
                     <Button size="small" className='unbox-button order-button' onClick={() => {
-                      message.info('暂无物流信息')
+                        message.info('暂无物流信息')
                     }}>查看物流</Button>
                 </div>
             )

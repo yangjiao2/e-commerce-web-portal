@@ -1,15 +1,15 @@
-import React, {Component} from 'react'
-import {withRouter} from 'react-router-dom'
-import {Query, Mutation} from "react-apollo"
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import { Query, Mutation } from "react-apollo"
 import gql from "graphql-tag"
-import {message} from 'antd'
-import {NavBar, Icon, ActivityIndicator, Badge, Modal} from 'antd-mobile'
+import { NavBar, Icon, ActivityIndicator, Modal, Card, Toast, } from 'antd-mobile'
+import { Row, Col } from 'antd'
 import classNames from 'classnames'
 import moment from 'moment'
 
-import {productAndSpec_by_id, create_userCart, cart_by_userid} from "../../../utils/gql"
-import {idGen} from '../../../utils/func'
-import {getCookie} from "../../../utils/cookie"
+import { PRODUCT_DETAIL_BY_ID_QUERY, INSERT_CART_MUTATION, CART_DETAIL_BY_USER_ID_QUERY } from "../../../utils/gql"
+import { idGen } from '../../../utils/func'
+import { setCookie, getCookie } from "../../../utils/cookie"
 import './index.css'
 
 class Detail extends Component {
@@ -18,11 +18,12 @@ class Detail extends Component {
         this.state = {
             id: ''
         }
+        setCookie('user_id', 1);
     }
 
     componentWillMount() {
-        let {location} = this.props
-        if(location && location.state) {
+        let { location } = this.props
+        if (location && location.state) {
             this.setState({
                 id: location.state.id
             })
@@ -30,35 +31,34 @@ class Detail extends Component {
     }
 
     render() {
-        let {id} = this.state
-
+        let { id } = this.state
         return (
             <div className='detail-wrap' >
-                <div className='detail-navbar-wrap navbar'>
+                <div className='detail-navbar-wrap'>
                     <NavBar
                         mode="light"
-                        icon={<Icon type="left"/>}
-                        onLeftClick={() => {this.props.history.go(-1)}}
-                    >商品详情
+                        icon={<Icon type="left" />}
+                        onLeftClick={() => { this.props.history.go(-1) }}
+                    >
+                        <div>商品详情</div>
                     </NavBar>
                 </div>
 
-                <Query query={gql(productAndSpec_by_id)} variables={{id}}>
+                <Query query={gql(PRODUCT_DETAIL_BY_ID_QUERY)} variables={{ "id": id }}>
                     {
-                        ({loading, error, data}) => {
+                        ({ loading, error, data }) => {
                             if (loading) {
                                 return (
                                     <div className="loading-center">
-                                        <ActivityIndicator text="加载中..." size="large"/>
+                                        <ActivityIndicator text="加载中..." size="large" />
                                     </div>
                                 )
                             }
                             if (error) {
-                                return 'error!'
+                                return '商品详情: 页面出问题...'
                             }
-                            // console.log('productAndSpec_by_id data',data)
                             return (
-                                <DetailRender data={data} history={this.props.history}/>
+                                <DetailRender data={data} history={this.props.history} />
                             )
                         }
                     }
@@ -76,59 +76,84 @@ class DetailRender extends Component {
         this.state = {
             cartCount: JSON.parse(localStorage.getItem('cartCount')),
             openSelect: false,
-            buttonType: 'add'
+            buttonType: ''
         }
     }
 
-    showModal = (e,key) => {
+    // 弹出选择框
+    showModal = (e, key) => {
         e.preventDefault(); // 修复 Android 上点击穿透
         this.setState({
             [key]: true,
         })
     }
 
-    changeDetailState = (state,val) => {
+    changeDetailState = (state, val) => {
         this.setState({
-            [state]:val
+            [state]: val
         })
     }
 
-    changeBottomButtonType = (e,val) => {
+    // 设置弹出框内容：加入购物车或加入收藏夹
+    changeBottomButtonType = (e, val) => {
         this.setState({
-            buttonType:val
+            buttonType: val
         })
-        this.showModal(e,'openSelect')
+        if (val === 'star') {
+            Toast.success('已加入收藏夹')
+        } else {
+            this.showModal(e, 'openSelect')
+        }
     }
 
     render() {
-        let {data} = this.props
-        let {name, intro, img, price, stock, discountRate} = data.productbyid
-        let {cartCount, openSelect, buttonType} = this.state
-        // console.log('DetailRender openSelect',openSelect)
-
+        let { data } = this.props
+        let { name, intro, img, price, stock } = data.product;
+        let { cartCount, openSelect, buttonType } = this.state
+        console.log('DetailRender openSelect', openSelect)
+        let discountRate = 0.8;
         return (
-            <div className='detail-wrapper content-wrap'>
+            <div className='detail-wrapper'>
                 <div className='detail-simple-show'>
                     {/*<div className='detail-img' style={{backgroundImage: "url('"+ img + "')"}}/>*/}
-                    <img className='detail-img' src={img} alt="商品图片"/>
-                    <div className='detail-intro-content'>
-                        <div className='detail-name detail-padding'>{name}</div>
-                        <div className='detail-intro detail-padding'>{intro}</div>
-                        <div className='detail-price detail-padding'>
-                            <span>￥{(price*discountRate/100).toFixed(2)}</span>&nbsp;&nbsp;
-                            <span>￥{price.toFixed(2)}</span>
-                            <span className='detail-stock'>库存 {stock}</span>
-                        </div>
-                    </div>
-                </div>
-                <div className='detail-complicate-show'>
+                    <Row>
+                        <Col span={10}>
+                            <img className='detail-img' src={img} alt="商品图片" />
+                        </Col>
+                        <Col span={14}>
+                            <div className='detail-intro-content'>
+                                <Card full>
+                                    <Card.Header
+                                        title={<div className='detail-name detail-padding'>{name}</div>}
+                                    />
+                                    <Card.Body>
+                                        <div className='detail-price detail-padding'>
+                                            <span>￥{(price * discountRate).toFixed(2)}</span>&nbsp;&nbsp;
+                                    <span>￥{price.toFixed(2)}</span>
+                                            <span className='detail-stock'>库存 {stock}</span>
+                                        </div>
+                                    </Card.Body>
+                                    <Card.Footer
+                                        extra={
+                                            <div>
+                                                <span className='detail-bottom-button add' onClick={(e) => { this.changeBottomButtonType(e, 'star') }}>加入收藏夹</span>
+                                                <span >{' '}</span>
+                                                <span className='detail-bottom-button add' onClick={(e) => { this.changeBottomButtonType(e, 'add') }}>加入购物袋</span>
+                                            </div>
+                                        } />
+                                </Card>
+                            </div>
+                            {/* <div className='detail-intro detail-padding'>{intro}</div>>*/}
+                        </Col>
+                    </Row>
+                    {/*  <div className='detail-complicate-show'>
                     <div className='detail-padding detail-complicate-title'>商品信息</div>
                     <div className='detail-complicate-show-img'>
-                        {/*通过商品详情图片展示*/}
                         <img className='detail-img' src={img} alt="商品图片"/>
                     </div>
                 </div>
-                <div className='detail-footer'>
+
+                <div className='detail-footer2s'>
                     <div className='detail-bottom'>
                         <span className='detail-bottom-icon border-right' onClick={()=>{this.props.history.push({pathname: '/home'})}}>
                             <div className='detail-icon detail-icon-shop'/>
@@ -145,22 +170,18 @@ class DetailRender extends Component {
                               }}
                         >
                             <div className='detail-icon detail-icon-cart'/>
-                            <Badge text={cartCount} overflowCount={90} hot>
-                                 <span style={{display: 'inline-block' }} />
-                            </Badge>
                         </span>
                         <span className='detail-bottom-button add' onClick={(e)=>{this.changeBottomButtonType(e,'add')}}>加入购物袋</span>
-                        <span className='detail-bottom-button buy' onClick={(e)=>{this.changeBottomButtonType(e,'buy')}}>立即购买</span>
-                        <SelectModal
-                            changeDetailState={this.changeDetailState}
-                            openSelect={openSelect}
-                            buttonType={buttonType}
-                            productData={data}
-                            price={price}
-                            img={img}
-                            history={this.props.history}
-                        />
+
                     </div>
+                         */}
+                    <SelectModal
+                        changeDetailState={this.changeDetailState}
+                        openSelect={openSelect}
+                        buttonType={buttonType}
+                        productData={data}
+                        history={this.props.history}
+                    />
                 </div>
             </div>
         )
@@ -173,204 +194,159 @@ class SelectModal extends Component {
         this.state = {
             count: 1,
             selectColor: '',
-            selectSpec:{},
+            selectSpec: {},
             specList: [],
             colorList: []
         }
     }
 
     componentWillMount() {
-        let {productData} = this.props
-        this.handleData(productData.spec)
+        let { productData } = this.props
+        // this.handleData(productData.spec)
     }
 
-    // 规格表处理
-    handleData = (specs) => {
-        let flag = true, selectFlag = true
-        let specObject = {}, i = 0, specList = []
-        let colorObject = {}, j = 0, colorList = [], selectColor = ''
-        specs.forEach((item) => {
-            let {id,color,size,stock,status} = item
-            if(flag && status > 0) {
-                selectColor = color
-                flag = false
-            }
-            specObject[color] ? specList[specObject[color] - 1].spec.push({id, size, stock, status}) : specObject[color] = ++i && specList.push({
-                color,
-                spec: [{id, size, stock, status}],
-            })
-            if(!colorObject[color]) {
-                colorObject[color] = ++j
-                colorList.push({
-                    id,
-                    color
-                })
-            }
-        })
 
-        specList.forEach((items)=>{
-            let {spec} = items
-            spec.forEach((item)=>{
-                item.select = false
-                if(selectFlag && item.status > 0) {
-                    item.select = true
-                    selectFlag = false
-                }
-            })
-            selectFlag = true
-        })
-
+    changeState = (state, val) => {
         this.setState({
-            selectColor,
-            specList,
-            colorList
-        })
-        // console.log('specList',specList)
-        // console.log('colorList',colorList)
-    }
-
-    changeState = (state,val) => {
-        this.setState({
-            [state]:val
+            [state]: val
         })
     }
 
     //获取输入框的值
-    getInputValue=(e)=>{
+    getInputValue = (e) => {
         this.setState({
-            count:e.target.value
+            count: e.target.value
         })
     }
 
-    // 增加
-    augment=()=>{
+    // 增加购物车数量
+    augment = () => {
         this.setState({
-            count:this.state.count*1+1
+            count: this.state.count * 1 + 1
         })
     }
 
-    // 减少
-    reduce=()=> {
-        this.setState({
-            count:this.state.count*1-1
-        })
+    // 减少购物车数量
+    reduce = () => {
+        if (this.state.count > 1) {
+            this.setState({
+                count: this.state.count * 1 - 1
+            })
+        }
     }
 
     // 添加至购物袋
-    onCreateUserCart = (create_userCart, user_id) => {
-        let id = idGen('cart')
-        let {productData} = this.props
-        let product_id = productData.productbyid.id
-        let {count, selectColor, specList} = this.state
-        let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
-        let specificationStock_id =  specFilter.id
-        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+    onCreateUserCart = (mutation, user_id) => {
+        // let id = idGen('cart')
+        let { productData } = this.props
+        let product_id = productData.product.id
+        let { count, selectColor, specList } = this.state
+        // let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
 
-        const cartContent = {
-            id,
-            user_id,
-            product_id,
-            specificationStock_id,
-            count,
-            createdAt,
-            updatedAt: ""
-        }
-        // console.log('cartContent',cartContent)
+        const cartContent =
+        {
+            "user_id": user_id,
+            "product_id": product_id,
+            "status": 1,
+            "count": count
+        };
 
-        this.props.changeDetailState('openSelect',false)
-        create_userCart({variables:cartContent}).then((data)=>{
-            // console.log('create_userCart data',data)
+        this.props.changeDetailState('openSelect', false)
+        mutation({ variables: cartContent }).then((data) => {
             let cartCount = JSON.parse(localStorage.getItem("cartCount")) + count
-            this.props.changeDetailState('cartCount',cartCount)
-            message.success('成功添加至购物车')
-            localStorage.setItem("cartCount",JSON.stringify(cartCount))
+            this.props.changeDetailState('cartCount', cartCount)
+            Toast.success('成功添加至购物车')
+            localStorage.setItem("cartCount", JSON.stringify(cartCount))
         })
     }
 
-    // 立即购买
-    buyNow = () => {
-        let {count, selectColor, specList} = this.state
-        let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-        let id = idGen('cart')
-        let {productData} = this.props
-        let {id:product_id, img, intro, name, price, status, stock, unit} = productData.productbyid
-        let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
-        let {id:specificationStock_id, size, stock:specStock, status:specStatus} =  specFilter
-        let totalPrice = price * count
+    // // 立即购买
+    // buyNow = () => {
+    //     let {count, selectColor, specList} = this.state
+    //     let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+    //     let id = idGen('cart')
+    //     let {productData} = this.props
+    //     let {id:product_id, img, intro, name, price, status, stock, unit} = productData.productbyid
+    //     let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
+    //     let {id:specificationStock_id, size, stock:specStock, status:specStatus} =  specFilter
+    //     let totalPrice = price * count
 
-        let buyNowContent = [{
-            count,
-            createdAt,
-            id,
-            product_id:{
-                id:product_id,
-                img,
-                intro,
-                name,
-                price,
-                status,
-                stock,
-                unit
-            },
-            specificationStock_id:{
-                id:specificationStock_id,
-                color:selectColor,
-                size,
-                stock:specStock,
-                status:specStatus
-            }
-        }]
-        // console.log('buyNowContent',buyNowContent)
-        sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
-        sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
-        sessionStorage.setItem("totalCount",JSON.stringify(this.state.count))
-        this.props.changeDetailState('openSelect')
-        this.props.history.push({
-            pathname: '/cart/orders',
-            state:{
-                dataType: 'buyNowContent'
-            }
-        })
-    }
+    //     let buyNowContent = [{
+    //         count,
+    //         createdAt,
+    //         id,
+    //         product_id:{
+    //             id:product_id,
+    //             img,
+    //             intro,
+    //             name,
+    //             price,
+    //             status,
+    //             stock,
+    //             unit
+    //         },
+    //         specificationStock_id:{
+    //             id:specificationStock_id,
+    //             color:selectColor,
+    //             size,
+    //             stock:specStock,
+    //             status:specStatus
+    //         }
+    //     }]
+    //     // console.log('buyNowContent',buyNowContent)
+    //     sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
+    //     sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
+    //     sessionStorage.setItem("totalCount",JSON.stringify(this.state.count))
+    //     this.props.changeDetailState('openSelect')
+    //     this.props.history.push({
+    //         pathname: '/cart/orders',
+    //         state:{
+    //             dataType: 'buyNowContent'
+    //         }
+    //     })
+    // }
 
     render() {
         let user_id = getCookie('user_id')
-        let {price, img, buttonType} = this.props
-        let {count, selectColor, specList, colorList} = this.state
-        let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
-        let specStock =  specFilter.stock || 0
-        let selectSize =  specFilter.size
-
-        return(
+        let { productData, buttonType } = this.props
+        let product = productData.product || {};
+        let { price, stock, img } = product;
+        let { count, selectColor, specList, colorList } = this.state
+        // let specFilter = []; //specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
+        // let specStock =  specFilter.stock || 0
+        // let selectSize =  specFilter.size
+        return (
             <Modal
                 popup
                 visible={this.props.openSelect}
-                onClose={()=>this.props.changeDetailState('openSelect',false)}
+                onClose={() => this.props.changeDetailState('openSelect', false)}
                 animationType="slide-up"
-                // afterClose={() => { console.log('close model')}}
+            // afterClose={() => { console.log('close model')}}
             >
                 <div className="popup-box" >
                     <div className="main-goods-box">
-                        <div className="close-popup" onClick={()=>this.props.changeDetailState('openSelect',false)}>
+                        <div className="close-popup" onClick={() => this.props.changeDetailState('openSelect', false)}>
                             ×
                         </div>
                         <div className="goods-box">
                             <div className="goods-info">
                                 <div className="left">
-                                    <img src={img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt="商品图片"/>
+                                    <img src={img || "https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png"} alt="商品图片" />
                                 </div>
                                 <div className="mid">
                                     <div className="goods_price"> ￥ {price}</div>
-                                    <div className="selected-type">已选择： {selectColor} / {selectSize}</div>
                                 </div>
                                 <div className="right">库存
-                                    {specStock}
+                                    {stock}
                                 </div>
                             </div>
                             <div className="scroll-body">
                                 <div className="goods_type">
                                     <ul>
+                                        {/*
                                         <li>
+                                    <div className="selected-type">已选择： {selectColor} / {selectSize}</div>
+
                                             <div className="type-title">颜色</div>
                                             <dl>
                                                 {
@@ -391,6 +367,7 @@ class SelectModal extends Component {
                                             </dl>
                                         </li>
                                         <Specification specList={specList.filter(item=>item.color === selectColor)[0]} changeState={this.changeState}/>
+                                        */}
                                     </ul>
                                 </div>
                                 <div className="edit-product">
@@ -402,35 +379,35 @@ class SelectModal extends Component {
                                                 'selected_button-disabled': count <= 1
                                             })}
                                             // disabled={count <= 1}
-                                            onClick={()=>{
-                                                if(count > 1){
+                                            onClick={() => {
+                                                if (count > 1) {
                                                     this.reduce()
-                                                }else {
-                                                    message.warning('数量不能小于1个')
+                                                } else {
+                                                    Toast.fail('数量不能小于1个')
                                                 }
                                             }}
                                         >-</button>
-                                        <input className="selected_input" type="text" value={count} onChange={(e)=>{this.getInputValue(e)}}/>
+                                        <input className="selected_input" type="text" value={count} onChange={(e) => { this.getInputValue(e) }} />
                                         <button className="selected_button-red" onClick={this.augment}>+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <Mutation mutation={gql(create_userCart)}
-                              refetchQueries={[
-                                  {query: gql(cart_by_userid), variables:{user_id}}
-                              ]}
-                              onError={error=>console.log('error',error)}
+                    <Mutation mutation={gql(INSERT_CART_MUTATION)}
+                        refetchQueries={[
+                            { query: gql(CART_DETAIL_BY_USER_ID_QUERY), variables: { user_id } }
+                        ]}
+                        onError={error => console.log('error', error)}
                     >
-                        {(create_userCart,{ loading, error }) => (
+                        {(insert_cart, { loading, error }) => (
                             <div className='confirm-footer'>
                                 <button
                                     className='confirm-button'
-                                    onClick={()=>{
-                                        if(buttonType === 'add'){
-                                            this.onCreateUserCart(create_userCart, user_id)
-                                        }else if(buttonType === 'buy'){
+                                    onClick={() => {
+                                        if (buttonType === 'add') {
+                                            this.onCreateUserCart(insert_cart, user_id)
+                                        } else if (buttonType === 'buy') {
                                             this.buyNow()
                                         }
                                     }}
@@ -451,26 +428,26 @@ class Specification extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            spec:this.props.specList.spec
+            spec: this.props.specList.spec
         }
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({
-            spec:nextProps.specList.spec,
+            spec: nextProps.specList.spec,
         })
     }
 
     // 改变选择
-    changeSelectedStatus=(i)=>{
+    changeSelectedStatus = (i) => {
         this.setState((prevState, props) => ({
-            spec: prevState.spec.map((item,index)=>{
-                if(index===i){
-                    item.select=true
+            spec: prevState.spec.map((item, index) => {
+                if (index === i) {
+                    item.select = true
                     // console.log('select item',item)
-                    this.props.changeState('selectSpec',item)
-                }else {
-                    item.select=false
+                    this.props.changeState('selectSpec', item)
+                } else {
+                    item.select = false
                 }
                 return item
             })
@@ -478,7 +455,7 @@ class Specification extends Component {
     }
 
     render() {
-        let {spec} = this.state
+        let { spec } = this.state
         // console.log('spec',spec)
 
         return (
@@ -486,15 +463,15 @@ class Specification extends Component {
                 <div className="type-title">规格</div>
                 <dl>
                     {
-                        spec.map((item,index)=>(
+                        spec.map((item, index) => (
                             <dd
                                 className={classNames({
                                     'spec-gray': item.status < 1,
                                     'spec-red': item.status > 0 && item.select
                                 })}
-                                key={'spec'+item.id}
-                                onClick={()=>{
-                                    if(item.status > 0)  this.changeSelectedStatus(index)
+                                key={'spec' + item.id}
+                                onClick={() => {
+                                    if (item.status > 0) this.changeSelectedStatus(index)
                                 }}
                             >
                                 {item.size}

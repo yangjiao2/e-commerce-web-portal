@@ -1,16 +1,16 @@
 .guess-wrap {
-    background-color: white;
-    min-height: 300px;
-    position: relative;
-    padding-bottom: 20px;
+  background-color: white;
+  min-height: 300px;
+  position: relative;
+  /* padding-bottom: 20px; */
 }
 
 .guess-title {
-    display: block;
-    color: #fb9494;
-    font-size: 16px;
-    margin: 0 auto;
-    padding: 20px 0;
-    width: 120px;
-    text-align: center;
+  display: block;
+  color: #fb9494;
+  font-size: 16px;
+  margin: 0px auto;
+  background-color: white;
+  padding: 30px 40px 0px 50px;
+  /* width: 120px; */
 }

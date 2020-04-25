@@ -1,18 +1,22 @@
-import React, {Component} from 'react'
-import {Row, Col, Icon} from 'antd'
-import {Switch, Route, NavLink, withRouter} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Row, Col, Input } from 'antd'
+import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
 import classnames from 'classnames'
-import {request} from 'graphql-request'
+import { request } from 'graphql-request'
 import moment from 'moment'
-
+import top_banner from './images/top_banner.png'
+import { UserOutlined, AppstoreOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Home from './pages/home'
 import Cart from './pages/cart'
 import My from './pages/my'
-import {graphqlFC} from "./configs/url"
-import {getCookie, setCookie} from "./utils/cookie"
-import {find_user_by_openid, create_user} from "./utils/gql"
-import {idGen, getIsWechatBrowser} from "./utils/func"
+import Tool from './pages/tool'
+import { graphqlFC } from "./configs/url"
+import { getCookie, setCookie } from "./utils/cookie"
+import { find_user_by_openid, create_user } from "./utils/gql"
+import { idGen, getIsWechatBrowser } from "./utils/func"
 import './app.css'
+
+const { Search } = Input;
 
 class App extends Component {
     constructor(props) {
@@ -25,7 +29,7 @@ class App extends Component {
 
     // componentWillMount 适用于刷新的 tabbar 的展示
     componentWillMount() {
-        let {location} = this.props,
+        let { location } = this.props,
             pathname = location.pathname
 
         // 根据首次的 pathname 显示 icon 选中
@@ -49,14 +53,14 @@ class App extends Component {
 
     // componentWillReceiveProps 适用于跳转的 tabbar 的展示
     componentWillReceiveProps(next) {
-        let {location} = next,
+        let { location } = next,
             pathname = location.pathname,
             state = location.state
 
         // 有 state 的话，根据tabHidden显示或隐藏 tabbar, （进入子界面）
         // 无 state 的话，就显示 tabbar （返回到主界面）
         if (location && state) {
-            let tabHidden = state.tabHidden !== undefined ? state.tabHidden : true
+            let tabHidden = state.tabHidden !== undefined ? state.tabHidden : true;
             this.setState({
                 tabHidden
             })
@@ -88,7 +92,7 @@ class App extends Component {
         // console.log('isWechatLogin',isWechatLogin)
         if (isWechatLogin) {
             // setCookie("openid","o2fcFv6Rh2-4rCh3d5_1uCWCT5Yc")
-            setCookie("openid","o2fcFv8x3wy5WtcP116S5GzzkgDQ")
+            setCookie("openid", "o2fcFv8x3wy5WtcP116S5GzzkgDQ")
             let openid = getCookie("openid")
             let user_id = getCookie("user_id")
             console.log('oauthLogin openid', openid)
@@ -96,7 +100,7 @@ class App extends Component {
             if (!openid) {
                 window.location.href = "/subscribe"
             } else if (!user_id) {
-                request(graphqlFC, find_user_by_openid, {openid})
+                request(graphqlFC, find_user_by_openid, { openid })
                     .then(data => {
                         console.log('find user data', data)
                         if (data.userbyprops.length) {
@@ -138,61 +142,91 @@ class App extends Component {
     }
 
     render() {
-        let {selectedTab, tabHidden} = this.state
+        let { selectedTab, tabHidden } = this.state
+        console.log(this.state);
         return (
-            <div style={{height: '100%'}}>
-                <div className={classnames('tabbar', {'tabbar-hidden': tabHidden})}>
+            <div>
+                <div className={classnames('topbar')}>
+                    <div>
+                        <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/home">
+                            <div>
+                                <img src={top_banner} alt="西柚商城" width={200} />
+                            </div>
+                        </NavLink>
+
+                    </div>
+                    {/* 搜索栏 */}
+                    <div className={classnames('search')}>
+                        <Search
+                            placeholder="搜索商品"
+                            onSearch={value => console.log(value)}
+                            style={{ width: 300 }}
+                        />
+                        <NavLink exact isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
+                            <ShoppingCartOutlined style={{ fontSize: 24, padding: 16 }} />
+                        </NavLink>
+
+                    </div>
+                </div>
+                {/* 分类栏 */}
+                {/*  tabHidden == false &&  */}
+                {<div className={classnames('tabbar')}>
                     <Row>
-                        <Col span={8} className='tabbar-content'>
+                        <Col span={6} className='tabbar-content'>
                             <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/home">
                                 {
-                                    selectedTab === 'home' ?
-                                        <HomeSelectedIcon/>
-                                        :
-                                        <HomeUnselectedIcon/>
+                                    <HomeOutlined />
                                 }
-                                <div className='tabbar-title'>
-                                    主页
-                                </div>
+                                <span className='tabbar-title'>
+                                    {' 主页 '}
+                                </span>
                             </NavLink>
                         </Col>
-                        <Col span={8} className='tabbar-content'>
+                        <Col span={6} className='tabbar-content'>
                             <NavLink isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
                                 {
-                                    selectedTab === 'cart' ?
-                                        <CartSelectedIcon/>
-                                        :
-                                        <CartUnselectedIcon/>
+                                    <AppstoreOutlined />
                                 }
-                                <div className='tabbar-title'>
-                                    购物袋
-                                </div>
+                                <span className='tabbar-title'>
+                                    {' 商品分类 '}
+                                </span>
                             </NavLink>
                         </Col>
-                        <Col span={8} className='tabbar-content'>
+                        <Col span={6} className='tabbar-content'>
                             <NavLink isActive={this.isActiveFunc('my')} activeClassName="active" to="/my">
                                 {
-                                    selectedTab === 'my' ?
-                                        <MySelectedIcon/>
-                                        :
-                                        <MyUnselectedIcon/>
+                                    <UserOutlined />
                                 }
-                                <div className='tabbar-title'>
-                                    我
-                                </div>
+                                <span className='tabbar-title'>
+                                    {' 个人中心 '}
+                                </span>
+                            </NavLink>
+                        </Col>
+                        <Col span={6} className='tabbar-content'>
+                            <NavLink isActive={this.isActiveFunc('tool')} activeClassName="active" to="/tool">
+                                {
+                                    <UserOutlined />
+                                }
+                                <span className='tabbar-title'>
+                                    {' 订单详情 '}
+                                </span>
                             </NavLink>
                         </Col>
                     </Row>
                 </div>
+                }
                 <div className='tabbar-route-content'>
+
                     <Switch>
                         <Route exact path="/" render={() => {
-                            this.oauthLogin()
-                            return <Home/>
-                        }}/>
-                        <Route path="/home" component={Home}/>
-                        <Route path="/cart" component={Cart}/>
-                        <Route path="/my" component={My}/>
+                            // this.oauthLogin()
+                            return <Home />
+                        }} />
+                        <Route path="/home" component={Home} />
+                        <Route path="/category" component={Home} />
+                        <Route path="/cart" component={Cart} />
+                        <Route path="/my" component={My} />
+                        <Route path="/tool" component={Tool} />
                     </Switch>
                 </div>
             </div>
@@ -202,27 +236,3 @@ class App extends Component {
 }
 
 export default withRouter(App)
-
-const HomeUnselectedIcon = () => (
-    <Icon type="home" style={{fontSize: 22}}/>
-)
-
-const HomeSelectedIcon = () => (
-    <Icon type="home" theme="twoTone" style={{fontSize: 22}}/>
-)
-
-const CartUnselectedIcon = () => (
-    <Icon type="shopping" style={{fontSize: 22}}/>
-)
-
-const CartSelectedIcon = () => (
-    <Icon type="shopping" theme="twoTone" style={{fontSize: 22}}/>
-)
-
-const MyUnselectedIcon = () => (
-    <Icon type="setting" style={{fontSize: 22}}/>
-)
-
-const MySelectedIcon = () => (
-    <Icon type="setting" theme="twoTone" style={{fontSize: 22}}/>
-)

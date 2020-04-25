@@ -1,0 +1,8 @@
+{
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "html.format.indentInnerHtml": true,
+    "editor.formatOnSave": true,
+    "prettier.withNodeModules": true,
+    "prettier.trailingComma": "all"
+}

@@ -1,13 +1,13 @@
-import {Component} from "react"
+import { Component } from "react"
 import React from "react"
-import {ActivityIndicator, NavBar, Modal} from 'antd-mobile'
-import {Icon, Row, Col, message} from 'antd'
-import {Query, Mutation} from "react-apollo"
+import { ActivityIndicator, NavBar, Toast, Modal } from 'antd-mobile'
+import { Icon, Row, Col } from 'antd'
+import { Query, Mutation } from "react-apollo"
 import gql from "graphql-tag"
 
 import SingleAddress from "./singleaddress"
-import {getCookie} from "../../../../utils/cookie"
-import {userAddressbyprops, delete_address} from "../../../../utils/gql"
+import { getCookie } from "../../../../utils/cookie"
+import { LOCATION_BY_USER_ID_QUERY, delete_address } from "../../../../utils/gql"
 import './index.css'
 const alert = Modal.alert
 
@@ -45,41 +45,37 @@ class Address extends Component {
     }
 
     render() {
-        let {addressChoosed, addressID, single} = this.state
+        let { addressChoosed, addressID, single } = this.state
         let user_id = getCookie('user_id')
         let navContent = single ? '编辑地址' : '地址管理'
 
         return (
             <div>
-                <div className='navbar'>
+                <div className='detail-navbar-wrap'>
                     <NavBar
                         mode="light"
-                        icon={<Icon type="left"/>}
+                        icon={<Icon type="left" />}
                         onLeftClick={() => {
-                            if(single){
-                                this.changePage(false)
-                            }else {
-                                this.props.history.go(-1)
-                            }
+                            this.props.history.go(-1)
                         }}
                     >{navContent}</NavBar>
                 </div>
-                <div className='content-wrap'>
-                    <Query query={gql(userAddressbyprops)} variables={{user_id}}>
+                <div>
+                    <Query query={gql(LOCATION_BY_USER_ID_QUERY)} variables={{ user_id }}>
                         {
-                            ({loading, error, data, refetch}) => {
+                            ({ loading, error, data, refetch }) => {
                                 if (loading) {
                                     return (
                                         <div className="loading-center">
-                                            <ActivityIndicator text="加载中..." size="large"/>
+                                            <ActivityIndicator text="加载中..." size="large" />
                                         </div>
                                     )
                                 }
                                 if (error) {
-                                    return 'error!'
+                                    return '地址管理: 页面出问题...'
                                 }
 
-                                data = data.userAddressbyprops
+                                data = data.location;
                                 // console.log('address data',data)
                                 let defaultAddress = data.find(data => data.default === 1) || ''
 
@@ -124,13 +120,13 @@ class AddressRender extends Component {
         this.state = {}
     }
 
-    changeOrdersAddress =(address) => {
+    changeOrdersAddress = (address) => {
         // console.log('address',address,this.props.history)
-        let {history} = this.props
+        let { history } = this.props
         let prePage = history.location.state.prePage
 
-        if(prePage){
-            sessionStorage.setItem('ordersAddress',JSON.stringify(address))
+        if (prePage) {
+            sessionStorage.setItem('ordersAddress', JSON.stringify(address))
             this.props.history.go(-1)
         }
     }
@@ -141,11 +137,11 @@ class AddressRender extends Component {
             {
                 text: '确定',
                 onPress: () => {
-                    delete_address({variables:{id:deleteId}}).then((data)=>{
+                    delete_address({ variables: { id: deleteId } }).then((data) => {
                         // console.log('delete data',data)
-                        let num = data.data.deleteuserAddress.replace(/[^0-9]/ig,"")
-                        if(num){
-                            message.success('删除成功')
+                        let num = data.data.deleteuserAddress.replace(/[^0-9]/ig, "")
+                        if (num) {
+                            Toast.success('删除成功')
                             this.props.refetch()
                         }
                     })
@@ -155,15 +151,15 @@ class AddressRender extends Component {
     }
 
     render() {
-        let {changePage, changeAddress, shoppingAddress} = this.props
+        let { changePage, changeAddress, shoppingAddress } = this.props
 
         return (
             <div>
                 <div className='address-add' onClick={() => {
                     changePage(true)
-                    changeAddress({id: 'add'})
+                    changeAddress({ id: 'add' })
                 }}>
-                    <Icon type="plus"/>&nbsp;
+                    <Icon type="plus" />&nbsp;
                     添加新地址
                 </div>
                 {
@@ -171,7 +167,7 @@ class AddressRender extends Component {
                         <div className='kind-empty gray'>
                             <p>暂无收货地址</p>
                             <p>点击下方按钮可新增地址</p>
-                        </div>:''
+                        </div> : ''
                 }
                 {
                     shoppingAddress.length ?
@@ -185,7 +181,7 @@ class AddressRender extends Component {
                                                 <Col span={18} className='address-phone ellipsis'>
                                                     {address.telephone}&nbsp;&nbsp;
                                                     {address.default ?
-                                                        <span className='address-label'>默认</span>:''
+                                                        <span className='address-label'>默认</span> : ''
                                                     }
                                                 </Col>
                                             </Row>
@@ -196,21 +192,21 @@ class AddressRender extends Component {
                                         <div className='address-edit'>
                                             <Icon
                                                 type="edit"
-                                                onClick={()=>{
+                                                onClick={() => {
                                                     changePage(true)
                                                     changeAddress(address)
                                                 }}
                                             />
                                         </div>
                                         <Mutation mutation={gql(delete_address)}
-                                                  onError={error=>console.log('error',error)}
+                                            onError={error => console.log('error', error)}
                                         >
-                                            {(delete_address,{ loading, error }) => (
+                                            {(delete_address, { loading, error }) => (
                                                 <div className='address-edit'>
                                                     <Icon
                                                         type="delete"
-                                                        onClick={()=>{
-                                                            this.deleteAddress(delete_address,address.id)
+                                                        onClick={() => {
+                                                            this.deleteAddress(delete_address, address.id)
                                                         }}
                                                     />
                                                 </div>
@@ -219,7 +215,7 @@ class AddressRender extends Component {
                                     </div>
                                 )
                             })}
-                        </div>:''
+                        </div> : ''
                 }
             </div>
         )

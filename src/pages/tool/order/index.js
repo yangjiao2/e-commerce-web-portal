@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Display from './display'
-import Detail from "./detail"
+// import Display from './display'
+// import Detail from "./detail"
 import { withRouter, Route, Switch } from 'react-router-dom'
 
 class Order extends Component {
@@ -32,9 +32,9 @@ class Order extends Component {
         return (
             <div className='order-wrap'>
                 <Switch>
-                    <Route path="/my/order/display" component={Display} />
-                    <Route path="/my/order/detail" component={Detail} />
-                    <Route path="/my/order/*" component={Display} />
+                    {/* <Route path="/my/order/display" component={Display}/>
+                    <Route path="/my/order/detail" component={Detail}/>
+                    <Route path="/my/order/*" component={Display}/> */}
                 </Switch>
             </div>
         )

@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
-import {NavBar, ActivityIndicator} from 'antd-mobile'
-import {Query} from "react-apollo"
+import React, { Component } from 'react'
+import { NavBar, ActivityIndicator } from 'antd-mobile'
+import { Query } from "react-apollo"
 import gql from "graphql-tag"
 
 import CartDetail from "./detail"
 import CartEdit from "./edit"
 import Empty from "../empty"
-import {cart_by_userid} from "../../../utils/gql"
-import {getCookie} from "../../../utils/cookie"
+import { CART_DETAIL_BY_USER_ID_QUERY } from "../../../utils/gql"
+import { getCookie } from "../../../utils/cookie"
 import './index.css'
 
 class All extends Component {
@@ -15,21 +15,21 @@ class All extends Component {
         super(props)
         this.state = {
             page: 'detail',
-            updateData:false
+            updateData: false
         }
     }
 
     componentWillMount() {
-        // console.log('cartAll componentWillMount',this.props,this.state)
+        // console.log('cartAll componentWillMount', this.props, this.state)
         this.getHash()
     }
 
     componentDidMount() {
-        // console.log('cartAll componentDidMount',this.props,this.state)
+        // console.log('cartAll componentDidMount', this.props, this.state)
         let state = this.props.history.location.state
         let updateData = state ? state.updateData : false
 
-        if(updateData){
+        if (updateData) {
             this.setState({
                 updateData
             })
@@ -37,7 +37,7 @@ class All extends Component {
     }
 
     getHash = () => {
-        // console.log('location', window.location.hash)
+        console.log('location', window.location.hash)
         let hash = window.location.hash || '#tab=cart&page=detail'
         let page = 'detail'
         if (window.location.hash && hash.indexOf("&") > 0) {
@@ -56,56 +56,60 @@ class All extends Component {
     }
 
     renderPage = (data, refetch) => {
-        let {page,updateData} = this.state
-
+        let { page, updateData } = this.state
+        let cartList = data.cart;
+        console.log('all renderPage', page);
         switch (page) {
             case 'detail':
-                return <CartDetail cartList={data.cartList} refetch={refetch} updateData={updateData}/>
+                return <CartDetail cartList={cartList} refetch={refetch} updateData={updateData} />
             case 'edit':
-                return <CartEdit cartList={data.cartList} refetch={refetch}/>
+                return <CartEdit cartList={cartList} refetch={refetch} />
             default:
                 return <div>test</div>
         }
     }
 
     render() {
-        let {page} = this.state
+        let { page } = this.state
         let user_id = getCookie('user_id')
-        // console.log('render',page,this.props)
+        // console.log('render', page, this.props)
 
         return (
-            <Query query={gql(cart_by_userid)} variables={{user_id}}>
+            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ user_id }}>
                 {
-                    ({loading, error, data, refetch}) => {
+                    ({ loading, error, data, refetch }) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator size="large"/>
+                                    <ActivityIndicator size="large" />
                                     <span>加载中...</span>
                                 </div>
                             )
                         }
                         if (error) {
-                            return 'error!'
+                            return '购物车: 页面出问题...'
                         }
-                        // console.log('cart all data',data)
 
+                        let cartList = data.cart;
+                        console.log(data);
                         return (
                             <div className='cart-wrap'>
                                 <div className='cart-navbar-wrap navbar'>
+                                    {/*
                                     <NavBar
                                         mode="light"
                                         rightContent={[
-                                            data.cartList.length ?
+                                            cartList.length ?
                                                 <span className='navbar-button' key={"cart-navbar"} onClick={this.changeCartPage}>
-                                                {page === 'detail' ? "编辑" : "完成"}
-                                            </span> : ''
+                                                    {page === 'detail' ? "编辑" : "完成"}
+                                                </span> : ''
                                         ]}
-                                    >购物袋
+                                    >购物袋2
                                     </NavBar>
+                                     */}
                                 </div>
-                                {data.cartList.length ?
-                                    this.renderPage(data, refetch) : <Empty/>
+                                {cartList.length ?
+                                    this.renderPage(data, refetch) : <Empty />
                                 }
                             </div>
                         )

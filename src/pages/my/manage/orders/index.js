@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import './index.css'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import {
     SearchBar,
     NavBar,
@@ -8,12 +8,12 @@ import {
     ActivityIndicator,
     List
 } from 'antd-mobile'
-import {Icon} from 'antd'
+import { Icon } from 'antd'
 import classNames from 'classnames'
-import {Query} from "react-apollo"
+import { Query } from "react-apollo"
 import gql from "graphql-tag"
-import {order_by_id, orderbyprops} from "../../../../utils/gql"
-import {DisplayRender} from "../../order/display"
+import { order_by_id, orderbyprops } from "../../../../utils/gql"
+import { DisplayRender } from "../../order/display"
 
 const Item = List.Item;
 
@@ -26,20 +26,20 @@ class Orders extends Component {
     }
 
     render() {
-        let {accordionKey} = this.state
+        let { accordionKey } = this.state
         return (
             <div className='goods-wrap'>
                 <NavBar
                     className='navbar'
                     mode="light"
-                    icon={<Icon type="left"/>}
+                    icon={<Icon type="left" />}
                     onLeftClick={() => {
                         this.props.history.go(-1)
                     }}
                 >订单管理</NavBar>
                 <div className='content-wrap'>
-                    <div className='my-list-subtitle' style={{color: 'grey'}}><Icon type="bulb"
-                                                                                    style={{marginRight: 10}}/>{accordionKey ? '折叠单项以展开更多分类' : '请选择需要打开的分类'}
+                    <div className='my-list-subtitle' style={{ color: 'grey' }}><Icon type="bulb"
+                        style={{ marginRight: 10 }} />{accordionKey ? '折叠单项以展开更多分类' : '请选择需要打开的分类'}
                     </div>
                     <Accordion className="my-accordion" onChange={(key) => {
                         this.setState({
@@ -47,24 +47,24 @@ class Orders extends Component {
                         })
                     }}>
                         <Accordion.Panel header="查询订单"
-                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '0'})}>
-                            <Search/>
+                            className={classNames({ 'hidden': accordionKey !== undefined && accordionKey !== '0' })}>
+                            <Search />
                         </Accordion.Panel>
                         <Accordion.Panel header="待发货"
-                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '1'})}>
-                            <Shiping/>
+                            className={classNames({ 'hidden': accordionKey !== undefined && accordionKey !== '1' })}>
+                            <Shiping />
                         </Accordion.Panel>
                         <Accordion.Panel header="待收货"
-                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '2'})}>
-                            <Unbox/>
+                            className={classNames({ 'hidden': accordionKey !== undefined && accordionKey !== '2' })}>
+                            <Unbox />
                         </Accordion.Panel>
                         <Accordion.Panel header="待评价"
-                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '3'})}>
-                            <Completed/>
+                            className={classNames({ 'hidden': accordionKey !== undefined && accordionKey !== '3' })}>
+                            <Completed />
                         </Accordion.Panel>
                         <Accordion.Panel header="已完成"
-                                         className={classNames({'hidden': accordionKey !== undefined && accordionKey !== '4'})}>
-                            <Commented/>
+                            className={classNames({ 'hidden': accordionKey !== undefined && accordionKey !== '4' })}>
+                            <Commented />
                         </Accordion.Panel>
                     </Accordion>
                 </div>
@@ -87,7 +87,7 @@ class Search extends Component {
     }
 
     onChange = (value) => {
-        this.setState({value});
+        this.setState({ value });
     };
 
     render() {
@@ -97,11 +97,11 @@ class Search extends Component {
                     ref={ref => this.autoFocusInst = ref}
                     placeholder="请在此处输入订单编号"
                     value={this.state.value}
-                    onSubmit={searchValue => this.setState({searchValue})}
-                    onCancel={() => this.setState({value: ''})}
-                    onChange={value => this.setState({value})}
+                    onSubmit={searchValue => this.setState({ searchValue })}
+                    onCancel={() => this.setState({ value: '' })}
+                    onChange={value => this.setState({ value })}
                 />
-                <SearchQuery id={this.state.searchValue}/>
+                <SearchQuery id={this.state.searchValue} />
             </div>
         )
     }
@@ -135,15 +135,15 @@ class SearchQuery extends Component {
     }
 
     render() {
-        let {id} = this.props
+        let { id } = this.props
         return (
-            <Query query={gql(order_by_id)} variables={{id}} className='search-query'>
+            <Query query={gql(order_by_id)} variables={{ id }} className='search-query'>
                 {
-                    ({loading, error, data}) => {
+                    ({ loading, error, data }) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="加载中..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large" />
                                 </div>
                             )
                         }
@@ -158,9 +158,9 @@ class SearchQuery extends Component {
                                 </div>
                             )
                         } else {
-                            let {id, orderStatus, orderTotalPay, productTotalPay, count, remark, user_id, createdAt, orderLogistics_id, orderPay_id} = data
-                            let {telephone: telephoneUser, username: usernameUser, email} = user_id
-                            let {consigneeName, consigneeTel, consignAddress} = orderLogistics_id
+                            let { id, orderStatus, orderTotalPay, productTotalPay, count, remark, user_id, createdAt, orderLogistics_id, orderPay_id } = data
+                            let { telephone: telephoneUser, username: usernameUser, email } = user_id
+                            let { consigneeName, consigneeTel, consignAddress } = orderLogistics_id
                             let logisticsFee, LogisticsStatus, expressCreatedAt
                             if (orderLogistics_id !== null) {
                                 logisticsFee = orderLogistics_id.logisticsFee
@@ -194,9 +194,9 @@ class SearchQuery extends Component {
                                 <List>
                                     {
                                         Object.keys(all).map((key, index) => (
-                                                <Item key={index}><span className='item-title'>{key}：</span><span
-                                                    className='item-value'>{all[key]}</span></Item>
-                                            )
+                                            <Item key={index}><span className='item-title'>{key}：</span><span
+                                                className='item-value'>{all[key]}</span></Item>
+                                        )
                                         )
                                     }
                                 </List>
@@ -217,13 +217,13 @@ class Shiping extends Component {
 
     render() {
         return (
-            <Query query={gql(orderbyprops)} variables={{orderStatus: '1'}}>
+            <Query query={gql(orderbyprops)} variables={{ orderStatus: '1' }}>
                 {
-                    ({loading, error, data}) => {
+                    ({ loading, error, data }) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="加载中..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large" />
                                 </div>
                             )
                         }
@@ -264,13 +264,13 @@ class Unbox extends Component {
 
     render() {
         return (
-            <Query query={gql(orderbyprops)} variables={{orderStatus: '2'}}>
+            <Query query={gql(orderbyprops)} variables={{ orderStatus: '2' }}>
                 {
-                    ({loading, error, data}) => {
+                    ({ loading, error, data }) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="加载中..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large" />
                                 </div>
                             )
                         }
@@ -311,13 +311,13 @@ class Completed extends Component {
 
     render() {
         return (
-            <Query query={gql(orderbyprops)} variables={{orderStatus: '3'}}>
+            <Query query={gql(orderbyprops)} variables={{ orderStatus: '3' }}>
                 {
-                    ({loading, error, data}) => {
+                    ({ loading, error, data }) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="加载中..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large" />
                                 </div>
                             )
                         }
@@ -358,13 +358,13 @@ class Commented extends Component {
 
     render() {
         return (
-            <Query query={gql(orderbyprops)} variables={{orderStatus: '4'}}>
+            <Query query={gql(orderbyprops)} variables={{ orderStatus: '4' }}>
                 {
-                    ({loading, error, data}) => {
+                    ({ loading, error, data }) => {
                         if (loading) {
                             return (
                                 <div className="loading-center">
-                                    <ActivityIndicator text="加载中..." size="large"/>
+                                    <ActivityIndicator text="加载中..." size="large" />
                                 </div>
                             )
                         }

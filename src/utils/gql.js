@@ -1,3 +1,93 @@
+// 库存
+const PRODUCT_QUERY = `
+{
+    product: profile_product {
+        id
+        img
+        name
+        price
+    }
+}
+`;
+
+// 物品查询
+const USER_DETAIL_BY_ID_QUERY = `
+    query userById($id: Int!) {
+        user: profile_profile_by_pk(id: $id) {
+            id
+            name
+            email
+            password
+        }
+    }
+`;
+
+
+// 物品查询
+const PRODUCT_DETAIL_BY_ID_QUERY = `
+    query productById($id: Int!) {
+        product: profile_product_by_pk(id: $id) {
+            id
+            img
+            name
+            price
+            stock
+        }
+    }
+`;
+
+// 用户购物车查询
+const CART_DETAIL_BY_USER_ID_QUERY = `
+    query cartByUserId($user_id: Int!) {
+        cart: profile_cart(where: {user_id: {_eq: $user_id}}) {
+            id
+            product_id
+            count
+            product: cart_product {
+                id
+                name
+                description
+                price
+                stock
+                img
+            }
+        }
+    }
+`;
+
+// 加入购物车/收藏夹
+const INSERT_CART_MUTATION = `
+mutation insert_cart($user_id: Int!, $product_id: Int!, $status: Int!, $count: Int!) {
+  insert_profile_cart(objects: {user_id: $user_id, product_id: $product_id, status: $status, count: $count}, 
+    on_conflict: {constraint: cart_user_id_product_id_status_key, update_columns: count}) {
+    returning {
+      id
+      product_id
+      count
+    }
+  }
+}
+
+`;
+
+// 用户地址查询
+const LOCATION_BY_USER_ID_QUERY = `
+    query locationByUserId($user_id: Int!) {
+        location: profile_location(where: {user_id: {_eq: $user_id}}) {
+            address
+            area
+            city
+            default
+            id
+            postcode
+            phone
+            province
+            user_id
+            username
+        }
+    }
+`;
+
 const create_user = `
     mutation createuser($email: String, $updatedAt: String, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID!, $userData_id: ID) {
         createuser: create_user(email: $email updatedAt: $updatedAt password: $password telephone: $telephone username: $username createdAt: $createdAt openid: $openid id: $id userData_id: $userData_id) {
@@ -159,7 +249,7 @@ const productAndSpec_by_id = `
             stock
             discountRate
         }
-        
+
         spec: specificationStock_by_props(product_id: $id ) {
             id
             color
@@ -194,7 +284,7 @@ const create_specificationStock = `
             specificationStock {
                 updatedAt
                 color
-    
+
                 createdAt
                 size
                 slideImg
@@ -330,7 +420,7 @@ const delete_userCart_by_id = `
             id: {
                 _in: $id
             }
-        }) 
+        })
     }
 `
 
@@ -350,7 +440,7 @@ const create_update_userAddress = `
                 createdAt
                 deletedAt
                 id
-    
+
                 area
                 province
             }
@@ -368,7 +458,7 @@ const create_update_userAddress = `
                 createdAt
                 deletedAt
                 id
-    
+
                 area
                 province
             }
@@ -392,7 +482,7 @@ const update_userAddress = `
                 createdAt
                 deletedAt
                 id
-    
+
                 area
                 province
             }
@@ -410,7 +500,7 @@ const update_userAddress = `
                 createdAt
                 deletedAt
                 id
-    
+
                 area
                 province
             }
@@ -445,10 +535,10 @@ const userAddressbyprops = `
 `
 const user_default_address = `
     query user_default_address($user_id: ID, $default: Int) {
-        defaultAddress: userAddress_by_props(user_id: $user_id default: $default) { 
-            id 
+        defaultAddress: userAddress_by_props(user_id: $user_id default: $default) {
+            id
             default
-            username        
+            username
             telephone
             province
             area
@@ -457,7 +547,7 @@ const user_default_address = `
             user_id {
                 openid
                 id
-            }                       
+            }
         }
     }
 `
@@ -479,13 +569,13 @@ const orderbyprops = `
                 logisticsFee
                 expressId
                 createdAt
-    
+
                 consigneeTel
                 id
                 expressName
                 consignAddress
                 LogisticsStatus
-    
+
                 consigneeName
             }
             orderTotalPay
@@ -503,7 +593,7 @@ const orderbyprops = `
                 openid
                 id
                 totalFee
-    
+
                 cashFee
             }
         }
@@ -522,13 +612,13 @@ const order_by_id = `
                 logisticsFee
                 expressId
                 createdAt
-    
+
                 consigneeTel
                 id
                 expressName
                 consignAddress
                 LogisticsStatus
-    
+
                 consigneeName
             }
             orderTotalPay
@@ -556,7 +646,7 @@ const order_by_id = `
                 openid
                 id
                 totalFee
-    
+
                 cashFee
             }
         }
@@ -570,14 +660,14 @@ const update_order = `
             order {
                 remark
                 updatedAt
-    
+
                 orderTotalPay
                 createdAt
                 orderStatus
-    
+
                 id
                 count
-    
+
                 productTotalPay
             }
         }
@@ -623,7 +713,7 @@ const orderProduct_by_props = `
 `
 
 const create_order = `
-    mutation createorder($remark: String, $updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID, 
+    mutation createorder($remark: String, $updatedAt: String, $orderLogistics_id: ID, $orderTotalPay: Float, $createdAt: String, $orderStatus: String, $userAddress_id: ID, $id: ID!, $count: Int, $user_id: ID, $productTotalPay: Float, $orderPay_id: ID,
                          $deliveryTime: String, $serviceStore: String, $logisticsFee: Float, $expressId: String, $order_id: ID, $consigneeTel: String, $orderLogisticsId: ID!, $expressName: String, $consignAddress: String, $LogisticsStatus: String, $consigneeName: String
                          $deleteId: [String]) {
         createorder: create_order(remark: $remark updatedAt: $updatedAt orderLogistics_id: $orderLogistics_id orderTotalPay: $orderTotalPay createdAt: $createdAt orderStatus: $orderStatus userAddress_id: $userAddress_id id: $id count: $count user_id: $user_id productTotalPay: $productTotalPay orderPay_id: $orderPay_id) {
@@ -658,7 +748,7 @@ const create_order = `
                     postcode
                     createdAt
                     deletedAt
-                    id    
+                    id
                     area
                     province
                 }
@@ -674,10 +764,10 @@ const create_order = `
                     openid
                     id
                     totalFee
-        
+
                     cashFee
                 }
-            } 
+            }
         }
         createorderLogistics: create_orderLogistics(deliveryTime: $deliveryTime serviceStore: $serviceStore updatedAt: $updatedAt logisticsFee: $logisticsFee expressId: $expressId createdAt: $createdAt order_id: $order_id consigneeTel: $consigneeTel id: $orderLogisticsId expressName: $expressName consignAddress: $consignAddress LogisticsStatus: $LogisticsStatus user_id: $user_id consigneeName: $consigneeName) {
             result
@@ -691,14 +781,14 @@ const create_order = `
                 order_id {
                     remark
                     updatedAt
-        
+
                     orderTotalPay
                     createdAt
                     orderStatus
-        
+
                     id
                     count
-        
+
                     productTotalPay
                 }
                 consigneeTel
@@ -723,7 +813,7 @@ const create_order = `
             id: {
                 _in: $deleteId
             }
-        }) 
+        })
     }
 `
 
@@ -735,18 +825,18 @@ const create_order_product = `
                 updatedAt
                 productColor
                 unit
-    
+
                 productSize
                 orderPay
                 createdAt
                 productImg
                 productName
-    
+
                 productPrice
                 id
                 count
                 productPay
-    
+
             }
         }
     }
@@ -852,7 +942,7 @@ const update_product = `
                 intro
                 discountRate
                 price
-    
+
                 img
                 stock
             }
@@ -878,6 +968,12 @@ const slideshow_by_props = `
 `
 
 export {
+    PRODUCT_QUERY,
+    PRODUCT_DETAIL_BY_ID_QUERY,
+    CART_DETAIL_BY_USER_ID_QUERY,
+    INSERT_CART_MUTATION,
+    LOCATION_BY_USER_ID_QUERY,
+    USER_DETAIL_BY_ID_QUERY,
     create_user,
     find_user_by_openid,
     user_by_id,
@@ -914,5 +1010,5 @@ export {
     create_product,
     update_product,
     delete_product_by_id,
-	slideshow_by_props
+    slideshow_by_props
 }
