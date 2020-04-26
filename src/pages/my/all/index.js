@@ -76,7 +76,7 @@ class All extends Component {
                                     })
                                 } else if (tools.id === 'profile') {
                                     this.props.history.push({
-                                        pathname: 'my/profile'
+                                        pathname: '/my/profile'
                                     })
                                 } else {
                                     this.props.history.push({

@@ -7,7 +7,7 @@ import gql from "graphql-tag"
 
 import SingleAddress from "./singleaddress"
 import { getCookie } from "../../../../utils/cookie"
-import { LOCATION_BY_USER_ID_QUERY, delete_address } from "../../../../utils/gql"
+import { LOCATION_BY_USER_ID_QUERY, DELETE_LOCATION_MUTATION } from "../../../../utils/gql"
 import './index.css'
 const alert = Modal.alert
 
@@ -198,7 +198,7 @@ class AddressRender extends Component {
                                                 }}
                                             />
                                         </div>
-                                        <Mutation mutation={gql(delete_address)}
+                                        <Mutation mutation={gql(DELETE_LOCATION_MUTATION)}
                                             onError={error => console.log('error', error)}
                                         >
                                             {(delete_address, { loading, error }) => (

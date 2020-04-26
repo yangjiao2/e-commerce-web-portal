@@ -8,7 +8,7 @@ import classNames from 'classnames'
 import moment from 'moment'
 import debounce from 'lodash.debounce'
 
-import { INSERT_CART_MUTATION } from "../../../../utils/gql"
+import { INSERT_CART_MUTATION, DELETE_CART_MUTATION } from "../../../../utils/gql"
 import '../index.css'
 import { getCookie } from "../../../../utils/cookie"
 
@@ -71,21 +71,31 @@ class CartDetail extends Component {
             case 'reduce':
                 result = this.updateCartItemCount(e, i, -1)
                 break
+            case 'delete':
+                result = this.delCartItem(e, i)
+                break
             default:
                 console.log('handleChangedCount type error')
                 break
         }
-        console.log(result);
+        console.log('result', result);
 
-        if (result) {
-            this.updateCartProductCount(result, updateCount)
+        if (result && type != 'delete') {
+            updateCount({ variables: result })
+            // this.updateCartProductCount(result, updateCount)
+        } else if (result && type == 'delete') {
+            this.deleteCartProductCount(result, updateCount)
         }
     }
 
-    // 使用函数防抖5s后请求更新数量
     updateCartProductCount = (data, updateCount) => {
         // console.log('updateCartProductCount id count',id,count)
         // let updatedAt = moment().format('YYYY-MM-DD HH:mm:ss')
+        updateCount({ variables: data })
+    }
+
+    deleteCartProductCount = (data, updateCount) => {
+        console.log('deleteCartProductCount ', data)
         updateCount({ variables: data })
     }
 
@@ -98,6 +108,7 @@ class CartDetail extends Component {
                     item.count = e.target.value
                     id = item.id
                     count = item.count
+                    status = item.status
                     return item
                 } else {
                     return item
@@ -142,11 +153,13 @@ class CartDetail extends Component {
 
     //删除
     delCartItem = (e, i) => {
+        let id = -1;
         this.setState({
             cartList: this.state.cartList.filter((item, index) => {
                 if (index !== i) {
                     return true
                 } else {
+                    id = item.id;
                     return false
                 }
             })
@@ -154,6 +167,14 @@ class CartDetail extends Component {
         setTimeout(() => {
             this.sumPrice(true)
         }, 1)
+        let user_id = getCookie('user_id');
+        return {
+            // 'user_id': user_id,
+            // 'product_id': id,
+            // 'count': 0,
+            // 'status': status,
+            'id': id
+        }
     }
 
     // 改变选择
@@ -244,7 +265,6 @@ class CartDetail extends Component {
                 shopping.push(item)
             }
         })
-        console.log('cartList', this.state.cartList)
         // console.log('shopping',shopping)
         sessionStorage.setItem("cartSelected", JSON.stringify(shopping))
         sessionStorage.setItem("totalPrice", JSON.stringify(this.state.totalPrice))
@@ -333,9 +353,15 @@ class CartDetail extends Component {
                                                                 this.handleChangedCount(e, 'augment', index, insert_cart)
                                                             }}>+</button>
 
-                                                        <button className="jiesuan-delete" onClick={(e) => {
-                                                            this.handleChangedCount(e, 'augment', index, insert_cart)
-                                                        }}><span>删除</span></button>
+                                                        <Mutation mutation={gql(DELETE_CART_MUTATION)}
+                                                            onError={error => console.log('error', error)}
+                                                        >
+                                                            {(delete_cart, { loading, error }) => (
+                                                                <button className="jiesuan-delete" onClick={(e) => {
+                                                                    this.handleChangedCount(e, 'delete', index, delete_cart)
+                                                                }}><span>删除</span></button>
+                                                            )}
+                                                        </Mutation>
                                                     </div>
                                                 )}
                                             </Mutation>

@@ -38,37 +38,53 @@ const PRODUCT_DETAIL_BY_ID_QUERY = `
 
 // 用户购物车查询
 const CART_DETAIL_BY_USER_ID_QUERY = `
-    query cartByUserId($user_id: Int!) {
-        cart: profile_cart(where: {user_id: {_eq: $user_id}}) {
+query cartByUserId($user_id: Int!, $status: Int!) {
+    cart: profile_cart(where: {user_id: {_eq: $user_id}, status: {_eq: $status}}) {
+        id
+        product_id
+        count
+        status
+        product: cart_product {
+            id
+            name
+            description
+            price
+            stock
+            img
+        }
+    }
+}
+`;
+
+// 加入购物车/收藏夹
+const INSERT_CART_MUTATION = `
+    mutation insert_cart($user_id: Int!, $product_id: Int!, $status: Int!, $count: Int!) {
+        insert_profile_cart(objects: {user_id: $user_id, product_id: $product_id, status: $status, count: $count}, 
+            on_conflict: {constraint: cart_user_id_product_id_status_key, update_columns: count}) {
+            returning {
             id
             product_id
             count
-            product: cart_product {
+            }
+        }
+    }
+
+`;
+
+
+// 删除购物车/收藏夹
+const DELETE_CART_MUTATION = `
+    mutation delete_profile_cart ($id: Int!){
+        delete_profile_cart(where: {id: {_eq: $id}}){
+            returning {
                 id
-                name
-                description
-                price
-                stock
-                img
+                user_id
+                product_id
             }
         }
     }
 `;
 
-// 加入购物车/收藏夹
-const INSERT_CART_MUTATION = `
-mutation insert_cart($user_id: Int!, $product_id: Int!, $status: Int!, $count: Int!) {
-  insert_profile_cart(objects: {user_id: $user_id, product_id: $product_id, status: $status, count: $count}, 
-    on_conflict: {constraint: cart_user_id_product_id_status_key, update_columns: count}) {
-    returning {
-      id
-      product_id
-      count
-    }
-  }
-}
-
-`;
 
 // 用户地址查询
 const LOCATION_BY_USER_ID_QUERY = `
@@ -87,6 +103,66 @@ const LOCATION_BY_USER_ID_QUERY = `
         }
     }
 `;
+
+// 增加地址
+const INSERT_LOCATION_MUTATION = `
+    mutation insert_location($default: Int!, $address: String!, $area: String!, $city: String!, $phone: String!, $postcode: String!, $province: String!, $user_id: Int!, $username: String!) {
+        insertAddress: insert_profile_location(objects: { default: $default, address: $address, area: $area, city: $city phone: $phone, postcode: $postcode, province: $province, user_id: $user_id, username: $username }) {
+            returning {
+                address
+                area
+                city
+                id
+                phone
+                postcode
+                province
+                user_id
+                username
+            }
+        }
+    }
+`;
+
+
+// 修改地址
+const UPDATE_LOCATION_MUTATION = `
+mutation update_location($id: Int!, $default: Int!, $address: String!, $area: String!, $city: String!, $phone: String!, $postcode: String!, $province: String!, $user_id: Int!, $username: String!) {
+    updateAddress: update_profile_location(_set: { default: $default, address: $address, area: $area, city: $city, phone: $phone, postcode: $postcode, province: $province, user_id: $user_id, username: $username }, where: { id: { _eq: $id } }) {
+        returning {
+            address
+            area
+            city
+            id
+            phone
+            postcode
+            province
+            user_id
+            username
+        }
+    }
+}
+`;
+
+// 删除地址
+const DELETE_LOCATION_MUTATION = `
+    mutation delete_profile_location ($id: Int!){
+        deleteAddress: delete_profile_location(where: {id: {_eq: $id}}){
+            returning {
+                id
+                address
+                area
+                city
+                id
+                phone
+                postcode
+                province
+                user_id
+                username
+            }
+        }
+    }
+`;
+
 
 const create_user = `
     mutation createuser($email: String, $updatedAt: String, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID!, $userData_id: ID) {
@@ -974,6 +1050,11 @@ export {
     INSERT_CART_MUTATION,
     LOCATION_BY_USER_ID_QUERY,
     USER_DETAIL_BY_ID_QUERY,
+    DELETE_CART_MUTATION,
+    INSERT_LOCATION_MUTATION,
+    UPDATE_LOCATION_MUTATION,
+    DELETE_LOCATION_MUTATION,
+
     create_user,
     find_user_by_openid,
     user_by_id,

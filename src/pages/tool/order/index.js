@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-// import Display from './display'
-// import Detail from "./detail"
+import Display from './display'
+import Detail from "./detail"
 import { withRouter, Route, Switch } from 'react-router-dom'
 
 class Order extends Component {
@@ -11,17 +11,18 @@ class Order extends Component {
 
     componentWillMount() {
         let { location } = this.props
+        console.log('tool order');
         if (location && location.state) {
             if (['pay', 'ship', 'unbox', 'judge'].indexOf(location.state.kind) > -1) {
                 this.props.history.replace({
-                    pathname: '/my/order/display',
+                    pathname: '/tool/order/display',
                     state: {
                         kind: location.state.kind
                     }
                 })
             } else {
                 this.props.history.push({
-                    pathname: '/my/order/detail',
+                    pathname: '/tool/order/detail',
                     state: {}
                 })
             }
@@ -32,9 +33,9 @@ class Order extends Component {
         return (
             <div className='order-wrap'>
                 <Switch>
-                    {/* <Route path="/my/order/display" component={Display}/>
-                    <Route path="/my/order/detail" component={Detail}/>
-                    <Route path="/my/order/*" component={Display}/> */}
+                    <Route path="/tool/order/display" component={Display} />
+                    <Route path="/tool/order/detail" component={Detail} />
+                    <Route path="/tool/order/*" component={Display} />
                 </Switch>
             </div>
         )

@@ -7,7 +7,7 @@ import { getCookie } from "../../../utils/cookie"
 import { user_by_id } from "../../../utils/gql"
 import { Query } from "react-apollo"
 import gql from "graphql-tag"
-import { PayCircleOutlined, FieldTimeOutlined, ShoppingOutlined, ShopOutlined } from '@ant-design/icons'
+import { StarOutlined, EnvironmentOutlined, ShoppingCartOutlined, SolutionOutlined, PayCircleOutlined, FieldTimeOutlined, ShoppingOutlined, ShopOutlined } from '@ant-design/icons'
 
 const orderIcon = [
     {
@@ -29,7 +29,7 @@ const orderIcon = [
         icon: <ShopOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/judge.png',
         text: '已完成',
         id: 'judge'
-    }
+    },
 ]
 
 
@@ -50,9 +50,8 @@ class All extends Component {
                             // hasLine={false}
                             square={false}
                             onClick={(order) => {
-                                console.log('tool all', order);
                                 this.props.history.push({
-                                    pathname: '/my/order/',
+                                    pathname: '/tool/order/',
                                     state: {
                                         kind: order.id
                                     }

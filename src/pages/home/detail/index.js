@@ -396,7 +396,7 @@ class SelectModal extends Component {
                     </div>
                     <Mutation mutation={gql(INSERT_CART_MUTATION)}
                         refetchQueries={[
-                            { query: gql(CART_DETAIL_BY_USER_ID_QUERY), variables: { user_id } }
+                            { query: gql(CART_DETAIL_BY_USER_ID_QUERY), variables: { "user_id": user_id, "status": 1 } }
                         ]}
                         onError={error => console.log('error', error)}
                     >
@@ -418,7 +418,7 @@ class SelectModal extends Component {
                         )}
                     </Mutation>
                 </div>
-            </Modal>
+            </Modal >
         )
     }
 }

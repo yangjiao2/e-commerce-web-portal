@@ -1,12 +1,11 @@
 import React, { Component } from "react"
-import { message } from 'antd'
-import { InputItem, TextareaItem, Picker, Switch } from 'antd-mobile'
+import { InputItem, TextareaItem, Picker, Switch, Toast } from 'antd-mobile'
 import { Mutation } from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
 import { district } from 'antd-mobile-full-demo-data';
 
-import { create_update_userAddress, update_userAddress, userAddressbyprops } from "../../../../../utils/gql"
+import { INSERT_LOCATION_MUTATION, UPDATE_LOCATION_MUTATION, LOCATION_BY_USER_ID_QUERY } from "../../../../../utils/gql"
 import './index.css'
 import { idGen } from "../../../../../utils/func"
 
@@ -52,43 +51,38 @@ class SingleAddress extends Component {
         })
     }
 
-    saveAddress = (user_id, mutate) => {
+    saveAddress = (user_id, update_address) => {
         let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
         let { username, phone, province, city, area, address, defaultStatus, id } = this.state
         let areaAddress = province + city + area
         const testPhoneNum = /^1[0-9]{10}$/;
-        let isPoneAvailable = testPhoneNum.test(phone);
+        let isPhoneAvailable = testPhoneNum.test(phone);
 
-        if (username && isPoneAvailable && areaAddress && address) {
-            let addressId = id || idGen('address')
+        if (username && isPhoneAvailable && areaAddress && address) {
+            // let addressId = id || idGen('address')
 
             let defaultStatus1 = defaultStatus ? 1 : 0
             const addressContent = {
                 address,
-                updatedAt: "",
                 phone,
                 default: defaultStatus1,
                 city,
                 username,
                 postcode: "",
-                createdAt,
-                deletedAt: "",
-                id: addressId,
+                // id: addressId,
                 user_id,
                 area,
                 province
             }
 
-            let { defaultAddress } = this.props
-            if (defaultAddress) {
+            let { addressID, defaultAddress } = this.props
+            console.log(addressID, defaultAddress);
+            if (addressID !== 'add') {
                 let { id } = defaultAddress
-                addressContent.updateID = id
-                addressContent.updateDefault = 0
-            } else {
-                addressContent.updateID = ''
+                addressContent.id = id
             }
 
-            mutate({ variables: addressContent }).then((data) => {
+            update_address({ variables: addressContent }).then((data) => {
                 this.props.refetch()
                 let prePage = this.props.history.location.state.prePage
 
@@ -103,17 +97,17 @@ class SingleAddress extends Component {
                 }
             })
         } else if (!username) {
-            message.warning('收货人不能为空', 1)
+            Toast.info('收货人不能为空', 1)
         } else if (!phone) {
-            message.warning('联系电话不能为空', 1);
-        } else if (!isPoneAvailable) {
-            message.warning('请输入11位有效手机号码', 1)
+            Toast.info('联系电话不能为空', 1);
+        } else if (!isPhoneAvailable) {
+            Toast.info('请输入11位有效手机号码', 1)
         } else if (!areaAddress) {
-            message.warning('请选择地区', 1)
+            Toast.info('请选择地区', 1)
         } else if (!address) {
-            message.warning('请输入详细地址，无需包含省市', 1)
+            Toast.info('请输入详细地址，无需包含省市', 1)
         } else {
-            message.warning('收货地址暂未完善', 2)
+            Toast.info('收货地址暂未完善', 2)
         }
 
     }
@@ -176,16 +170,16 @@ class SingleAddress extends Component {
                 </div>
 
                 <div className='address-button-group'>
-                    <Mutation mutation={addressID === 'add' ? gql(create_update_userAddress) : gql(update_userAddress)}
+                    <Mutation mutation={addressID === 'add' ? gql(INSERT_LOCATION_MUTATION) : gql(UPDATE_LOCATION_MUTATION)}
                         refetchQueries={[
-                            { query: gql(userAddressbyprops), variables: { user_id } }
+                            { query: gql(LOCATION_BY_USER_ID_QUERY), variables: { user_id } }
                         ]}
                         onError={error => console.log('error', error)}
                     >
-                        {(mutate, { loading, error }) => (
+                        {(update_address, { loading, error }) => (
                             <div className='address-add'
                                 onClick={() => {
-                                    this.saveAddress(user_id, mutate)
+                                    this.saveAddress(user_id, update_address)
                                 }}
                             >
                                 保存并使用

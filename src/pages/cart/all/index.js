@@ -75,7 +75,7 @@ class All extends Component {
         // console.log('render', page, this.props)
 
         return (
-            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ user_id }}>
+            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ "user_id": user_id, "status": 1 }}>
                 {
                     ({ loading, error, data, refetch }) => {
                         if (loading) {
@@ -89,9 +89,7 @@ class All extends Component {
                         if (error) {
                             return '购物车: 页面出问题...'
                         }
-
                         let cartList = data.cart;
-                        console.log(data);
                         return (
                             <div className='cart-wrap'>
                                 <div className='cart-navbar-wrap navbar'>
