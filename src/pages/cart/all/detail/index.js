@@ -85,7 +85,7 @@ class CartDetail extends Component {
     // 使用函数防抖5s后请求更新数量
     updateCartProductCount = (data, updateCount) => {
         // console.log('updateCartProductCount id count',id,count)
-        let updatedAt = moment().format('YYYY-MM-DD HH:mm:ss')
+        // let updatedAt = moment().format('YYYY-MM-DD HH:mm:ss')
         updateCount({ variables: data })
     }
 

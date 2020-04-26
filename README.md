@@ -1,29 +1,33 @@
-## 西柚电商 web app
+## 电商 React 网页端
 
 ## 项目介绍
 
-`西柚电商`项目是一套电商系统，包括前台商城系统及后台管理系统。包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、会员中心。
+`西柚电商`项目是一套电商系统，包括前台商城系统及后台管理系统。包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、个人信息等模块。
 
 ## 项目演示
 
 ### 后端技术
 
-| 技术     | 说明           | 官网                       |
-| -------- | -------------- | -------------------------- |
-| Hasura   | 开源引擎       | https://https://hasura.io/ |
-| RabbitMq | 消息队列       | https://www.rabbitmq.com/  |
-| Redis    | 分布式缓存     | https://redis.io/          |
-| Apollo   | graphql 数据库 | www.apollographql.com/     |
+| 技术   | 说明               | 官网                       |
+| ------ | ------------------ | -------------------------- |
+| Hasura | 开源引擎           | https://https://hasura.io/ |
+| Apollo | graphql 数据库接口 | www.apollographql.com/     |
 
 ### 前端技术
 
-| 技术             | 说明                    | 官网                                   |
-| ---------------- | ----------------------- | -------------------------------------- |
-| AntDesign Mobile | 前端 UI 框架            | https://mobile.ant.design/             |
-| Axios            | 前端 HTTP 框架          | https://github.com/axios/axios         |
-| v-charts         | 基于 Echarts 的图表框架 | https://v-charts.js.org/               |
-| Js-cookie        | cookie 管理工具         | https://github.com/js-cookie/js-cookie |
-| AntDesign        | 进度条控件              | https://ant.design/components/icon/    |
+| 技术             | 说明            | 官网                                                             |
+| ---------------- | --------------- | ---------------------------------------------------------------- |
+| AntDesign Mobile | 前端 UI 框架    | https://mobile.ant.design/                                       |
+| Axios            | 前端 HTTP 框架  | https://github.com/axios/axios                                   |
+| Js-cookie        | cookie 管理工具 | https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie |
+| AntDesign        | 图表库          | https://ant.design/components/icon/                              |
+
+### 其他
+
+| 技术    | 说明           | 官网                    |
+| ------- | -------------- | ----------------------- |
+| Webpack | 前端 UI 框架   | https://webpack.js.org/ |
+| Babel   | 前端 HTTP 框架 | https://babeljs.io/     |
 
 ## 开发模块
 
@@ -45,6 +49,10 @@
 - html-webpack-plugin: 创建 HTML 模版
 
 ## 项目框架
+
+- 购物车
+  为了增加代码复用率，我在数据库方面用`状态`来控制和表达物品的收藏，待付费，待发货，待完成等等的状态
+  并且通过使用 `localStorage` 来读组建内部变量的增删改，减少数据库查询和更改请求数量
 
 ## 流程记录
 
@@ -85,7 +93,7 @@ git push heroku master
 
 4. 云端图片/ api
 
-1) 宣传滑动图片
+- 宣传滑动图片
 
 滑动图片暂存在 https://imgbb.com/ 中，这是一个免费图片上传库
 地址:
@@ -95,6 +103,6 @@ git push heroku master
 - https://ibb.co/0y6nVjm
 - https://ibb.co/V3Wjp5b
 
-2. 库存数据
-   RapidAPI 有 Taobao API 的 淘宝鞋子数据
-   从中提取到 Hasura Graphql Database (链接：https://xiyou-server.herokuapp.com/console/data/schema/profile/tables)
+* 库存数据
+  RapidAPI 有 Taobao API 的 淘宝鞋子数据
+  从中提取到 Hasura Graphql Database (链接：https://xiyou-server.herokuapp.com/console/data/schema/profile/tables)
