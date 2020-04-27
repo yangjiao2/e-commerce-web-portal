@@ -262,16 +262,17 @@ const ButtonGroupRender = (props) => {
                     }}>查看物流</Button>
                 </div>
             )
-        // case '3':
-        //     return (
-        //         <div className='order-card-button-group'>
-        //             <Button size="small" className='judge-button order-button'>去评价</Button>
-        //         </div>
-        //     )
+        case '3':
+            return (
+                <div className='order-card-button-group'>
+                    <Button size="small" className='judge-button order-button' onClick={() => {
+                        message.info('评价')
+                    }}>去评价</Button>
+                </div>
+            )
         default:
             return (
                 <div>
-
                 </div>
             )
     }

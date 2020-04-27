@@ -163,6 +163,24 @@ const DELETE_LOCATION_MUTATION = `
     }
 `;
 
+// 用户默认地址查询
+const DEFAULT_LOCATION_BY_USER_ID_QUERY = `
+    query locationByUserId($user_id: Int!) {
+        location: profile_location(where: {user_id: {_eq: $user_id}, default: {_eq: 1}}) {
+            address
+            area
+            city
+            default
+            id
+            postcode
+            phone
+            province
+            user_id
+            username
+        }
+    }
+`;
+
 
 const create_user = `
     mutation createuser($email: String, $updatedAt: String, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID!, $userData_id: ID) {
@@ -688,7 +706,6 @@ const order_by_id = `
                 logisticsFee
                 expressId
                 createdAt
-
                 consigneeTel
                 id
                 expressName
@@ -1054,6 +1071,7 @@ export {
     INSERT_LOCATION_MUTATION,
     UPDATE_LOCATION_MUTATION,
     DELETE_LOCATION_MUTATION,
+    DEFAULT_LOCATION_BY_USER_ID_QUERY,
 
     create_user,
     find_user_by_openid,

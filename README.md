@@ -4,19 +4,25 @@
 
 `西柚电商`项目是一套电商系统，包括前台商城系统及后台管理系统。包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、个人信息等模块。
 
-4.1 用户注册和登录
+1 用户注册和登录
 注册和登录是每个用户使用 app 必须要进行的操作，用户填写个人信息，包括用户名，密码，手机号等基本信息之后即可完成注册，后续用户若退出登录再登录时，需要输入之前注册时的用户名和密码。
-4.2 主页商品浏览
+
+2 主页商品浏览
 用户登录成功后进入页面，主板块的上部分用轮播图来显示推出的最新商品，下边时导航栏，可切换主页，商品分类，个人信息等。
-4.3 商品搜索
+
+3 商品搜索
 主页用来搜索商品，根据用户提供的关键字，设置关键词的超链接。
-4.4 加入购物车
+
+4 加入购物车
 购物车页面用来管理选中但未支付的商品，用户可以在购物车内修改商品的数量或者删除商品，选中要支付的商品后自动统计价格。
-4.5 商品收藏
+
+5 商品收藏
 用户点击收藏的商品，将其添加到收藏夹。每点击一次程序做一次判断，若完成收藏，则显示收藏成功。连续点击则判断是否收藏成功或取消收藏。
-4.6 收货地址管理
+
+6 收货地址管理
 用户提交订单后编辑收货地址，填写时并自动定位。
-4.7 个人中心
+
+7 个人中心
 个人中心可以查看自己的个人信息，查看订单，浏览记录。还有设置，关于等。
 
 ## 项目演示
@@ -33,7 +39,6 @@
 | 技术             | 说明            | 官网                                                             |
 | ---------------- | --------------- | ---------------------------------------------------------------- |
 | AntDesign Mobile | 前端 UI 框架    | https://mobile.ant.design/                                       |
-| Axios            | 前端 HTTP 框架  | https://github.com/axios/axios                                   |
 | Js-cookie        | cookie 管理工具 | https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie |
 | AntDesign        | 图表库          | https://ant.design/components/icon/                              |
 
@@ -70,7 +75,7 @@
   并且通过使用 `localStorage` 来读组建内部变量的增删改，减少数据库查询和更改请求数量
   通过传入`type`和`物品参数`，运用一个函数方程进行增加，改变，减少和删除数量，提高代码复用率
 
-## 流程记录
+## 流程细节
 
 1. react webpack babel 安装
 
@@ -103,9 +108,47 @@ git push heroku master
    URI: https://xiyou-server.herokuapp.com/v1/graphql
 
 - profile: 用户资料
+  | column | type | property |
+  | ---------------- | --------------- | ---------------------------------------------------------------- |
+  Id | Int | Nextval |
+  Name | String | |
+  Email | String | |  
+  Password | String |
+
 - cart: 购物车
-- product: 商品
+  | column | type | property |
+  | ---------------- | --------------- | ---------------------------------------------------------------- |
+  Id | Int | Nextval (自动递增) |
+  User_id | Int | |
+  Product_id| | Int | |
+  Count| Int | |
+  Status| Int | |
+
+* product: 商品
+  | column | type | property |
+  | ---------------- | --------------- | ---------------------------------------------------------------- |
+  Id | Int |Nextval|
+  Name | String| |
+  Price | Float| |
+  Category | String| |
+  Img | Json| |
+  Stock | Int| |
+  Description | String| |
+
 - location: 地址
+  地址 (location)
+  | column | type | property |
+  | ---------------- | --------------- | ---------------------------------------------------------------- |
+  Id | Int | Nextval |
+  User_id | Int | |
+  Username | String | |
+  Phone | String | |
+  Province | String | |
+  City | String | |
+  Area | String | |
+  Address | String | |
+  Postcode | String | |
+  Default | Int | |
 
 4. 云端图片/ api
 
