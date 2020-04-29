@@ -6,8 +6,9 @@ import { Query } from "react-apollo"
 import { Mutation } from "react-apollo"
 import gql from "graphql-tag"
 import classNames from 'classnames'
+import empty_cart from '../../../../images/empty_cart.jpg'
 
-import { delete_order, orderbyprops, orderProduct_by_props } from "../../../../utils/gql"
+import { delete_order, ORDER_BY_USER_ID_STATUS, ORDER_PRODUCT_BY_ORDER_ID } from "../../../../utils/gql"
 import { getCookie } from "../../../../utils/cookie"
 import './index.css'
 
@@ -71,7 +72,7 @@ class Display extends Component {
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(orderbyprops)} variables={{ user_id, orderStatus }}>
+                <Query query={gql(ORDER_BY_USER_ID_STATUS)} variables={{ user_id, status: [orderStatus] }}>
                     {
                         ({ loading, error, data }) => {
                             if (loading) {
@@ -133,13 +134,14 @@ class DisplayRender extends Component {
                     data.length === 0 ?
                         <div className='order-tip-wrap'>
                             <div className='order-tip'>还没有这种订单</div>
+                            {/* <img src={empty_cart} alt="" width={200} /> */}
                         </div>
                         :
                         data.map(order => (
                             <div key={order.id} className='order-card'>
                                 <div className='order-card-top'>订单号: {order.id}</div>
 
-                                <Query query={gql(orderProduct_by_props)} variables={{ order_id: order.id }}>
+                                <Query query={gql(ORDER_PRODUCT_BY_ORDER_ID)} variables={{ order_id: order.id }}>
                                     {
                                         ({ loading, error, data }) => {
                                             if (loading) {
@@ -215,7 +217,7 @@ const ButtonGroupRender = (props) => {
                 <div className='order-card-button-group'>
                     <Mutation
                         mutation={gql(delete_order)}
-                        refetchQueries={[{ query: gql(orderbyprops), variables: { user_id, orderStatus } }]}
+                        refetchQueries={[{ query: gql(ORDER_BY_USER_ID_STATUS), variables: { user_id, status: [orderStatus] } }]}
                     >
                         {(delete_order, { loading, error }) => {
                             if (loading) {

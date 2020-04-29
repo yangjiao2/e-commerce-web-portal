@@ -2,7 +2,7 @@
 
 ## 项目介绍
 
-`西柚电商`项目是一套电商系统，包括前台商城系统及后台管理系统。包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、个人信息等模块。
+此项目是一套电商系统，包括前台商城系统及后台管理系统。包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、个人信息等模块。
 
 1 用户注册和登录
 注册和登录是每个用户使用 app 必须要进行的操作，用户填写个人信息，包括用户名，密码，手机号等基本信息之后即可完成注册，后续用户若退出登录再登录时，需要输入之前注册时的用户名和密码。
@@ -165,3 +165,28 @@ git push heroku master
 * 库存数据
   RapidAPI 有 Taobao API 的 淘宝鞋子数据
   从中提取到 Hasura Graphql Database (链接：https://xiyou-server.herokuapp.com/console/data/schema/profile/tables)
+
+5. local 部署和 Heroku 部署
+   local 部署:
+
+   ```
+   npm install
+   npm start
+   ```
+
+   heroku 部署:
+   package.json config:
+
+   ```
+   "engines": {
+    "node": "12.11.1"
+    },
+   ```
+
+   ```
+    "scripts": {
+    "start": "node --max_old_space_size=2560 scripts/start.js",
+    "build": "node --max_old_space_size=2560 scripts/build.js",
+    "test": "node scripts/test.js"
+    },
+   ```

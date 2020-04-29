@@ -201,7 +201,7 @@ class SelectModal extends Component {
     }
 
     componentWillMount() {
-        let { productData } = this.props
+        // let { productData } = this.props
         // this.handleData(productData.spec)
     }
 

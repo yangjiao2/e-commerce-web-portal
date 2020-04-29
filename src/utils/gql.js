@@ -89,7 +89,7 @@ const DELETE_CART_MUTATION = `
 // 用户地址查询
 const LOCATION_BY_USER_ID_QUERY = `
     query locationByUserId($user_id: Int!) {
-        location: profile_location(where: {user_id: {_eq: $user_id}}) {
+        location: profile_location(where: {user_id: {_eq: $user_id}, default: {_in: [1, 0]}}) {
             address
             area
             city
@@ -146,7 +146,7 @@ mutation update_location($id: Int!, $default: Int!, $address: String!, $area: St
 // 删除地址
 const DELETE_LOCATION_MUTATION = `
     mutation delete_profile_location ($id: Int!){
-        deleteAddress: delete_profile_location(where: {id: {_eq: $id}}){
+        deleteAddress: update_profile_location(_set: { default: -1}, where: {id: {_eq: $id}}){
             returning {
                 id
                 address
@@ -181,6 +181,117 @@ const DEFAULT_LOCATION_BY_USER_ID_QUERY = `
     }
 `;
 
+// 创建订单
+const CREATE_ORDER = `
+    mutation insert_profile_order($cartTotal: numeric!, $count: Int!, $createAt: timestamptz, $location_id: Int!, $orderStatus: Int, $productTotal: numeric!, $updateAt: timestamptz, $user_id: Int!) {
+        insert_profile_order(objects: {cartTotal: $cartTotal, count: $count, createAt: $createAt, location_id: $location_id, orderStatus: $orderStatus, productTotal: $productTotal, updateAt: $updateAt, user_id: $user_id}) {
+            returning {
+            user_id
+            id
+            orderStatus
+            count
+            cartTotal
+            location_id
+            productTotal
+            }
+        }
+    }
+`
+// 创建订单物品
+const CREATE_ORDER_PRODUCT = `
+mutation insert_profile_order($cart_id: Int! $order_id: Int!, $count: Int!, $productPay: numeric!, $product_id: Int!) {
+    insert_profile_orderProduct(objects: {count: $count, order_id: $order_id, productPay: $productPay, product_id: $product_id}) {
+        returning {
+        count
+        order_id
+        product_id
+        }
+    }
+    delete_profile_cart(where: {id: {_eq: $cart_id}}){
+        affected_rows
+    }
+}
+`
+
+// 查询订单
+const ORDER_BY_USER_ID_STATUS = `
+    query orderByUserId($user_id: Int!, $status: [Int!]) {
+        orderbyprops: profile_order(where: {user_id: {_eq: $user_id}, orderStatus: {_in: $status}}) {
+            cartTotal
+            count
+            createAt
+            id
+            location_id
+            orderStatus
+            productTotal
+            updateAt
+            user_id
+        }
+    }
+`
+
+// 查询订单物品
+const ORDER_PRODUCT_BY_ORDER_ID = `
+    query orderProductByOrderId($order_id: Int!) {
+        orderProductbyprops: profile_orderProduct(where: {order_id: {_eq: $order_id}}) {
+            count
+            id
+            order_id
+            productPay
+            product_id
+            product {
+                id
+                img
+                name
+            }
+        }
+    }
+`
+
+// 修改订单状态
+const UPDATE_ORDER_STATUS = `
+    query updateOrderStatus($id: Int!, $orderStatus: Int!) {
+        update_profile_order(where: {id: {_eq: $id}}, _set: {orderStatus: $orderStatus}) {
+            returning {
+                cartTotal
+                count
+                createAt
+                id
+                location_id
+                orderStatus
+                updateAt
+                productTotal
+                user_id
+            }
+        }
+    }
+`
+
+// 删除订单
+const DELETE_ORDER = `
+    mutation delete_profile_order($order_id: Int!) {
+        delete_profile_orderProduct(where: {order_id: {_eq: $order_id}}) {
+            returning {
+                id
+            }
+        }
+        delete_profile_order(where: {id: {_eq: $order_id}}) {
+            returning {
+                id
+                cartTotal
+                count
+                createAt
+                id
+                location_id
+                orderStatus
+                updateAt
+                productTotal
+                user_id
+            }
+        }
+    }
+
+`
 
 const create_user = `
     mutation createuser($email: String, $updatedAt: String, $password: String, $telephone: String, $username: String, $createdAt: String, $openid: String, $id: ID!, $userData_id: ID) {
@@ -1072,6 +1183,11 @@ export {
     UPDATE_LOCATION_MUTATION,
     DELETE_LOCATION_MUTATION,
     DEFAULT_LOCATION_BY_USER_ID_QUERY,
+    CREATE_ORDER,
+    CREATE_ORDER_PRODUCT,
+    ORDER_BY_USER_ID_STATUS,
+    ORDER_PRODUCT_BY_ORDER_ID,
+    DELETE_ORDER,
 
     create_user,
     find_user_by_openid,

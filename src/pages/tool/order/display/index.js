@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Row, Col, message } from 'antd'
-import { NavBar, Icon, ActivityIndicator, Button } from 'antd-mobile'
+import { Row, Col } from 'antd'
+import { NavBar, Icon, ActivityIndicator, Button, Toast } from 'antd-mobile'
 import { Query } from "react-apollo"
 import { Mutation } from "react-apollo"
 import gql from "graphql-tag"
 import classNames from 'classnames'
+import empty_cart from '../../../../images/empty-cart.png'
 
-import { delete_order, orderbyprops, orderProduct_by_props } from "../../../../utils/gql"
+import { DELETE_ORDER, ORDER_BY_USER_ID_STATUS, ORDER_PRODUCT_BY_ORDER_ID } from "../../../../utils/gql"
 import { getCookie } from "../../../../utils/cookie"
 import './index.css'
 
@@ -71,7 +72,7 @@ class Display extends Component {
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(orderbyprops)} variables={{ user_id, orderStatus }}>
+                <Query query={gql(ORDER_BY_USER_ID_STATUS)} variables={{ user_id, status: [orderStatus] }}>
                     {
                         ({ loading, error, data }) => {
                             if (loading) {
@@ -103,28 +104,25 @@ class DisplayRender extends Component {
     }
 
     orderCardContentRender = (data) => {
-        if (data.length === 1) {
+        return (data.map(order => {
+            let product = order.product;
             return (
-                <Row style={{ width: '100%' }}>
-                    <Col span={6} style={{ height: '100%' }}>
+                <Row key={order.id} style={{ width: '100%' }}>
+                    <Col span={4} style={{ height: '100px' }}>
                         <div className='order-product-img'
-                            style={{ backgroundImage: `url('${data[0].product_id.img}')` }} />
+                            style={{ backgroundImage: `url('${product.img[0]}')` }} />
                     </Col>
-                    <Col span={16} offset={2}>
-                        <div className='order-product-name'>{data[0].product_id.name}</div>
+                    <Col span={16} offset={1}>
+                        <div className='order-product-name'>{product.name}</div>
                     </Col>
                 </Row>
             )
-        } else {
-            return (data.map(data => (
-                <div className='order-product-img' style={{ backgroundImage: `url('${data.product_id.img}')` }}
-                    key={data.id} />
-            )))
         }
+        ))
     }
 
     render() {
-        let { data, orderStatus, button = true } = this.props
+        let { data, orderStatus, button = false } = this.props
         let content = orderStatus === '0' ? '需付款' : '实付款'
 
         return (
@@ -133,13 +131,16 @@ class DisplayRender extends Component {
                     data.length === 0 ?
                         <div className='order-tip-wrap'>
                             <div className='order-tip'>还没有这种订单</div>
+                            <div >
+                                <img src={empty_cart} alt="" width={400} />
+                            </div>
                         </div>
                         :
                         data.map(order => (
                             <div key={order.id} className='order-card'>
                                 <div className='order-card-top'>订单号: {order.id}</div>
 
-                                <Query query={gql(orderProduct_by_props)} variables={{ order_id: order.id }}>
+                                <Query query={gql(ORDER_PRODUCT_BY_ORDER_ID)} variables={{ order_id: order.id }}>
                                     {
                                         ({ loading, error, data }) => {
                                             if (loading) {
@@ -187,16 +188,11 @@ class DisplayRender extends Component {
                                         className='order-card-count'>共{order.count}件商品&nbsp;&nbsp;{content}:
                                     </div>
                                     <div
-                                        className='order-card-pay'>￥{Math.round(order.productTotalPay * 100) / 100}</div>
+                                        className='order-card-pay'>￥{Math.round(order.productTotal * 100) / 100}</div>
                                 </div>
 
-                                {
-                                    button ?
-                                        <ButtonGroupRender id={order.id} order={order} orderStatus={this.props.orderStatus}
-                                            history={this.props.history} />
-                                        :
-                                        ''
-                                }
+                                <ButtonGroupRender id={order.id} order={order}
+                                    history={this.props.history} />
 
                             </div>
                         ))
@@ -207,36 +203,38 @@ class DisplayRender extends Component {
 }
 
 const ButtonGroupRender = (props) => {
-    let { orderStatus, id, order } = props
+    let { id, order } = props
+    let orderStatus = String(order.orderStatus)
     let user_id = getCookie('user_id')
+    let deleteButton = (<Mutation
+        mutation={gql(DELETE_ORDER)}
+        refetchQueries={[{ query: gql(ORDER_BY_USER_ID_STATUS), variables: { user_id, status: [orderStatus] } }]}
+    >
+        {(delete_order, { loading, error }) => {
+            if (loading) {
+                return (
+                    <div className="loading-center">
+                        <ActivityIndicator text="加载中..." size="large" />
+                    </div>
+                )
+            }
+            if (error) {
+                return 'error!'
+            }
+            return (
+                <div>
+                    <Button size="small" className='pay-button order-button' onClick={() => {
+                        delete_order({ variables: { order_id: id } })
+                    }}>删除</Button>
+                </div>
+
+            )
+        }}
+    </Mutation>);
     switch (orderStatus) {
         case '0':
             return (
                 <div className='order-card-button-group'>
-                    <Mutation
-                        mutation={gql(delete_order)}
-                        refetchQueries={[{ query: gql(orderbyprops), variables: { user_id, orderStatus } }]}
-                    >
-                        {(delete_order, { loading, error }) => {
-                            if (loading) {
-                                return (
-                                    <div className="loading-center">
-                                        <ActivityIndicator text="加载中..." size="large" />
-                                    </div>
-                                )
-                            }
-                            if (error) {
-                                return 'error!'
-                            }
-                            return (
-                                <Button size="small" className='pay-button order-button' onClick={() => {
-                                    delete_order({ variables: { id } })
-                                }}>取消</Button>
-                            )
-                        }}
-                    </Mutation>
-
-
                     <Button size="small" className='pay-button order-button' style={{ marginLeft: 5 }} onClick={() => {
                         sessionStorage.setItem('payOrder', JSON.stringify(order))
                         props.history.push({
@@ -244,30 +242,36 @@ const ButtonGroupRender = (props) => {
                             state: {}
                         })
                     }}>去支付</Button>
+                    {deleteButton}
+
                 </div>
             )
         case '1':
             return (
                 <div className='order-card-button-group'>
                     <Button size="small" className='ship-button order-button' onClick={() => {
-                        message.success('已提醒')
+                        Toast.success('已提醒商家发货')
                     }}>催发货</Button>
+                    {deleteButton}
+
                 </div>
             )
         case '2':
             return (
                 <div className='order-card-button-group'>
                     <Button size="small" className='unbox-button order-button' onClick={() => {
-                        message.info('暂无物流信息')
+                        Toast.info('暂无物流信息')
                     }}>查看物流</Button>
+                    {deleteButton}
                 </div>
             )
         case '3':
             return (
                 <div className='order-card-button-group'>
                     <Button size="small" className='judge-button order-button' onClick={() => {
-                        message.info('评价')
+                        Toast.info('感谢您的评价')
                     }}>去评价</Button>
+                    {deleteButton}
                 </div>
             )
         default:

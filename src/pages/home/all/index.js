@@ -89,6 +89,7 @@ class Recommend extends Component {
                             data={productList}
                             columnNum={3}
                             hasLine={false}
+                            // square={false}
                             itemStyle={{ margin: '5px' }}
                             onClick={(recommend) => {
                                 console.log(recommend)

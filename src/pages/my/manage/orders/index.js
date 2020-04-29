@@ -12,7 +12,7 @@ import { Icon } from 'antd'
 import classNames from 'classnames'
 import { Query } from "react-apollo"
 import gql from "graphql-tag"
-import { order_by_id, orderbyprops } from "../../../../utils/gql"
+import { order_by_id, ORDER_BY_USER_ID_STATUS } from "../../../../utils/gql"
 import { DisplayRender } from "../../order/display"
 
 const Item = List.Item;
@@ -217,7 +217,7 @@ class Shiping extends Component {
 
     render() {
         return (
-            <Query query={gql(orderbyprops)} variables={{ orderStatus: '1' }}>
+            <Query query={gql(ORDER_BY_USER_ID_STATUS)} variables={{ orderStatus: '1' }}>
                 {
                     ({ loading, error, data }) => {
                         if (loading) {

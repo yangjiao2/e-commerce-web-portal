@@ -6,7 +6,7 @@ import { Query, Mutation } from "react-apollo"
 import gql from "graphql-tag"
 import moment from 'moment'
 
-import { DEFAULT_LOCATION_BY_USER_ID_QUERY, create_order, create_order_product, orderbyprops } from "../../../utils/gql"
+import { DEFAULT_LOCATION_BY_USER_ID_QUERY, CREATE_ORDER, CREATE_ORDER_PRODUCT, ORDER_BY_USER_ID_STATUS } from "../../../utils/gql"
 import { idGen } from "../../../utils/func"
 import { getCookie } from "../../../utils/cookie"
 import './index.css'
@@ -74,112 +74,102 @@ class CartOrders extends Component {
         })
     }
 
+    // 创建订单
     onSubmitOrderAndProduct = (user_id, create_order, create_order_product) => {
         let ordersAddress = JSON.parse(sessionStorage.getItem('ordersAddress'))
-
+        console.log(ordersAddress);
         if (ordersAddress) {
             let { totalCount, totalPrice, remark, delivery } = this.state
-            let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+            let createAt = (new Date()).toISOString()
             let { id: userAddress_id, telephone, username, province, city, area, address } = ordersAddress
             let addressData = String(province + city + area + address)
             let tag = telephone ? telephone.replace(/[^0-9]/ig, "").slice(-4) : Math.random().toString(10).substr(2, 4)
-            const orderId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
-            let orderLogisticsId = idGen('deliver')
+            // const orderId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag
+            // let orderLogisticsId = idGen('deliver')
 
             const orderContent = {
-                remark,
-                updatedAt: "",
-                orderLogistics_id: orderLogisticsId,
-                orderTotalPay: totalPrice,
-                createdAt,
-                orderStatus: "0",
-                userAddress_id,
-                id: orderId,
+                // remark,
+                // updatedAt: "",
+                // orderLogistics_id: orderLogisticsId,
+                cartTotal: totalPrice,
+                createAt,
+                // orderStatus: "0",
+                location_id: userAddress_id,
+                // id: orderId,
                 count: totalCount,
                 user_id,
-                productTotalPay: totalPrice,
-                orderPay_id: "",
-                deleteId: []
+                productTotal: totalPrice,
+                // orderPay_id: "",
+                orderStatus: 1, // 待发货
+                // deleteId: []
             }
 
-            const orderLogistics = {
-                updatedAt: "",
-                deliveryTime: "",
-                serviceStore: "",
-                expressName: delivery[0],
-                logisticsFee: 0.0,
-                expressId: "",
-                createdAt,
-                order_id: orderId,
-                consigneeTel: telephone,
-                orderLogisticsId,
-                consignAddress: addressData,
-                LogisticsStatus: "0",
-                user_id,
-                consigneeName: username
-            }
 
             let type = this.props.history.location.state.dataType
             let shopping = JSON.parse(sessionStorage.getItem(type))
-            if (type === 'cartSelected') orderContent.deleteId = shopping.map(item => item.id)
+            // if (type === 'cartSelected') orderContent.deleteId = shopping.map(item => item.id)
+            console.log('createOrder shopping', shopping)
+            //...orderLogistics
+            // let createOrder = create_order({ variables: { ...orderContent } })
+            create_order({ variables: { ...orderContent } }).then((cart_data) => {
 
-            // console.log('createOrder orderContent',orderContent)
+                console.log(cart_data);
+                let createOrderProduct = shopping.map((item, index) => {
+                    // let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+                    // let orderProductId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag + index
+                    let { id: cart_id, count, product: productData, } = item
+                    //  specificationStock_id: specData 
+                    let { id: product_id, price } = productData
+                    // let {  id: specId, color, size } = specData
+                    // console.log('product',index,item,product)
 
-            let createOrder = create_order({ variables: { ...orderContent, ...orderLogistics } })
+                    const orderProduct = {
+                        // updatedAt: "",
+                        // productColor: color,
+                        // unit,
+                        product_id,
+                        // specificationStock_id: specId,
+                        // productSize: size,
+                        // orderPay: price,
+                        // createdAt,
+                        // productImg: img,
+                        // productName: name,
+                        order_id: cart_data.data.insert_profile_order.returning[0].id,
+                        // productPrice: price,
+                        // id: orderProductId,
+                        // user_id,
+                        cart_id: cart_id,
+                        count,
+                        productPay: price * count,
+                        // orderPay_id: "",
+                    }
+                    // console.log(`orderProduct${index}`,orderProduct)
 
-            let createOrderProduct = shopping.map((item, index) => {
-                let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-                let orderProductId = createdAt.replace(/[^0-9]/ig, "").substr(2) + tag + index
-                let { count, product: productData, specificationStock_id: specData } = item
-                let { id: product, img, name, price, unit } = productData
-                let { id: specId, color, size } = specData
-                // console.log('product',index,item,product)
-
-                const orderProduct = {
-                    updatedAt: "",
-                    productColor: color,
-                    unit,
-                    product,
-                    specificationStock_id: specId,
-                    productSize: size,
-                    orderPay: price,
-                    createdAt,
-                    productImg: img,
-                    productName: name,
-                    order_id: orderId,
-                    productPrice: price,
-                    id: orderProductId,
-                    user_id,
-                    count,
-                    productPay: price,
-                    orderPay_id: "",
-                }
-                // console.log(`orderProduct${index}`,orderProduct)
-
-                return create_order_product({ variables: orderProduct }).then((data) => {
-                    // console.log('ok data',index,data)
-                    return data.data
+                    return create_order_product({ variables: orderProduct }).then((product_data) => {
+                        console.log('ok create_order_product', index, product_data)
+                        return product_data.data
+                    })
                 })
             })
 
-            Promise.all([createOrder, createOrderProduct]).then((data) => {
-                // console.log('onSubmitOrderAndProduct data',data)
-                sessionStorage.setItem('payOrder', JSON.stringify(orderContent))
-                if (type === 'cartSelected') {
-                    let cartCount = JSON.parse(localStorage.getItem("cartCount")) - totalCount
-                    localStorage.setItem("cartCount", JSON.stringify(cartCount))
-                    localStorage.removeItem("cartList")
-                }
-
-                this.props.history.push({
-                    pathname: '/cart/pay',
-                    state: {}
-                })
-            }).catch((err) => {
-                console.log('submit error', err)
-            })
+            // Promise.all([createOrder, createOrderProduct]).then((data) => {
+            //     // console.log('onSubmitOrderAndProduct data',data)
+            //     // sessionStorage.setItem('payOrder', JSON.stringify(orderContent))
+            //     if (type === 'cartSelected') {
+            //         let cartCount = JSON.parse(localStorage.getItem("cartCount")) - totalCount
+            //         localStorage.setItem("cartCount", JSON.stringify(cartCount))
+            //         localStorage.removeItem("cartList")
+            //     }
+            //     Toast.success('订单提交成功')
+            //     this.props.history.push({
+            //         pathname: '/tool/',
+            //         state: {}
+            //     })
+            // }).catch((err) => {
+            //     console.log('submit error', err)
+            // })
         } else {
-            Toast.warning('请先添加收货地址')
+            Toast.info('请先添加收货地址')
         }
 
     }
@@ -361,8 +351,7 @@ class CartOrders extends Component {
                         </div>
                     </div>
                 </div>
-                {/*}
-                <Mutation mutation={gql(create_order)}
+                <Mutation mutation={gql(CREATE_ORDER)}
                     onError={error => console.log('create_order error', error)}
                 >
                     {(create_order, { loading, error }) => (
@@ -370,12 +359,12 @@ class CartOrders extends Component {
                             <div className="jiesuan">
                                 <div className='jiesuan-total'>
                                     <span>合计：</span>
-                                    <span className="jiesuan-total_price">¥ {totalPrice}</span>
+                                    <span className="jiesuan-total_price">¥ {totalPrice.toFixed(2)}</span>
                                 </div>
                                 <Mutation
-                                    mutation={gql(create_order_product)}
+                                    mutation={gql(CREATE_ORDER_PRODUCT)}
                                     onError={error => console.log('create_order_product error', error)}
-                                    refetchQueries={[{ query: gql(orderbyprops), variables: { user_id, orderStatus: '0' } }]}
+                                    refetchQueries={[{ query: gql(ORDER_BY_USER_ID_STATUS), variables: { user_id, status: ['0'] } }]}
                                 >
                                     {(create_order_product, { loading, error }) => (
                                         <button className="jiesuan-button"
@@ -389,7 +378,7 @@ class CartOrders extends Component {
                             </div>
                         </div>
                     )}
-                </Mutation> */}
+                </Mutation>
             </div>
         )
     }
@@ -408,7 +397,7 @@ const OrdersAddress = ({ props, selectAddress }) => {
                 multipleLine
                 onClick={() => {
                     props.history.push({
-                        pathname: '/my/tools',
+                        pathname: '/my/info',
                         state: {
                             page: 'address',
                             prePage: 'orders'
