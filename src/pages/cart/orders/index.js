@@ -152,22 +152,15 @@ class CartOrders extends Component {
                 })
             })
 
-            // Promise.all([createOrder, createOrderProduct]).then((data) => {
-            //     // console.log('onSubmitOrderAndProduct data',data)
-            //     // sessionStorage.setItem('payOrder', JSON.stringify(orderContent))
-            //     if (type === 'cartSelected') {
-            //         let cartCount = JSON.parse(localStorage.getItem("cartCount")) - totalCount
-            //         localStorage.setItem("cartCount", JSON.stringify(cartCount))
-            //         localStorage.removeItem("cartList")
-            //     }
-            //     Toast.success('订单提交成功')
-            //     this.props.history.push({
-            //         pathname: '/tool/',
-            //         state: {}
-            //     })
-            // }).catch((err) => {
-            //     console.log('submit error', err)
-            // })
+            // 页面跳转
+            Toast.success('订单提交成功')
+            this.props.history.push({
+                pathname: '/tool/order/display',
+                state: {
+                    kind: 'ship',
+                }
+            })
+
         } else {
             Toast.info('请先添加收货地址')
         }
@@ -214,7 +207,7 @@ class CartOrders extends Component {
                                                 )
                                             }
                                             if (error) {
-                                                return '1error!'
+                                                return '订单地址页面出现错误...'
                                             }
                                             let defaultAddress = data.location[0]
 

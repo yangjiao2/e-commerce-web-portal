@@ -24,7 +24,7 @@ const toolsIcon = [
     {
         icon: <StarOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/cart.png',
         text: '收藏夹',
-        id: 'cart'
+        id: 'star',
     },
     {
         icon: <SolutionOutlined />, //'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/message.png',
@@ -72,11 +72,18 @@ class All extends Component {
                             onClick={(tools) => {
                                 if (tools.id === 'cart') {
                                     this.props.history.push({
-                                        pathname: '/cart'
+                                        pathname: '/cart/detail'
                                     })
                                 } else if (tools.id === 'profile') {
                                     this.props.history.push({
                                         pathname: '/my/profile'
+                                    })
+                                } else if (tools.id === 'star') {
+                                    this.props.history.push({
+                                        pathname: '/cart/star',
+                                        state: {
+                                            page: 'star'
+                                        }
                                     })
                                 } else {
                                     this.props.history.push({

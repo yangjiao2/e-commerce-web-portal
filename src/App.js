@@ -159,10 +159,21 @@ class App extends Component {
                     <div className={classnames('search')}>
                         <Search
                             placeholder="搜索商品"
-                            onSearch={value => console.log(value)}
+                            onSearch={value => {
+                                console.log('onPressEnter', value);
+                                this.props.history.push({
+                                    pathname: `/home/query=`,
+                                    search: value,
+                                })
+                            }}
+
                             style={{ width: 300 }}
                         />
-                        <NavLink exact isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
+                        <NavLink exact isActive={this.isActiveFunc('cart')} activeClassName="active" to=
+                            {{
+                                pathname: "/cart/detail",
+                                state: { page: "detail" }
+                            }} >
                             <ShoppingCartOutlined style={{ fontSize: 24, padding: 16 }} />
                         </NavLink>
 
@@ -170,50 +181,51 @@ class App extends Component {
                 </div>
                 {/* 分类栏 */}
                 {/*  tabHidden == false &&  */}
-                {<div className={classnames('tabbar')}>
-                    <Row>
-                        <Col span={6} className='tabbar-content'>
-                            <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/home">
-                                {
-                                    <HomeOutlined />
-                                }
-                                <span className='tabbar-title'>
-                                    {' 主页 '}
-                                </span>
-                            </NavLink>
-                        </Col>
-                        <Col span={6} className='tabbar-content'>
-                            <NavLink isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
-                                {
-                                    <AppstoreOutlined />
-                                }
-                                <span className='tabbar-title'>
-                                    {' 商品分类 '}
-                                </span>
-                            </NavLink>
-                        </Col>
-                        <Col span={6} className='tabbar-content'>
-                            <NavLink isActive={this.isActiveFunc('my')} activeClassName="active" to="/my">
-                                {
-                                    <UserOutlined />
-                                }
-                                <span className='tabbar-title'>
-                                    {' 个人中心 '}
-                                </span>
-                            </NavLink>
-                        </Col>
-                        <Col span={6} className='tabbar-content'>
-                            <NavLink isActive={this.isActiveFunc('tool')} activeClassName="active" to="/tool">
-                                {
-                                    <UserOutlined />
-                                }
-                                <span className='tabbar-title'>
-                                    {' 订单详情 '}
-                                </span>
-                            </NavLink>
-                        </Col>
-                    </Row>
-                </div>
+                {
+                    <div className={classnames('tabbar')}>
+                        <Row>
+                            <Col span={6} className='tabbar-content'>
+                                <NavLink exact isActive={this.isActiveFunc('home')} activeClassName="active" to="/home">
+                                    {
+                                        <HomeOutlined />
+                                    }
+                                    <span className='tabbar-title'>
+                                        {' 主页 '}
+                                    </span>
+                                </NavLink>
+                            </Col>
+                            <Col span={6} className='tabbar-content'>
+                                <NavLink isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
+                                    {
+                                        <AppstoreOutlined />
+                                    }
+                                    <span className='tabbar-title'>
+                                        {' 商品分类 '}
+                                    </span>
+                                </NavLink>
+                            </Col>
+                            <Col span={6} className='tabbar-content'>
+                                <NavLink isActive={this.isActiveFunc('my')} activeClassName="active" to="/my">
+                                    {
+                                        <UserOutlined />
+                                    }
+                                    <span className='tabbar-title'>
+                                        {' 个人中心 '}
+                                    </span>
+                                </NavLink>
+                            </Col>
+                            <Col span={6} className='tabbar-content'>
+                                <NavLink isActive={this.isActiveFunc('tool')} activeClassName="active" to="/tool">
+                                    {
+                                        <UserOutlined />
+                                    }
+                                    <span className='tabbar-title'>
+                                        {' 订单详情 '}
+                                    </span>
+                                </NavLink>
+                            </Col>
+                        </Row>
+                    </div>
                 }
                 <div className='tabbar-route-content'>
 
@@ -224,12 +236,12 @@ class App extends Component {
                         }} />
                         <Route path="/home" component={Home} />
                         <Route path="/category" component={Home} />
-                        <Route path="/cart" component={Cart} />
+                        <Route path="/cart/:page" component={Cart} />
                         <Route path="/my" component={My} />
                         <Route path="/tool" component={Tool} />
                     </Switch>
                 </div>
-            </div>
+            </div >
 
         )
     }

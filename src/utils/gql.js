@@ -10,6 +10,18 @@ const PRODUCT_QUERY = `
 }
 `;
 
+// 库存查询
+const PRODUCT_BY_SEARCH = `
+    query productBySearch($text: String!) {
+        product: profile_product(where: {name: {_like: $text}}) {
+            id
+            img
+            name
+            price
+        }
+    }
+`
+
 // 物品查询
 const USER_DETAIL_BY_ID_QUERY = `
     query userById($id: Int!) {
@@ -1173,6 +1185,7 @@ const slideshow_by_props = `
 
 export {
     PRODUCT_QUERY,
+    PRODUCT_BY_SEARCH,
     PRODUCT_DETAIL_BY_ID_QUERY,
     CART_DETAIL_BY_USER_ID_QUERY,
     INSERT_CART_MUTATION,

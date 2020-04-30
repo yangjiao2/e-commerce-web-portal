@@ -11,7 +11,6 @@ class Order extends Component {
 
     componentWillMount() {
         let { location } = this.props
-        console.log('tool order');
         if (location && location.state) {
             if (['pay', 'ship', 'unbox', 'judge'].indexOf(location.state.kind) > -1) {
                 this.props.history.replace({

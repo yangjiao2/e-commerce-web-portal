@@ -13,19 +13,35 @@ import './index.css'
 class All extends Component {
     constructor(props) {
         super(props)
+        console.log('cart all ', props)
+        // let state = props.location.state
+        // let page = state ? state.page : 'detail'
+        let page = props.match.params.page || 'details';
         this.state = {
-            page: 'detail',
-            updateData: false
+            page,
+            updateData: false,
+            status: page === 'detail' ? 1 : 0,
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // console.log('componentWillReceiveProps', nextProps);
+        if (nextProps.match.params.page !== this.props.match.params.page) {
+            let page = nextProps.match.params.page
+            this.setState({
+                page,
+                status: page === 'detail' ? 1 : 0,
+            })
         }
     }
 
     componentWillMount() {
         // console.log('cartAll componentWillMount', this.props, this.state)
-        this.getHash()
+        // this.getHash()
     }
 
     componentDidMount() {
-        // console.log('cartAll componentDidMount', this.props, this.state)
+        console.log('cartAll componentDidMount', this.props, this.state)
         let state = this.props.history.location.state
         let updateData = state ? state.updateData : false
 
@@ -36,18 +52,18 @@ class All extends Component {
         }
     }
 
-    getHash = () => {
-        console.log('location', window.location.hash)
-        let hash = window.location.hash || '#tab=cart&page=detail'
-        let page = 'detail'
-        if (window.location.hash && hash.indexOf("&") > 0) {
-            let pageHash = hash.split("&")[1]
-            page = pageHash.substr(pageHash.indexOf("=") + 1)
-        }
-        this.setState({
-            page
-        })
-    }
+    // getHash = () => {
+    //     console.log('location', window.location.hash)
+    //     let hash = window.location.hash || '#tab=cart&page=detail'
+    //     let page = 'detail'
+    //     if (window.location.hash && hash.indexOf("&") > 0) {
+    //         let pageHash = hash.split("&")[1]
+    //         page = pageHash.substr(pageHash.indexOf("=") + 1)
+    //     }
+    //     this.setState({
+    //         page
+    //     })
+    // }
 
     changeCartPage = () => {
         this.setState((preState) => ({
@@ -58,15 +74,11 @@ class All extends Component {
     renderPage = (data, refetch) => {
         let { page, updateData } = this.state
         let cartList = data.cart;
-        console.log('all renderPage', page);
-        switch (page) {
-            case 'detail':
-                return <CartDetail cartList={cartList} refetch={refetch} updateData={updateData} />
-            case 'edit':
-                return <CartEdit cartList={cartList} refetch={refetch} />
-            default:
-                return <div>test</div>
+        if (page === 'edit') {
+            return <CartEdit cartList={cartList} refetch={refetch} />
         }
+        return <CartDetail cartList={cartList} refetch={refetch} updateData={updateData} page={page} />
+
     }
 
     render() {
@@ -75,7 +87,7 @@ class All extends Component {
         // console.log('render', page, this.props)
 
         return (
-            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ "user_id": user_id, "status": 1 }}>
+            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ "user_id": user_id, "status": this.state.status }}>
                 {
                     ({ loading, error, data, refetch }) => {
                         if (loading) {
@@ -107,7 +119,7 @@ class All extends Component {
                                      */}
                                 </div>
                                 {cartList.length ?
-                                    this.renderPage(data, refetch) : <Empty />
+                                    this.renderPage(data, refetch) : <Empty page={this.state.page} />
                                 }
                             </div>
                         )

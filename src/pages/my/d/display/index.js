@@ -6,7 +6,7 @@ import { Query } from "react-apollo"
 import { Mutation } from "react-apollo"
 import gql from "graphql-tag"
 import classNames from 'classnames'
-import empty_cart from '../../../../images/empty_cart.jpg'
+import empty_cart from '../../../../images/empty-cart.png'
 
 import { delete_order, ORDER_BY_USER_ID_STATUS, ORDER_PRODUCT_BY_ORDER_ID } from "../../../../utils/gql"
 import { getCookie } from "../../../../utils/cookie"

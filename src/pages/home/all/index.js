@@ -9,9 +9,9 @@ import { graphql } from '@apollo/react-hoc';
 
 import { Grid, Card, Carousel, WhiteSpace, ActivityIndicator } from 'antd-mobile'
 import Logo from '../../../components/logo'
-import { PRODUCT_QUERY, category_by_props, productbyprops } from "../../../utils/gql"
+import { PRODUCT_QUERY, category_by_props, PRODUCT_BY_SEARCH } from "../../../utils/gql"
 import './index.css'
-import { TagOutlined } from '@ant-design/icons';
+import { TagOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from "apollo-boost"
@@ -20,7 +20,10 @@ import { ApolloProvider } from "react-apollo"
 class HomePage extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        console.log('homepage', props)
+        this.state = {
+            query: props.query || ''
+        }
     }
 
     render() {
@@ -42,10 +45,35 @@ class HomePage extends Component {
             text: '更多',
             id: 'more'
         }
+        let query = this.props.query || '';
+        let text = query === '' ? query : query.substring(1)
+        if (query) {
+            return (<Query query={gql(PRODUCT_BY_SEARCH)} variables={{ text: `%${text}%` }}>
+                {result => {
+                    const { loading, error, data } = result;
+                    const productList = data.product;
+
+                    return <div className='guess-wrapper'>
+                        <div className='guess-title'>
+                            <SearchOutlined /> {` 搜索结果: ${text}`}
+                            <ProductGridView data={productList} onClick={
+                                (item) => {
+                                    console.log(item)
+                                    this.props.history.push({
+                                        pathname: '/home/detail',
+                                        state: {
+                                            id: item.id
+                                        }
+                                    })
+                                }} />
+                        </div>
+                    </div>
+                }}
+            </Query>);
+        }
 
         return (
             <div>
-
                 <Carousel
                     autoplay={true}
                     infinite
@@ -68,6 +96,8 @@ class HomePage extends Component {
     }
 }
 
+
+
 class Recommend extends Component {
     constructor(props) {
         super(props)
@@ -84,40 +114,53 @@ class Recommend extends Component {
                     return <div className='guess-wrapper'>
                         <div className='guess-title'>
                             <TagOutlined /> {' 店铺推荐 '}
+                            <ProductGridView data={productList} onClick={
+                                (item) => {
+                                    console.log(item)
+                                    this.props.history.push({
+                                        pathname: '/home/detail',
+                                        state: {
+                                            id: item.id
+                                        }
+                                    })
+                                }} />
                         </div>
-                        <Grid
-                            data={productList}
-                            columnNum={3}
-                            hasLine={false}
-                            // square={false}
-                            itemStyle={{ margin: '5px' }}
-                            onClick={(recommend) => {
-                                console.log(recommend)
-                                this.props.history.push({
-                                    pathname: '/home/detail',
-                                    state: {
-                                        id: recommend.id
-                                    }
-                                })
-                            }}
-                            renderItem={dataItem => (
-                                <div key={dataItem.id} className='product-item'>
-                                    <div className='product-item-img' style={{ backgroundImage: "url('" + dataItem.img[0] + "')" }} />
-                                    <div className='product-item-description'>
-                                        <div className='product-item-name'>{dataItem.name}</div>
-                                        <div className='product-item-price'>
-                                            <span>￥{(dataItem.price * 0.8).toFixed(2)}</span>&nbsp;
-                                    <span>￥{dataItem.price}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        />
                     </div>
                 }}
             </Query>
 
         )
+    }
+}
+
+class ProductGridView extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        let { data, onClick } = this.props;
+        return (<Grid
+            data={data}
+            columnNum={3}
+            hasLine={false}
+            // square={false}
+            itemStyle={{ margin: '5px' }}
+            onClick={onClick}
+            renderItem={dataItem => (
+                <div key={dataItem.id} className='product-item'>
+                    <div className='product-item-img' style={{ backgroundImage: "url('" + dataItem.img[0] + "')" }} />
+                    <div className='product-item-description'>
+                        <div className='product-item-name'>{dataItem.name}</div>
+                        <div className='product-item-price'>
+                            <span>￥{(dataItem.price * 0.8).toFixed(2)}</span>&nbsp;
+                                    <span>￥{dataItem.price}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+        />)
     }
 }
 

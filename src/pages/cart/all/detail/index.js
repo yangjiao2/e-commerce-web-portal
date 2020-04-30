@@ -290,6 +290,7 @@ class CartDetail extends Component {
     render() {
         let { cartList, isSelectAll, selectedCount, totalPrice } = this.state;
         let discountRate = 0.8;
+        let navTitle = this.props.page === 'detail' ? '购物车' : '收藏夹';
         return (
             <div className="cart-content-wrap">
                 <div className='detail-navbar-wrap'>
@@ -299,7 +300,7 @@ class CartDetail extends Component {
                         onLeftClick={() => {
                             this.props.history.go(-1)
                         }}
-                    >{'购物车'}</NavBar>
+                    >{navTitle}</NavBar>
                 </div>
                 <div className='cart-content'>
                     {
@@ -325,46 +326,59 @@ class CartDetail extends Component {
                                             </div>
                                         </div>
                                         <div className="cart-list-count">
-                                            <Mutation mutation={gql(INSERT_CART_MUTATION)}
+                                            {this.props.page === 'detail' ? (
+                                                <Mutation mutation={gql(INSERT_CART_MUTATION)}
+                                                    onError={error => console.log('error', error)}
+                                                >
+                                                    {(insert_cart, { loading, error }) => (
+                                                        <div className="selected-wrap">
+                                                            <button
+                                                                className={classNames({
+                                                                    'selected_button-red': true,
+                                                                    'selected_button-disabled': item.count <= 1
+                                                                })}
+                                                                onClick={(e) => {
+                                                                    if (item.count > 1) {
+                                                                        this.handleChangedCount(e, 'reduce', index, insert_cart)
+                                                                    } else {
+                                                                        Toast.info('数量不能小于1个')
+                                                                    }
+                                                                }}
+                                                            >-</button>
+                                                            <input className="selected_input" type="text"
+                                                                min={1} step={1} max={item.product.stock}
+                                                                value={item.count}
+                                                                onChange={(e) => { this.handleChangedCount(e, 'input', index, insert_cart) }}
+                                                            />
+                                                            <button className="selected_button-red"
+                                                                onClick={(e) => {
+                                                                    this.handleChangedCount(e, 'augment', index, insert_cart)
+                                                                }}>+</button>
+
+                                                            <Mutation mutation={gql(DELETE_CART_MUTATION)}
+                                                                onError={error => console.log('error', error)}
+                                                            >
+                                                                {(delete_cart, { loading, error }) => (
+                                                                    <button className="jiesuan-delete" onClick={(e) => {
+                                                                        this.handleChangedCount(e, 'delete', index, delete_cart)
+                                                                    }}><span>删除</span></button>
+                                                                )}
+                                                            </Mutation>
+                                                        </div>
+                                                    )}
+                                                </Mutation>
+                                            ) : (<Mutation mutation={gql(DELETE_CART_MUTATION)}
                                                 onError={error => console.log('error', error)}
                                             >
-                                                {(insert_cart, { loading, error }) => (
+                                                {(delete_cart, { loading, error }) => (
                                                     <div className="selected-wrap">
-                                                        <button
-                                                            className={classNames({
-                                                                'selected_button-red': true,
-                                                                'selected_button-disabled': item.count <= 1
-                                                            })}
-                                                            onClick={(e) => {
-                                                                if (item.count > 1) {
-                                                                    this.handleChangedCount(e, 'reduce', index, insert_cart)
-                                                                } else {
-                                                                    Toast.info('数量不能小于1个')
-                                                                }
-                                                            }}
-                                                        >-</button>
-                                                        <input className="selected_input" type="text"
-                                                            min={1} step={1} max={item.product.stock}
-                                                            value={item.count}
-                                                            onChange={(e) => { this.handleChangedCount(e, 'input', index, insert_cart) }}
-                                                        />
-                                                        <button className="selected_button-red"
-                                                            onClick={(e) => {
-                                                                this.handleChangedCount(e, 'augment', index, insert_cart)
-                                                            }}>+</button>
-
-                                                        <Mutation mutation={gql(DELETE_CART_MUTATION)}
-                                                            onError={error => console.log('error', error)}
-                                                        >
-                                                            {(delete_cart, { loading, error }) => (
-                                                                <button className="jiesuan-delete" onClick={(e) => {
-                                                                    this.handleChangedCount(e, 'delete', index, delete_cart)
-                                                                }}><span>删除</span></button>
-                                                            )}
-                                                        </Mutation>
+                                                        <button className="jiesuan-delete" onClick={(e) => {
+                                                            this.handleChangedCount(e, 'delete', index, delete_cart)
+                                                        }}><span>删除</span></button>
                                                     </div>
                                                 )}
-                                            </Mutation>
+                                            </Mutation>)}
+
                                         </div>
                                     </div>
                                     {/* <WhiteSpace size="md" /> */}
