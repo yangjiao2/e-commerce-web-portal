@@ -215,3 +215,6 @@ git push heroku master
     "test": "node scripts/test.js"
     },
    ```
+
+6. favicon 制作
+   https://realfavicongenerator.net/
