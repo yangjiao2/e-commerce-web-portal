@@ -14,7 +14,6 @@ import {
     WhiteSpace,
     ActivityIndicator,
 } from "antd-mobile";
-import Logo from "../../../components/logo";
 import { PRODUCT_BY_CATEGORY } from "../../../utils/gql";
 import "./index.css";
 import { TagOutlined, SearchOutlined } from "@ant-design/icons";

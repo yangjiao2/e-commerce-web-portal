@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './index.css'
 import { Grid, ActivityIndicator } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
-import Logo from '../../../components/logo'
 import { getCookie } from "../../../utils/cookie"
 import { user_by_id } from "../../../utils/gql"
 import { Query } from "react-apollo"
@@ -127,7 +126,6 @@ class All extends Component {
                     </div>
                 </div>
                         */}
-                <Logo />
             </div>
         )
     }

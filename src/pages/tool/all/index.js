@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './index.css'
 import { Grid, ActivityIndicator } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
-import Logo from '../../../components/logo'
 import { getCookie } from "../../../utils/cookie"
 import { user_by_id } from "../../../utils/gql"
 import { Query } from "react-apollo"
@@ -69,31 +68,6 @@ class All extends Component {
                         />
                     </div>
                 </div>
-
-
-                {/*
-
-                <div className='my-card member-card' style={{ display: 'none' }}>
-                    <div className='card-title'>
-                        会员中心
-                    </div>
-                    <div className='card-icons'>
-                        <Grid data={memberIcon}
-                            columnNum={4}
-                            hasLine={false}
-                            onClick={(member) => {
-                                this.props.history.push({
-                                    pathname: '/my/member',
-                                    state: {
-                                        page: member.id
-                                    }
-                                })
-                            }}
-                        />
-                    </div>
-                </div>
-                        */}
-                <Logo />
             </div>
         )
     }

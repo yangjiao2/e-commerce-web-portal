@@ -8,7 +8,6 @@ import { request } from 'graphql-request'
 import { graphql } from '@apollo/react-hoc';
 
 import { Grid, Card, Carousel, WhiteSpace, ActivityIndicator } from 'antd-mobile'
-import Logo from '../../../components/logo'
 import { PRODUCT_QUERY, category_by_props, PRODUCT_BY_SEARCH } from "../../../utils/gql"
 import './index.css'
 import { TagOutlined, SearchOutlined } from '@ant-design/icons';
@@ -89,7 +88,6 @@ class HomePage extends Component {
                             </div>)
                     }
                 </Carousel>
-                <Logo />
                 <Recommend data={[]} history={this.props.history} />
             </div>
         )
