@@ -1,0 +1,10 @@
+.category-wrapper {
+  width: 80%;
+}
+
+.category-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100vh;
+}

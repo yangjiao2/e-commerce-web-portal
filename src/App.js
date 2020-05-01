@@ -8,6 +8,7 @@ import top_banner from './images/top_banner.png'
 import { UserOutlined, AppstoreOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Home from './pages/home'
 import Cart from './pages/cart'
+import Category from './pages/category'
 import My from './pages/my'
 import Tool from './pages/tool'
 import { graphqlFC } from "./configs/url"
@@ -195,7 +196,7 @@ class App extends Component {
                                 </NavLink>
                             </Col>
                             <Col span={6} className='tabbar-content'>
-                                <NavLink isActive={this.isActiveFunc('cart')} activeClassName="active" to="/cart">
+                                <NavLink isActive={this.isActiveFunc('category')} activeClassName="active" to="/category">
                                     {
                                         <AppstoreOutlined />
                                     }
@@ -235,7 +236,7 @@ class App extends Component {
                             return <Home />
                         }} />
                         <Route path="/home" component={Home} />
-                        <Route path="/category" component={Home} />
+                        <Route path="/category" component={Category} />
                         <Route path="/cart/:page" component={Cart} />
                         <Route path="/my" component={My} />
                         <Route path="/tool" component={Tool} />

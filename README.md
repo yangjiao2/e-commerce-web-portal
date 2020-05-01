@@ -1,5 +1,9 @@
 ## 电商 React 网页端
 
+效果演示：
+
+[![Demo](./demo/demo.gif)](https://youtu.be/LguAMw4L5Uc)
+
 ## 项目介绍
 
 此项目是一套电商系统，包括前台商城系统及后台管理系统。包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、个人信息等模块。
@@ -59,12 +63,12 @@
 #### babel
 
 - babel-core:
-- babel-preset-env: 为了支持 ES5, ES6 supporting part
+- babel-preset-env: 为了支持 ES5 | ES6 supporting part
 - babel-preset-react: react 支持
 
 #### webpack
 
-- webpack-cli: 用 CLI 去 starting dev server, creating production build, etc.
+- webpack-cli: 用 CLI 去 starting dev server | creating production build | etc.
 - webpack-dev-server: 自动 refresh
 - html-webpack-plugin: 创建 HTML 模版
 
@@ -110,7 +114,7 @@ git push heroku master
 - profile: 用户资料
   | column | type | property |
   | ---------------- | --------------- | ---------------------------------------------------------------- |
-  Id | Int | Nextval |
+  Id | Int | nextval |
   Name | String | |
   Email | String | |  
   Password | String |
@@ -118,28 +122,27 @@ git push heroku master
 - cart: 购物车
   | column | type | property |
   | ---------------- | --------------- | ---------------------------------------------------------------- |
-  Id | Int | Nextval (自动递增) |
+  Id | Int | nextval (自动递增) |
   User_id | Int | |
-  Product_id| | Int | |
+  Product_id| Int | |
   Count| Int | |
   Status| Int | |
 
 * product: 商品
   | column | type | property |
   | ---------------- | --------------- | ---------------------------------------------------------------- |
-  Id | Int |Nextval|
+  Id | Int | nextval|
   Name | String| |
   Price | Float| |
   Category | String| |
   Img | Json| |
   Stock | Int| |
-  Description | String| |
+  Description | String| nullable |
 
 - location: 地址
-  地址 (location)
   | column | type | property |
   | ---------------- | --------------- | ---------------------------------------------------------------- |
-  Id | Int | Nextval |
+  Id | Int | nextval |
   User_id | Int | |
   Username | String | |
   Phone | String | |
@@ -148,7 +151,29 @@ git push heroku master
   Area | String | |
   Address | String | |
   Postcode | String | |
-  Default | Int | |
+  Default | Int | default: 0 |
+
+- order: 订单
+  | column | type | property |
+  | ---------------- | --------------- | ---------------------------------------------------------------- |
+  Id | Int | nextval |
+  User_id | Int | |
+  Location_id | Int | |
+  ProductTotal | Float | default: 0 |
+  CartTotal | Float | default: 0 |
+  Count | Int | default: 0 |
+  OrderStatus | Int | default: 0 |
+  CreateAt | timestamp | nullable |
+  UpdateAt | timestamp | nullable |
+
+* orderProduct: 订单商品
+  | column | type | property |
+  | ---------------- | --------------- | ---------------------------------------------------------------- |
+  Id | Int | nextval |
+  Product_id | Int | |
+  order_id | Int | |
+  count | Int | |
+  productPay | Float | default: 0 |
 
 4. 云端图片/ api
 

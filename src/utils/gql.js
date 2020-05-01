@@ -10,7 +10,7 @@ const PRODUCT_QUERY = `
 }
 `;
 
-// 库存查询
+// 库存名称查询
 const PRODUCT_BY_SEARCH = `
     query productBySearch($text: String!) {
         product: profile_product(where: {name: {_like: $text}}) {
@@ -20,6 +20,18 @@ const PRODUCT_BY_SEARCH = `
             price
         }
     }
+`
+
+// 库存类别查询
+const PRODUCT_BY_CATEGORY = `
+    query productByCategory($category:  [String!]) {
+        product: profile_product(where: { category: { _in: $category } }) {
+            id
+            img
+            name
+            price
+        }
+}
 `
 
 // 物品查询
@@ -209,6 +221,7 @@ const CREATE_ORDER = `
         }
     }
 `
+
 // 创建订单物品
 const CREATE_ORDER_PRODUCT = `
 mutation insert_profile_order($cart_id: Int! $order_id: Int!, $count: Int!, $productPay: numeric!, $product_id: Int!) {
@@ -1186,6 +1199,7 @@ const slideshow_by_props = `
 export {
     PRODUCT_QUERY,
     PRODUCT_BY_SEARCH,
+    PRODUCT_BY_CATEGORY,
     PRODUCT_DETAIL_BY_ID_QUERY,
     CART_DETAIL_BY_USER_ID_QUERY,
     INSERT_CART_MUTATION,
