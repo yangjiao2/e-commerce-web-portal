@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Row, Col, Input } from 'antd'
 import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
 import classnames from 'classnames'
-import { request } from 'graphql-request'
 import moment from 'moment'
 import top_banner from './images/top_banner.png'
 import { UserOutlined, AppstoreOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
@@ -12,6 +11,7 @@ import Category from './pages/category'
 import My from './pages/my'
 import Tool from './pages/tool'
 import { graphqlFC } from "./configs/url"
+import { request } from 'graphql-request'
 import { getCookie, setCookie } from "./utils/cookie"
 import { find_user_by_openid, create_user } from "./utils/gql"
 import { idGen, getIsWechatBrowser } from "./utils/func"

@@ -84,7 +84,7 @@ class All extends Component {
     render() {
         let { page } = this.state
         let user_id = getCookie('user_id')
-        // console.log('render', page, this.props)
+        console.log('render cart', page, this.props, user_id)
 
         return (
             <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ "user_id": user_id, "status": this.state.status }}>

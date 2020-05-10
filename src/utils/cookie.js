@@ -23,5 +23,5 @@ export function getCookie(key) {
 }
 
 export function removeCookie(key) {
-    setCookie(key, "任意值", -1);
+    setCookie(key, "", -1);
 }

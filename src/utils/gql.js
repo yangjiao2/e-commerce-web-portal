@@ -1,7 +1,33 @@
+// 用户
+const USER_QUERY = `
+    query userByEmail($email: String!, $password: String!) {
+        user: profile_profile(where: {email: {_eq: $email}, password: {_eq: $password}}) {
+            email
+            id
+            name
+            password
+        }
+    }
+`;
+
 // 用户信息修改
 const UPDATE_USER_MUTATION = `
-    mutation update_profile_order($email: String!, $name: String!, $password: String!) {
+    mutation update_user($email: String!, $name: String!, $password: String!) {
         user: update_profile_profile(where: { email: { _eq: $email } }, _set: { name: $name, password: $password }) {
+            returning {
+                id
+                email
+                name
+                password
+            }
+        }
+    }
+`
+
+// 用户信息注册
+const INSERT_USER_MUTATION = `
+    mutation insert_user($email: String!, $name: String!, $password: String!) {
+        user: insert_profile_profile(objects: { email: $email , name: $name, password: $password }) {
             returning {
                 id
                 email
@@ -1230,6 +1256,8 @@ export {
     ORDER_PRODUCT_BY_ORDER_ID,
     DELETE_ORDER,
     UPDATE_USER_MUTATION,
+    USER_QUERY,
+    INSERT_USER_MUTATION,
 
     create_user,
     find_user_by_openid,
