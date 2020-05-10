@@ -18,7 +18,6 @@ class Detail extends Component {
         this.state = {
             id: ''
         }
-        setCookie('user_id', 1);
     }
 
     componentWillMount() {
@@ -115,7 +114,6 @@ class DetailRender extends Component {
         return (
             <div className='detail-wrapper'>
                 <div className='detail-simple-show'>
-                    {/*<div className='detail-img' style={{backgroundImage: "url('"+ img + "')"}}/>*/}
                     <Row>
                         <Col span={10}>
                             <img className='detail-img' src={img} alt="商品图片" />
@@ -146,35 +144,6 @@ class DetailRender extends Component {
                             {/* <div className='detail-intro detail-padding'>{intro}</div>>*/}
                         </Col>
                     </Row>
-                    {/*  <div className='detail-complicate-show'>
-                    <div className='detail-padding detail-complicate-title'>商品信息</div>
-                    <div className='detail-complicate-show-img'>
-                        <img className='detail-img' src={img} alt="商品图片"/>
-                    </div>
-                </div>
-
-                <div className='detail-footer2s'>
-                    <div className='detail-bottom'>
-                        <span className='detail-bottom-icon border-right' onClick={()=>{this.props.history.push({pathname: '/home'})}}>
-                            <div className='detail-icon detail-icon-shop'/>
-                        </span>
-                        <span className='detail-bottom-icon'
-                              onClick={()=>{
-                                  this.props.history.push({
-                                      pathname: '/cart',
-                                      state:{
-                                          updateData:true,
-                                          tabHidden:false
-                                      }
-                                  })
-                              }}
-                        >
-                            <div className='detail-icon detail-icon-cart'/>
-                        </span>
-                        <span className='detail-bottom-button add' onClick={(e)=>{this.changeBottomButtonType(e,'add')}}>加入购物袋</span>
-
-                    </div>
-                         */}
                     <SelectModal
                         changeDetailState={this.changeDetailState}
                         openSelect={openSelect}
@@ -260,51 +229,6 @@ class SelectModal extends Component {
         })
     }
 
-    // // 立即购买
-    // buyNow = () => {
-    //     let {count, selectColor, specList} = this.state
-    //     let createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
-    //     let id = idGen('cart')
-    //     let {productData} = this.props
-    //     let {id:product_id, img, intro, name, price, status, stock, unit} = productData.productbyid
-    //     let specFilter = specList.filter(item=>item.color === selectColor)[0].spec.filter(item=> item.select && item.status > 0)[0]
-    //     let {id:specificationStock_id, size, stock:specStock, status:specStatus} =  specFilter
-    //     let totalPrice = price * count
-
-    //     let buyNowContent = [{
-    //         count,
-    //         createdAt,
-    //         id,
-    //         product_id:{
-    //             id:product_id,
-    //             img,
-    //             intro,
-    //             name,
-    //             price,
-    //             status,
-    //             stock,
-    //             unit
-    //         },
-    //         specificationStock_id:{
-    //             id:specificationStock_id,
-    //             color:selectColor,
-    //             size,
-    //             stock:specStock,
-    //             status:specStatus
-    //         }
-    //     }]
-    //     // console.log('buyNowContent',buyNowContent)
-    //     sessionStorage.setItem("buyNowContent",JSON.stringify(buyNowContent))
-    //     sessionStorage.setItem("totalPrice",JSON.stringify(totalPrice))
-    //     sessionStorage.setItem("totalCount",JSON.stringify(this.state.count))
-    //     this.props.changeDetailState('openSelect')
-    //     this.props.history.push({
-    //         pathname: '/cart/orders',
-    //         state:{
-    //             dataType: 'buyNowContent'
-    //         }
-    //     })
-    // }
 
     render() {
         let user_id = getCookie('user_id')
@@ -343,31 +267,6 @@ class SelectModal extends Component {
                             <div className="scroll-body">
                                 <div className="goods_type">
                                     <ul>
-                                        {/*
-                                        <li>
-                                    <div className="selected-type">已选择： {selectColor} / {selectSize}</div>
-
-                                            <div className="type-title">颜色</div>
-                                            <dl>
-                                                {
-                                                    colorList.map((spec)=>(
-                                                        <dd
-                                                            className={classNames({
-                                                                'spec-red': spec.color === selectColor
-                                                            })}
-                                                            key={'color'+spec.id}
-                                                            onClick={()=>{
-                                                                this.changeState('selectColor',spec.color)
-                                                            }}
-                                                        >
-                                                            {spec.color}
-                                                        </dd>
-                                                    ))
-                                                }
-                                            </dl>
-                                        </li>
-                                        <Specification specList={specList.filter(item=>item.color === selectColor)[0]} changeState={this.changeState}/>
-                                        */}
                                     </ul>
                                 </div>
                                 <div className="edit-product">
@@ -456,7 +355,6 @@ class Specification extends Component {
 
     render() {
         let { spec } = this.state
-        // console.log('spec',spec)
 
         return (
             <li>

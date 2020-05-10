@@ -7,7 +7,7 @@ import Detail from './detail'
 import './index.css'
 
 const Home = (props) => {
-    let query = props.location.search
+    let query = props.location ? props.location.search : '';
     return (
         <div style={{ height: '100%' }}>
             <Switch>

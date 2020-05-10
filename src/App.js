@@ -90,9 +90,7 @@ class App extends Component {
 
     oauthLogin = () => {
         let isWechatLogin = getIsWechatBrowser()
-        // console.log('isWechatLogin',isWechatLogin)
         if (isWechatLogin) {
-            // setCookie("openid","o2fcFv6Rh2-4rCh3d5_1uCWCT5Yc")
             setCookie("openid", "o2fcFv8x3wy5WtcP116S5GzzkgDQ")
             let openid = getCookie("openid")
             let user_id = getCookie("user_id")
@@ -137,8 +135,7 @@ class App extends Component {
                     })
             }
         } else {
-            setCookie("user_id", "ioobot")
-            setCookie("openid", "ioobot")
+            setCookie("user_id", "1")
         }
     }
 
@@ -240,6 +237,7 @@ class App extends Component {
                         <Route path="/cart/:page" component={Cart} />
                         <Route path="/my" component={My} />
                         <Route path="/tool" component={Tool} />
+                        <Route path="" component={Home} />
                     </Switch>
                 </div>
             </div >

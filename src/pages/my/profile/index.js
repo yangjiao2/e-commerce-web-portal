@@ -3,7 +3,7 @@ import './index.css'
 import { NavBar, Icon, InputItem, List, Button, ActivityIndicator } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import { Query, Mutation } from "react-apollo"
-import { update_user, USER_DETAIL_BY_ID_QUERY } from "../../../utils/gql"
+import { UPDATE_USER_MUTATION, USER_DETAIL_BY_ID_QUERY } from "../../../utils/gql"
 import gql from "graphql-tag"
 import { getCookie } from "../../../utils/cookie"
 
@@ -67,22 +67,23 @@ class Profile extends Component {
 class ProfileRender extends Component {
     constructor(props) {
         super(props)
+        let { email, password, name } = props.data;
         this.state = {
-            name: '',
-            email: '',
-            passward: '',
+            name: name || '',
+            email: email || '',
+            password: password || '',
         }
     }
 
     render() {
-        let { email, password, name } = this.props.data;
-        console.log(this.props.data)
+        let { email, password, name } = this.state;
+        let data = this.props.data;
+        let onUpdate = data.email !== email || data.password !== password || data.name !== name;
         let user_id = getCookie('user_id')
         return (
             <div>
-
                 <Mutation
-                    mutation={gql(update_user)}
+                    mutation={gql(UPDATE_USER_MUTATION)}
                     refetchQueries={[{ query: gql(USER_DETAIL_BY_ID_QUERY), variables: { id: user_id } }]}
                 >
                     {(update_user, { loading, error }) => {
@@ -110,12 +111,16 @@ class ProfileRender extends Component {
                                 </List>
                                 <List className="my-list">
                                     <InputItem onChange={(e) => {
+                                        console.log(e);
                                         this.setState({ password: e })
                                     }} value={password} placeholder="请输入密码">密码</InputItem>
                                 </List>
-                                <Button onClick={() => {
-                                    update_user({ variables: { id: user_id, name } })
-                                }}>确认修改</Button>
+                                {onUpdate &&
+                                    (<div className='profile-change' onClick={() => {
+                                        update_user({ variables: { name, email, password } })
+                                    }}>
+                                        确认修改
+                                    </div>)}
                             </div>
                         )
                     }}

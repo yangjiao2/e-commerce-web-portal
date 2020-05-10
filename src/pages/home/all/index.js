@@ -26,18 +26,13 @@ class HomePage extends Component {
     }
 
     render() {
+        // 轮播图
         const carousel_url = [
             'https://i.ibb.co/vm1yLsb/Screen-Shot-2020-04-18-at-7-14-29-PM.png',
             'https://i.ibb.co/ZMXgVCg/10d93362996e2aefe57eb9d4a9bec895.jpg',
             'https://i.ibb.co/0DkHmqZ/335b1ee329117d7946458d3dfcff6909.jpg',
             'https://i.ibb.co/nwGFFgH/18e179a994a4a23a122e833d427edead.jpg',
         ];
-
-        const categoryFilter = {
-            "status": "1",
-            "limit": 7,
-            "sort_by": { "order": "asc" }
-        }
 
         const more = {
             icon: 'https://ece-img-1254337200.cos.ap-chengdu.myqcloud.com/icon/more.png',
