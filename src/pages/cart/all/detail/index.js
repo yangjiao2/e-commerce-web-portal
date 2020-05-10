@@ -388,7 +388,7 @@ class CartDetail extends Component {
                     }
                 </div>
                 <div className="footer">
-                    <div className="jiesuan">
+                    {this.props.page === 'detail' && <div className="jiesuan">
                         <div className="jiesuan-checkbox">
                             <Checkbox
                                 checked={isSelectAll}
@@ -420,6 +420,7 @@ class CartDetail extends Component {
                             <span>下单({selectedCount})</span>
                         </button>
                     </div>
+                    }
                 </div>
             </div>
         )

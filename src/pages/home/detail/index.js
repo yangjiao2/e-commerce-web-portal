@@ -100,6 +100,7 @@ class DetailRender extends Component {
         })
         if (val === 'star') {
             Toast.success('已加入收藏夹')
+
         } else {
             this.showModal(e, 'openSelect')
         }
@@ -107,9 +108,10 @@ class DetailRender extends Component {
 
     render() {
         let { data } = this.props
-        let { name, intro, img, price, stock } = data.product;
+        let { id: product_id, name, intro, img, price, stock } = data.product;
         let { cartCount, openSelect, buttonType } = this.state
         console.log('DetailRender openSelect', openSelect)
+        let user_id = getCookie('user_id')
         let discountRate = 0.8;
         return (
             <div className='detail-wrapper'>
@@ -134,7 +136,28 @@ class DetailRender extends Component {
                                     <Card.Footer
                                         extra={
                                             <div>
-                                                <span className='detail-bottom-button add' onClick={(e) => { this.changeBottomButtonType(e, 'star') }}>加入收藏夹</span>
+                                                <Mutation mutation={gql(INSERT_CART_MUTATION)}
+
+                                                    onError={error => console.log('error', error)}
+                                                >
+                                                    {(insert_cart, { loading, error }) => (
+                                                        <span className='detail-bottom-button add' onClick={(e) => {
+
+                                                            const cartContent =
+                                                            {
+                                                                "user_id": user_id,
+                                                                "product_id": product_id,
+                                                                "status": 0,
+                                                                "count": -1 // -1 for star item
+                                                            };
+                                                            insert_cart({ variables: cartContent }).then((data) => {
+                                                            })
+                                                            this.changeBottomButtonType(e, 'star')
+                                                        }}>加入收藏夹</span>
+
+                                                    )}
+                                                </Mutation>
+                                                {/* <span className='detail-bottom-button add' onClick={(e) => { this.changeBottomButtonType(e, 'star') }}>加入收藏夹</span> */}
                                                 <span >{' '}</span>
                                                 <span className='detail-bottom-button add' onClick={(e) => { this.changeBottomButtonType(e, 'add') }}>加入购物袋</span>
                                             </div>
@@ -168,12 +191,6 @@ class SelectModal extends Component {
             colorList: []
         }
     }
-
-    componentWillMount() {
-        // let { productData } = this.props
-        // this.handleData(productData.spec)
-    }
-
 
     changeState = (state, val) => {
         this.setState({

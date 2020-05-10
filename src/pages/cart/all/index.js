@@ -14,8 +14,6 @@ class All extends Component {
     constructor(props) {
         super(props)
         console.log('cart all ', props)
-        // let state = props.location.state
-        // let page = state ? state.page : 'detail'
         let page = props.match.params.page || 'details';
         this.state = {
             page,
@@ -87,7 +85,7 @@ class All extends Component {
         console.log('render cart', page, this.props, user_id)
 
         return (
-            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} variables={{ "user_id": user_id, "status": this.state.status }}>
+            <Query query={gql(CART_DETAIL_BY_USER_ID_QUERY)} fetchPolicy={'network-only'} variables={{ "user_id": user_id, "status": this.state.status }}>
                 {
                     ({ loading, error, data, refetch }) => {
                         if (loading) {
