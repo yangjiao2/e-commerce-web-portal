@@ -72,7 +72,9 @@ class Display extends Component {
                         }}
                     >{navTitle}</NavBar>
                 </div>
-                <Query query={gql(ORDER_BY_USER_ID_STATUS)} variables={{ user_id, status: [orderStatus] }}>
+                <Query query={gql(ORDER_BY_USER_ID_STATUS)}
+                    fetchPolicy={"network-only"}
+                    variables={{ user_id, status: [orderStatus] }}>
                     {
                         ({ loading, error, data }) => {
                             if (loading) {
@@ -107,15 +109,17 @@ class DisplayRender extends Component {
         return (data.map(order => {
             let product = order.product;
             return (
-                <Row key={order.id} style={{ width: '100%' }}>
-                    <Col span={4} style={{ height: '100px' }}>
-                        <div className='order-product-img'
-                            style={{ backgroundImage: `url('${product.img[0]}')` }} />
-                    </Col>
-                    <Col span={16} offset={1}>
-                        <div className='order-product-name'>{product.name}</div>
-                    </Col>
-                </Row>
+                <div>
+                    <Row key={order.id} style={{ width: '100%' }}>
+                        <Col span={2} style={{ height: '100px' }}>
+                            <div className='order-product-img'
+                                style={{ backgroundImage: `url('${product.img[0]}')` }} />
+                        </Col>
+                        <Col span={20} offset={1}>
+                            <div className='order-product-name'>{product.name} x {order.count}件</div>
+                        </Col>
+                    </Row>
+                </div>
             )
         }
         ))

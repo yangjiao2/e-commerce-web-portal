@@ -281,7 +281,7 @@ mutation insert_profile_order($cart_id: Int! $order_id: Int!, $count: Int!, $pro
 // 查询订单
 const ORDER_BY_USER_ID_STATUS = `
     query orderByUserId($user_id: Int!, $status: [Int!]) {
-        orderbyprops: profile_order(where: {user_id: {_eq: $user_id}, orderStatus: {_in: $status}}) {
+        orderbyprops: profile_order(where: {user_id: {_eq: $user_id}, orderStatus: {_in: $status}}, order_by: {id: desc}) {
             cartTotal
             count
             createAt

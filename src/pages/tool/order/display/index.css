@@ -9,9 +9,9 @@
 }
 
 .order-card-content {
-  height: 100px;
+  /* height: 100px; */
   background-color: #ffffff;
-  display: flex;
+  /* display: flex; */
   padding: 5px 0;
 }
 

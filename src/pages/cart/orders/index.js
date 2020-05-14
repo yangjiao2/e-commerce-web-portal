@@ -346,6 +346,7 @@ class CartOrders extends Component {
                 </div>
                 <Mutation mutation={gql(CREATE_ORDER)}
                     onError={error => console.log('create_order error', error)}
+                    refetchQueries={[{ query: gql(ORDER_BY_USER_ID_STATUS), variables: { user_id, status: ['0'] } }]}
                 >
                     {(create_order, { loading, error }) => (
                         <div className="orders-footer">
